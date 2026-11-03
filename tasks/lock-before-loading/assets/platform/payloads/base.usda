@@ -1,0 +1,1768 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "URDF USD Converter v0.3.2"
+    }
+    defaultPrim = "hinged_platform"
+    doc = """Generated from Composed Stage of root layer payloads/base.usd
+"""
+    endTimeCode = 1000000
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    startTimeCode = 0
+    subLayers = [
+        @./robot.usda@
+    ]
+    upAxis = "Z"
+)
+
+def Xform "hinged_platform" (
+    prepend apiSchemas = ["GeomModelAPI", "IsaacRobotAPI"]
+    assetInfo = {
+        string name = "hinged_platform"
+    }
+    kind = "component"
+)
+{
+    float3[] extentsHint = [(0.375, -0.2, 0.75), (0.525, 0.2, 0.85), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (0.375, -0.2, 0.75), (0.525, 0.2, 0.85)]
+    custom rel isaac:physics:robotJoints
+    custom rel isaac:physics:robotLinks
+    custom token isaac:robotType = "Default"
+
+    def Scope "Materials"
+    {
+        def Material "m6301866140732194489" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m3435171151432364434" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m4184525729735569868" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m5554627907480870094" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m7419797529523877736" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8613662119815778796" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m1230991609967888279" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8569036466552322226" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m639827430055036731" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m2887142731969416743" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m5797200463391414964" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m6913366419438768168" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m1016225350474438140" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8459247268196861344" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8281444579317176599" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "c132250110552443263" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/c132250110552443263>
+        )
+        {
+        }
+
+        def Material "m182008317030901714" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m1435304853464420717" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m5091931823107407167" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m5979039522345068621" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m1044389704037929329" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8254815380239703834" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m1484778375811013201" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m7372703269311484260" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8019273117162217865" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m5178633651186472933" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m4103854189489920207" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m450821342080663627" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m8668240990882852916" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m7523313932399565302" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m2802860901806312326" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "m4817947407488727295" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m6301866140732194489>
+        )
+        {
+        }
+
+        def Material "c675442341575166988" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/c132250110552443263>
+        )
+        {
+        }
+
+        def Material "m7386945973602740865" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m403437648168172401" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m6237762372408627551" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "m8257919652122560331" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m182008317030901714>
+        )
+        {
+        }
+
+        def Material "c7324579244939278877" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/c132250110552443263>
+        )
+        {
+        }
+
+        def Material "m9067212779315626439" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m4259589035473128699" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m3052055260683056961" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m949699962820697688" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m7250654792535612284" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m7491838317488778874" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m2375265739088593757" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m8722805236402908441" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m7815670917097738338" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m722773398396470286" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m9196681423532048120" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m2200320691209545724" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m1014097004828930450" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m2050014978687610978" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m9067212779315626439>
+        )
+        {
+        }
+
+        def Material "m7750554482030470583" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m7750554482030470583>
+        )
+        {
+        }
+
+        def Material "m1565894466079957484" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/m7750554482030470583>
+        )
+        {
+        }
+    }
+
+    def Scope "Geometry"
+    {
+        def Xform "stand" (
+            prepend apiSchemas = ["IsaacLinkAPI"]
+        )
+        {
+            def Cube "box" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m6301866140732194489>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.023, 0.25, 0.012)
+                double3 xformOp:translate = (0.5135000000000001, -0.04, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_1" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m3435171151432364434>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.023, 0.25, 0.012)
+                double3 xformOp:translate = (0.3865, -0.04, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_2" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m4184525729735569868>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.104, 0.17, 0.012)
+                double3 xformOp:translate = (0.45, 0, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_3" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m5554627907480870094>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0215, 0.088)
+                double3 xformOp:translate = (0.506, -0.14925, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_4" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m7419797529523877736>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.2015, 0.088)
+                double3 xformOp:translate = (0.506, -0.020749999999999998, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_5" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8613662119815778796>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.506, -0.13, 0.7797499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_6" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m1230991609967888279>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.506, -0.13, 0.8322499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_7" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8569036466552322226>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.0175, 0.088)
+                double3 xformOp:translate = (0.512, -0.15125, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_8" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m639827430055036731>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.1975, 0.088)
+                double3 xformOp:translate = (0.512, -0.018750000000000003, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_9" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m2887142731969416743>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.512, -0.13, 0.7777499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_10" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m5797200463391414964>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.512, -0.13, 0.8342499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_11" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m6913366419438768168>
+                double size = 1
+                quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.13, 0.817561)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_12" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m1016225350474438140>
+                double size = 1
+                quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.13, 0.794439)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_13" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8459247268196861344>
+                double size = 1
+                quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.118439, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_14" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8281444579317176599>
+                double size = 1
+                quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.141561, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cylinder "cylinder" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                uniform token axis = "Z"
+                float3[] extent = [(-0.009, -0.009, -0.003), (0.009, 0.009, 0.003)]
+                double height = 0.006000000000000005
+                rel material:binding = </hinged_platform/Materials/c132250110552443263>
+                double radius = 0.009
+                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.517, 0, 0.83)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_15" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m182008317030901714>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0008, 0.017)
+                double3 xformOp:translate = (0.506, -0.12140000000000001, 0.8059999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_16" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m1435304853464420717>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0008)
+                double3 xformOp:translate = (0.506, -0.13, 0.8146)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_17" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m5091931823107407167>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0008, 0.017)
+                double3 xformOp:translate = (0.506, -0.1386, 0.8059999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_18" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m5979039522345068621>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0008)
+                double3 xformOp:translate = (0.506, -0.13, 0.7973999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_19" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m1044389704037929329>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0215, 0.088)
+                double3 xformOp:translate = (0.39, -0.14925, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_20" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8254815380239703834>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.2015, 0.088)
+                double3 xformOp:translate = (0.39, -0.020749999999999998, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_21" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m1484778375811013201>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.39, -0.13, 0.7797499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_22" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m7372703269311484260>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.39, -0.13, 0.8322499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_23" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8019273117162217865>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.0175, 0.088)
+                double3 xformOp:translate = (0.396, -0.15125, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_24" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m5178633651186472933>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.1975, 0.088)
+                double3 xformOp:translate = (0.396, -0.018750000000000003, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_25" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m4103854189489920207>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.396, -0.13, 0.7777499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_26" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m450821342080663627>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.396, -0.13, 0.8342499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_27" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8668240990882852916>
+                double size = 1
+                quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.13, 0.817561)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_28" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m7523313932399565302>
+                double size = 1
+                quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.13, 0.794439)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_29" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m2802860901806312326>
+                double size = 1
+                quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.118439, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_30" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m4817947407488727295>
+                double size = 1
+                quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.141561, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cylinder "cylinder_1" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "cylinder"
+            )
+            {
+                uniform token axis = "Z"
+                float3[] extent = [(-0.009, -0.009, -0.003), (0.009, 0.009, 0.003)]
+                double height = 0.006000000000000005
+                rel material:binding = </hinged_platform/Materials/c675442341575166988>
+                double radius = 0.009
+                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.383, 0, 0.83)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_31" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m7386945973602740865>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0008, 0.017)
+                double3 xformOp:translate = (0.39, -0.12140000000000001, 0.8059999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_32" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m403437648168172401>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0008)
+                double3 xformOp:translate = (0.39, -0.13, 0.8146)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_33" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m6237762372408627551>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0008, 0.017)
+                double3 xformOp:translate = (0.39, -0.1386, 0.8059999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_34" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                rel material:binding = </hinged_platform/Materials/m8257919652122560331>
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0008)
+                double3 xformOp:translate = (0.39, -0.13, 0.7973999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cylinder "cylinder_2" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = "cylinder"
+            )
+            {
+                uniform token axis = "Z"
+                float3[] extent = [(-0.004, -0.004, -0.07), (0.004, 0.004, 0.07)]
+                double height = 0.14
+                rel material:binding = </hinged_platform/Materials/c7324579244939278877>
+                double radius = 0.004
+                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.45, 0, 0.83)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Xform "platform" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.45, 0, 0.83)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Cube "box" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m9067212779315626439>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.1, 0.4, 0.016)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m4259589035473128699>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.1, 0.15, 0.032)
+                    double3 xformOp:translate = (0, 0, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_2" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m3052055260683056961>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.01275, 0.032)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.143625, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_3" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m949699962820697688>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.01275, 0.032)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.116375, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_4" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m7250654792535612284>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.0145, 0.00875)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.13, -0.03562500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_5" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m7491838317488778874>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.0145, 0.00875)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.13, -0.012375000000000011)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_6" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m2375265739088593757>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.01125, 0.032)
+                    double3 xformOp:translate = (0.036250000000000004, -0.144375, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_7" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m8722805236402908441>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.01125, 0.032)
+                    double3 xformOp:translate = (0.036250000000000004, -0.115625, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_8" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m7815670917097738338>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.0175, 0.00725)
+                    double3 xformOp:translate = (0.036250000000000004, -0.13, -0.03637500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_9" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m722773398396470286>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.0175, 0.00725)
+                    double3 xformOp:translate = (0.036250000000000004, -0.13, -0.01162500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_10" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m9196681423532048120>
+                    double size = 1
+                    quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.13, -0.014939)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_11" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m2200320691209545724>
+                    double size = 1
+                    quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.13, -0.033061)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_12" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m1014097004828930450>
+                    double size = 1
+                    quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.120939, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_13" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m2050014978687610978>
+                    double size = 1
+                    quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.139061, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_14" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m7750554482030470583>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.05, 0.05, 0.0008)
+                    double3 xformOp:translate = (0, 0.15, 0.0084)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_15" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hinged_platform/Materials/m1565894466079957484>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.05, 0.05, 0.0008)
+                    double3 xformOp:translate = (0, -0.15, 0.0084)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_16" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.1, 0.4, 0.016)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_17" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.1, 0.15, 0.032)
+                    double3 xformOp:translate = (0, 0, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_18" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.01275, 0.032)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.143625, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_19" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.01275, 0.032)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.116375, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_20" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.0145, 0.00875)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.13, -0.03562500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_21" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0725, 0.0145, 0.00875)
+                    double3 xformOp:translate = (-0.0007500000000000007, -0.13, -0.012375000000000011)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_22" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.01125, 0.032)
+                    double3 xformOp:translate = (0.036250000000000004, -0.144375, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_23" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.01125, 0.032)
+                    double3 xformOp:translate = (0.036250000000000004, -0.115625, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_24" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.0175, 0.00725)
+                    double3 xformOp:translate = (0.036250000000000004, -0.13, -0.03637500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_25" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.0015, 0.0175, 0.00725)
+                    double3 xformOp:translate = (0.036250000000000004, -0.13, -0.01162500000000001)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_26" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.13, -0.014939)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_27" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.13, -0.033061)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_28" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.120939, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_29" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                    float3 xformOp:scale = (0.002121, 0.0175, 0.003)
+                    double3 xformOp:translate = (0.035189, -0.139061, -0.024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def Cube "box_35" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.023, 0.25, 0.012)
+                double3 xformOp:translate = (0.5135000000000001, -0.04, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_36" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.023, 0.25, 0.012)
+                double3 xformOp:translate = (0.3865, -0.04, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_37" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.104, 0.17, 0.012)
+                double3 xformOp:translate = (0.45, 0, 0.756)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_38" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0215, 0.088)
+                double3 xformOp:translate = (0.506, -0.14925, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_39" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.2015, 0.088)
+                double3 xformOp:translate = (0.506, -0.020749999999999998, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_40" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.506, -0.13, 0.7797499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_41" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.506, -0.13, 0.8322499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_42" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.0175, 0.088)
+                double3 xformOp:translate = (0.512, -0.15125, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_43" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.1975, 0.088)
+                double3 xformOp:translate = (0.512, -0.018750000000000003, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_44" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.512, -0.13, 0.7777499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_45" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.512, -0.13, 0.8342499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_46" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.13, 0.817561)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_47" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.13, 0.794439)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_48" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.118439, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_49" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.510939, -0.141561, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_50" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.0215, 0.088)
+                double3 xformOp:translate = (0.39, -0.14925, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_51" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.2015, 0.088)
+                double3 xformOp:translate = (0.39, -0.020749999999999998, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_52" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.39, -0.13, 0.7797499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_53" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.008, 0.017, 0.0355)
+                double3 xformOp:translate = (0.39, -0.13, 0.8322499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_54" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.0175, 0.088)
+                double3 xformOp:translate = (0.396, -0.15125, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_55" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.1975, 0.088)
+                double3 xformOp:translate = (0.396, -0.018750000000000003, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_56" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.396, -0.13, 0.7777499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_57" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (0.004, 0.025, 0.0315)
+                double3 xformOp:translate = (0.396, -0.13, 0.8342499999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_58" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.92387956, 0, -0.38268337, 0)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.13, 0.817561)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_59" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (-1.6002066e-7, 0.92387956, -6.628271e-8, -0.38268337)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.13, 0.794439)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_60" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.6532816, -0.6532814, -0.27059796, 0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.118439, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Cube "box_61" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                displayName = "box"
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (0.6532816, 0.6532814, -0.27059796, -0.27059805)
+                float3 xformOp:scale = (0.005657, 0.025, 0.003)
+                double3 xformOp:translate = (0.394939, -0.141561, 0.806)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def Scope "Physics"
+    {
+    }
+}
+

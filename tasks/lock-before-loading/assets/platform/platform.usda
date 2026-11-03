@@ -1,0 +1,2311 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "URDF USD Converter v0.3.2"
+    }
+    defaultPrim = "hinged_platform"
+    endTimeCode = 1000000
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    startTimeCode = 0
+    upAxis = "Z"
+)
+
+def Xform "hinged_platform" (
+    prepend references = @./payloads/base.usda@
+    variants = {
+        string Physics = "physics"
+    }
+    append variantSets = "Physics"
+)
+{
+    variantSet "Physics" = {
+        "mujoco" (
+            prepend payload = @./payloads/Physics/mujoco.usda@
+        ) {
+
+        }
+        "none" {
+
+        }
+        "physics" (
+            prepend payload = @./payloads/Physics/physics.usda@
+        ) {
+
+        }
+        "physx" (
+            prepend payload = @./payloads/Physics/physx.usda@
+        ) {
+
+        }
+    }
+}
+
+over "Flattened_Prototype_109"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_109.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_109.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_109.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_109.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_110"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_110.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_110.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_110.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_110.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_111"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_111.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_111.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_111.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_111.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_112"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_112.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_112.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_112.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_112.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_113"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_113.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_113.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_113.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_113.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_114"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_114.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_114.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_114.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_114.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_115"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_115.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_115.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_115.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_115.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_116"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_116.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_116.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_116.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_116.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_117"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_117.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_117.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_117.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_117.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_118"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_118.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_118.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_118.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_118.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_119"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_119.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_119.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_119.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_119.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_120"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_120.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_120.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_120.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_120.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_121"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_121.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_121.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_121.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_121.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_122"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_122.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_122.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_122.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_122.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_123"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_123.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_123.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_123.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_123.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_124"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_124.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_124.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_124.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_124.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_125"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_125.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_125.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_125.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_125.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_126"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_126.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_126.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_126.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_126.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_127"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_127.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_127.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_127.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_127.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_128"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_128.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_128.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_128.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_128.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_129"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_129.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_129.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_129.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_129.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_130"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_130.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_130.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_130.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_130.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_131"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_131.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_131.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_131.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_131.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_132"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_132.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_132.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_132.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_132.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_133"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_133.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_133.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_133.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_133.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_134"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_134.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_134.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_134.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_134.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_135"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_135.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_135.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_135.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_135.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_136"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_136.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_136.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_136.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_136.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_137"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_137.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_137.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_137.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_137.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_138"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_138.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_138.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_138.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_138.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_139"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_139.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_139.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_139.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_139.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_140"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_140.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_140.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_140.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_140.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_141"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_141.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_141.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_141.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_141.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_142"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_142.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_142.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_142.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_142.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_143"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_143.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_143.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_143.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_143.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_144"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_144.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_144.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_144.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_144.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_145"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_145.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_145.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_145.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_145.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_146"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_146.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_146.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_146.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_146.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_147"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_147.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_147.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_147.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_147.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_148"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_148.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_148.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_148.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_148.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_149"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_149.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_149.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_149.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_149.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_150"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_150.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_150.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_150.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_150.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_151"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_151.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_151.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_151.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_151.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_152"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_152.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_152.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_152.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_152.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_153"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_153.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_153.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_153.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_153.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_154"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_154.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_154.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_154.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_154.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_155"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_155.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_155.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_155.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_155.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_156"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_156.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_156.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_156.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_156.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_157"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_157.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_157.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_157.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_157.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_158"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_158.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_158.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_158.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_158.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_159"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_159.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_159.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_159.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_159.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_160"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_160.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_160.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_160.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_160.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_161"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_161.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_161.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_161.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_161.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_162"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_162.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_162.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_162.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_162.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_55"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_55.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_55.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_55.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_55.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_56"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_56.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_56.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_56.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_56.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_57"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_57.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_57.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_57.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_57.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_58"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_58.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_58.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_58.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_58.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_59"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_59.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_59.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_59.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_59.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_60"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_60.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_60.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_60.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_60.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_61"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_61.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_61.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_61.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_61.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_62"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_62.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_62.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_62.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_62.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_63"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_63.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_63.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_63.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_63.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_64"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_64.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_64.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_64.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_64.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_65"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_65.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_65.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_65.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_65.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_66"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_66.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_66.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_66.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_66.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_67"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_67.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_67.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_67.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_67.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_68"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_68.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_68.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_68.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_68.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_69"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_69.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_69.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_69.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_69.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_70"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_70.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_70.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_70.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_70.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_71"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_71.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_71.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_71.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_71.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_72"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_72.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_72.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_72.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_72.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_73"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_73.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_73.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_73.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_73.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_74"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_74.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_74.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_74.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_74.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_75"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_75.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_75.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_75.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_75.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_76"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_76.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_76.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_76.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_76.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_77"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_77.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_77.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_77.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_77.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_78"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_78.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_78.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_78.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_78.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_79"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_79.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_79.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_79.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_79.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_80"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_80.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_80.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_80.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_80.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_81"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_81.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_81.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_81.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_81.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_82"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_82.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_82.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_82.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_82.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_83"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_83.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_83.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_83.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_83.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_84"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_84.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_84.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_84.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_84.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_85"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_85.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_85.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_85.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_85.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_86"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_86.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_86.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_86.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_86.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_87"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_87.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_87.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_87.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_87.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_88"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_88.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_88.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_88.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_88.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_89"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_89.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_89.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_89.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_89.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_90"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_90.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_90.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_90.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_90.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_91"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_91.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_91.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_91.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_91.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_92"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_92.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_92.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_92.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_92.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_93"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_93.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_93.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_93.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_93.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_94"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_94.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_94.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_94.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_94.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_95"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_95.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_95.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_95.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_95.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_96"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_96.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_96.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_96.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_96.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_97"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_97.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_97.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_97.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_97.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_98"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_98.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_98.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_98.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_98.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_99"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_99.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_99.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_99.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_99.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_100"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_100.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_100.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_100.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_100.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_101"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_101.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_101.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_101.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_101.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_102"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_102.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_102.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_102.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_102.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_103"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_103.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_103.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_103.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_103.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_104"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_104.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_104.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_104.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_104.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_105"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_105.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_105.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_105.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_105.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_106"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_106.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_106.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_106.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_106.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_107"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_107.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_107.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_107.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_107.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_108"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_108.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_108.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_108.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_108.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_1"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_1.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_1.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_1.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_1.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_2"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_2.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_2.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_2.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_2.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_3"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_3.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_3.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_3.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_3.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_4"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_4.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_4.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_4.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_4.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_5"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_5.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_5.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_5.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_5.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_6"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_6.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_6.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_6.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_6.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_7"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_7.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_7.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_7.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_7.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_8"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_8.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_8.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_8.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_8.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_9"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_9.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_9.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_9.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_9.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_10"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_10.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_10.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_10.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_10.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_11"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_11.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_11.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_11.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_11.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_12"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_12.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_12.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_12.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_12.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_13"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_13.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_13.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_13.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_13.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_14"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_14.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_14.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_14.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_14.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_15"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_15.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_15.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_15.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_15.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_16"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_16.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_16.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_16.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_16.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_17"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_17.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_17.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_17.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_17.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_18"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_18.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_18.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_18.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_18.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_19"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_19.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_19.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_19.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_19.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_20"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_20.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_20.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_20.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_20.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_21"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_21.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_21.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_21.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_21.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_22"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_22.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_22.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_22.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_22.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_23"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_23.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_23.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_23.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_23.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_24"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_24.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_24.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_24.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_24.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_25"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_25.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_25.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_25.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_25.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_26"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_26.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_26.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_26.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_26.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_27"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_27.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_27.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_27.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_27.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_28"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_28.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_28.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_28.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_28.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_29"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_29.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_29.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_29.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_29.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_30"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_30.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_30.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_30.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_30.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_31"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_31.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_31.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_31.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_31.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_32"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_32.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_32.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_32.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_32.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_33"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_33.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_33.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_33.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_33.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_34"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_34.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_34.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_34.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_34.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_35"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_35.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_35.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_35.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_35.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_36"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_36.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_36.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_36.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_36.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_37"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_37.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_37.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_37.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_37.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_38"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_38.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_38.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_38.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_38.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_39"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_39.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_39.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_39.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_39.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_40"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_40.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_40.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_40.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_40.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_41"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_41.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_41.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_41.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_41.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_42"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_42.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_42.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_42.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_42.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_43"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_43.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_43.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_43.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_43.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_44"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_44.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_44.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_44.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_44.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_45"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_45.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_45.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_45.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_45.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_46"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_46.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_46.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_46.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_46.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_47"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_47.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_47.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_47.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_47.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_48"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_48.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_48.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_48.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_48.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_49"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_49.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_49.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_49.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_49.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_50"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_50.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_50.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_50.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_50.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_51"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_51.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_51.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_51.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_51.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_52"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_52.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_52.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_52.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_52.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_53"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_53.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_53.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_53.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_53.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_54"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_54.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_54.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_54.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_54.inputs:roughness>
+        token outputs:displacement
+        token outputs:surface
+    }
+}
+

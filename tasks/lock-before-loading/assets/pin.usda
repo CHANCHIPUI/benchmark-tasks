@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "Pin"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Pin" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.03
+
+    def Cylinder "shaft" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.15800000000000003
+        color3f[] primvars:displayColor = [(0.85, 0.1, 0.1)]
+        double radius = 0.006
+        double3 xformOp:translate = (-0.08400000000000002, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "tab" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.85, 0.1, 0.1)]
+        double size = 1
+        float3 xformOp:scale = (0.01, 0.03, 0.03)
+        uniform token[] xformOpOrder = ["xformOp:scale"]
+    }
+}
+
