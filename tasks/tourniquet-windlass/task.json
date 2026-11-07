@@ -1,0 +1,21 @@
+{
+  "title": "Tighten a tourniquet's windlass to the green and lock it",
+  "category": "Societal relevance",
+  "keywords": [
+    "first aid",
+    "tourniquet",
+    "reading a gauge",
+    "regrasping",
+    "holding against a load",
+    "locking"
+  ],
+  "instruction": "Tighten the tourniquet on the training leg until its gauge reads green, then lock the rod in its clip.",
+  "context": "A windlass tourniquet stops life-threatening bleeding from a limb: first-aid courses such as Stop the Bleed teach twisting the windlass until the bleeding stops, then locking the rod. Here a gauge stands in for the bleeding. The band pulls the rod back whenever nothing holds it, a gripper turns it only part of the way in one hold, and the clip lines up every half turn, first before the gauge is green. The robot must regrip without losing it, lock only in the green, and let go.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. A training thigh (firm skin-toned foam cylinder, 12.7 cm across, 40 cm long) lies along y, axis at x 28 and 6.55 cm up, hip end on the robot's left, strapped down on two pairs of wooden chocks (3 x 4 x 3.5 cm tall) at y +-15, inner faces 5.6 cm either side of the axis. A blue training windlass tourniquet (CAT style, band 3.8 cm wide, its own clip removed) is round it at y 0, fastened snug, tail toward the arms, over an adult blood pressure cuff's bladder. Its black plastic rod (15 cm long, 12 mm across, 30 g) sits on the twisted strap, axis 14.7 cm up, 30 degrees off lying along the thigh, one end toward the arms and the knee. A grey PLA clip on a 3.4 x 2.4 x 0.3 cm plate on the thigh 6.4 cm toward the knee from the windlass has two prongs (4 mm thick, 8 mm long, 7.5 mm tall, 1 mm inward lips) 4 mm clear either side of the rod, tops 1.5 mm below its underside. An aneroid gauge (12 cm dial, 0 to 300 mmHg, green from 250, stop at 300) on a post and 7 x 7 cm foot at x 43, y -15, dial centre 12 cm up, tilted 50 degrees up toward the arms, is tubed to the bladder and reads 60. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged at the end of the trial from a photo of the gauge and the clip, and the video. Locked: the rod's knee end pushed past the clip's lips onto its plate. 1.0 (success, ends the trial): gauge at 250 mmHg or more, the rod locked, and no part of the robot within 1 cm of the rod or clip for the last 1 s. 0.5: gauge in the green but the rod held instead of locked, or locked with the robot within 1 cm. 0.25: rod locked with the gauge under 250. 0: anything else, including letting go unlocked.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the rod out of the clip, untwist it to its start (30 degrees off lying along the thigh, one end toward the arms and the knee), and check the gauge reads 60 mmHg.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The thigh, band, clip and gauge are fixed; the rod turns about the vertical and tips up to 10 degrees on a 1.5 N m/rad spring. Task code adds the band's pull (0.06 N m per radian of turn), sets the gauge to 60 mmHg plus 1 per degree, and once the rod is 7 mm into the clip holds it down as the unmodelled lips would. Pressure is linear; the strap isn't modelled.",
+  "scores": "Dream-1 run: 0.0 (the right arm reached over the thigh and once pushed the rod round 9 degrees, raising the gauge to 69 mmHg, but never locked it); demo: 1.0",
+  "media": "M-YS4ANC"
+}
