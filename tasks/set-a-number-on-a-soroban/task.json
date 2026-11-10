@@ -1,0 +1,21 @@
+{
+  "title": "Set 2,605 on a cleared teacher's soroban, with its ones digit on the rod under the right-hand dot",
+  "category": "Societal relevance",
+  "keywords": [
+    "soroban",
+    "abacus",
+    "place value",
+    "number representation",
+    "bead pushing",
+    "classroom tool"
+  ],
+  "instruction": "Set 2,605 on the soroban. The rod with the right-hand dot on the beam is the ones place.",
+  "context": "Setting a number is the first skill a soroban course teaches. On each rod the bead above the beam is worth 5 and each of the four below it 1, and a bead counts only when pushed against the beam; the ones place is the rod marked by a unit dot, not the last rod as on a counting frame. The soroban is still taught in Japanese primary schools and abacus schools and used for mental-arithmetic training, and a robot assisting a teacher or pupil must follow its conventions.",
+  "setup": "Station table; positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. (1) Desk mat: black rubber, 36 cm (x) by 40 cm (y), 3 mm thick, centred at (29, 0), taped down. (2) Soroban: a 5-rod teacher's soroban, 32 cm wide (y), 28 cm deep (x) and 5 cm thick, 0.8 kg, lying flat on the mat, facing the robot and taped down; it spans x 15 to 43 and y -16 to 16. Frame: lacquered brown hardwood; near (bottom) bar 4 cm wide at x 15 to 19, far (top) bar 3.6 cm wide at x 39.4 to 43, side bars 2.5 cm wide. Beam: white-lacquered wood, 2 cm wide, at x 31.8 to 33.8, flush with the frame top, with black unit dots 14 mm across over rods 1 and 4. Rods: five black steel rods, 4 mm across, along x at y 8.8, 4.4, 0, -4.4 and -8.8 (rods 1 to 5 from the robot's left), 2.8 cm high. Beads: 25 yellow plastic double cones with flat hubs, 40 mm across and 24 mm thick, 8 g; on each rod one 5-bead between the beam and the far bar and four 1-beads between the beam and the near bar, each group with 3.2 cm of free travel. Start: cleared. Every 5-bead rests against the far bar (x 37.0 to 39.4) and every 1-bead is stacked against the near bar (x 19.0 to 28.6), leaving 3.2 cm of empty rod beside the beam on both sides. The beads slide along their rods and stay where they are pushed. object_jitter 0.",
+  "scoring": "A bead's empty space is the empty length of rod between it and the beam, not counting the beads in between (3.2 cm when cleared). It is at the beam with 5 mm or less, away with 20 mm or more, and undecided in between. A rod's digit is 5 if its 5-bead is at the beam, plus 1 for each 1-bead at the beam; a rod with an undecided bead is unreadable, which counts as wrong and as not cleared. A rod is cleared when every bead on it is away. Target: rods 1 to 5 (from the robot's left) read 2, 6, 0, 5, 0. 0 at any moment, for the rest of the trial: a bead forced more than 4 mm past its stop at the beam or the frame (the soroban damaged), or the frame moving more than 1 cm (only possible in a real trial, if the tape fails). Success, 1.0, ends the trial: the rods read 2, 6, 0, 5, 0 and no bead moves more than 1 mm for 1 s. Otherwise, at the run limit: 0 if rod 3 (the zero) or rod 5 (right of the ones rod) is not cleared; else 0.3 for each of rod 1 reading 2, rod 2 reading 6 and rod 4 reading 5, so 0, 0.3, 0.6 or 0.9. Doing nothing scores 0; the number set one rod to the right, or with the zero skipped, scores 0. The order of moves does not matter, and beads may be cleared and set again.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Clear the soroban: push every 5-bead against the far bar and every 1-bead against the near bar.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The soroban is one fixed-base articulation: 25 bead links on sliding joints with 3.2 cm of travel, hard stops at the frame and beam, and 1 N s/m of damping in place of the rod friction that holds real beads where they are pushed. Beads on a rod push each other through double-cone convex-hull colliders; each bead rides its joint, not its rod, while fingertips collide with the rods. The frame and mat are fixed, as if taped down.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FHERQQ"
+}
