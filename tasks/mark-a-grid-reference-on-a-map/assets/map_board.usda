@@ -1,0 +1,139 @@
+#usda 1.0
+(
+    defaultPrim = "MapBoard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "MapBoard" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 2.0000
+    int physxRigidBody:solverPositionIterationCount = 32
+    int physxRigidBody:solverVelocityIterationCount = 4
+    float physxRigidBody:maxDepenetrationVelocity = 1
+
+    def Material "PhysicsMaterial" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:staticFriction = 0.5000
+        float physics:dynamicFriction = 0.4000
+        float physics:restitution = 0
+    }
+
+    def Cube "col_board" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </MapBoard/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.310000, 0.000000, 0.001500)
+        float3 xformOp:scale = (0.520000, 0.580000, 0.003000)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Scope "Looks"
+    {
+        def Material "hardboard"
+        {
+            token outputs:surface.connect = </MapBoard/Looks/hardboard/surface.outputs:surface>
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                float inputs:metallic = 0.0
+                color3f inputs:diffuseColor.connect = </MapBoard/Looks/hardboard/color_tex.outputs:rgb>
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+            def Shader "uv"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+            def Shader "color_tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @../textures/hardboard.jpg@
+                float2 inputs:st.connect = </MapBoard/Looks/hardboard/uv.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                token inputs:sourceColorSpace = "sRGB"
+                float4 inputs:scale = (1, 1, 1, 1)
+                float3 outputs:rgb
+            }
+        }
+        def Material "map"
+        {
+            token outputs:surface.connect = </MapBoard/Looks/map/surface.outputs:surface>
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                float inputs:metallic = 0.0
+                color3f inputs:diffuseColor.connect = </MapBoard/Looks/map/color_tex.outputs:rgb>
+                float inputs:roughness = 0.72
+                token outputs:surface
+            }
+            def Shader "uv"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+            def Shader "color_tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @../textures/map.png@
+                float2 inputs:st.connect = </MapBoard/Looks/map/uv.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                token inputs:sourceColorSpace = "sRGB"
+                float4 inputs:scale = (1, 1, 1, 1)
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "visual"
+    {
+        def Mesh "hardboard" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </MapBoard/Looks/hardboard>
+            uniform bool doubleSided = 0
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7, 8, 1, 0, 9, 4, 5, 8, 2, 1, 9, 5, 6, 8, 3, 2, 9, 6, 7, 8, 0, 3, 9, 7, 4]
+            point3f[] points = [(0.57000, -0.29000, 0.00000), (0.57000, 0.29000, 0.00000), (0.05000, 0.29000, 0.00000), (0.05000, -0.29000, 0.00000), (0.57000, -0.29000, 0.00270), (0.57000, 0.29000, 0.00270), (0.05000, 0.29000, 0.00270), (0.05000, -0.29000, 0.00270), (0.31000, 0.00000, 0.00000), (0.31000, 0.00000, 0.00270)]
+            normal3f[] normals = [(1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000)] (
+                interpolation = "faceVarying"
+            )
+            texCoord2f[] primvars:st = [(-5.8000, 0.0000), (5.8000, 0.0000), (5.8000, 0.0540), (-5.8000, 0.0000), (5.8000, 0.0540), (-5.8000, 0.0540), (11.4000, 0.0000), (1.0000, 0.0000), (1.0000, 0.0540), (11.4000, 0.0000), (1.0000, 0.0540), (11.4000, 0.0540), (5.8000, 0.0000), (-5.8000, 0.0000), (-5.8000, 0.0540), (5.8000, 0.0000), (-5.8000, 0.0540), (5.8000, 0.0540), (1.0000, 0.0000), (11.4000, 0.0000), (11.4000, 0.0540), (1.0000, 0.0000), (11.4000, 0.0540), (1.0000, 0.0540), (6.2000, 0.0000), (11.4000, 5.8000), (11.4000, -5.8000), (6.2000, 0.0000), (11.4000, -5.8000), (11.4000, 5.8000), (6.2000, 0.0000), (1.0000, 5.8000), (11.4000, 5.8000), (6.2000, 0.0000), (11.4000, 5.8000), (1.0000, 5.8000), (6.2000, 0.0000), (1.0000, -5.8000), (1.0000, 5.8000), (6.2000, 0.0000), (1.0000, 5.8000), (1.0000, -5.8000), (6.2000, 0.0000), (11.4000, -5.8000), (1.0000, -5.8000), (6.2000, 0.0000), (1.0000, -5.8000), (11.4000, -5.8000)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+        def Mesh "map" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </MapBoard/Looks/map>
+            uniform bool doubleSided = 0
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7, 8, 1, 0, 9, 4, 5, 8, 2, 1, 9, 5, 6, 8, 3, 2, 9, 6, 7, 8, 0, 3, 9, 7, 4]
+            point3f[] points = [(0.57000, -0.29000, 0.00270), (0.57000, 0.29000, 0.00270), (0.05000, 0.29000, 0.00270), (0.05000, -0.29000, 0.00270), (0.57000, -0.29000, 0.00300), (0.57000, 0.29000, 0.00300), (0.05000, 0.29000, 0.00300), (0.05000, -0.29000, 0.00300), (0.31000, 0.00000, 0.00270), (0.31000, 0.00000, 0.00300)]
+            normal3f[] normals = [(1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000)] (
+                interpolation = "faceVarying"
+            )
+            texCoord2f[] primvars:st = [(0.0000, 0.0047), (1.1154, 0.0047), (1.1154, 0.0052), (0.0000, 0.0047), (1.1154, 0.0052), (0.0000, 0.0052), (1.0000, 0.0047), (0.0000, 0.0047), (0.0000, 0.0052), (1.0000, 0.0047), (0.0000, 0.0052), (1.0000, 0.0052), (1.1154, 0.0047), (0.0000, 0.0047), (0.0000, 0.0052), (1.1154, 0.0047), (0.0000, 0.0052), (1.1154, 0.0052), (0.0000, 0.0047), (1.0000, 0.0047), (1.0000, 0.0052), (0.0000, 0.0047), (1.0000, 0.0052), (0.0000, 0.0052), (0.5000, 0.5000), (1.0000, 1.0000), (1.0000, 0.0000), (0.5000, 0.5000), (1.0000, 0.0000), (1.0000, 1.0000), (0.5000, 0.5000), (0.0000, 1.0000), (1.0000, 1.0000), (0.5000, 0.5000), (1.0000, 1.0000), (0.0000, 1.0000), (0.5000, 0.5000), (0.0000, 0.0000), (0.0000, 1.0000), (0.5000, 0.5000), (0.0000, 1.0000), (0.0000, 0.0000), (0.5000, 0.5000), (1.0000, 0.0000), (0.0000, 0.0000), (0.5000, 0.5000), (0.0000, 0.0000), (1.0000, 0.0000)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+}
