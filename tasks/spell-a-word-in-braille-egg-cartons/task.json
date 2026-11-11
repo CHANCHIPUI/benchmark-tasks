@@ -1,0 +1,24 @@
+{
+  "title": "Spell \"hid\" in braille with balls in three egg cartons, one letter per carton, for a reader on the robot's side",
+  "category": "Societal relevance",
+  "keywords": [
+    "braille",
+    "egg carton",
+    "braille cell",
+    "visual impairment",
+    "special education",
+    "accessibility",
+    "tactile code",
+    "mirror letters",
+    "pick and place"
+  ],
+  "instruction": "Spell the word \"hid\" in braille for a reader sitting on your side of the table, one letter in each egg carton. A ball in a cup is a raised dot. In each carton, the top row is the one farthest from you, dots 1, 2 and 3 run down the left column, and dots 4, 5 and 6 run down the right column. The word reads from left to right.",
+  "context": "Teachers of pupils who are blind or have low vision, and families learning braille, build large braille cells from half-dozen egg cartons or muffin tins with a ball for each raised dot. The cell must be built as the reader will feel it: dots 1-3 down the left column, 4-6 down the right. In braille h/j, i/e and d/f are mirror images, so a cell built with its columns swapped is a different letter.",
+  "setup": "Coordinates in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. Board: dark grey painted hardboard, 22 (x) x 48 (y) x 0.3 cm, centred at (31, 0), fixed. Egg cartons: three half-dozen moulded-pulp (recycled paper) egg carton bases, light grey, lids cut off, taped to the board (fixed). Each is 15.6 cm along x, 10.6 cm along y and 3.2 cm tall, with no numbers or marks. Carton 1 is centred at (31, +13), carton 2 at (31, 0), carton 3 at (31, -13). Each carton has six cups in 3 rows of 2 at 5.0 cm pitch, each 4.6 cm across at the rim, 3.0 cm at the floor and 2.8 cm deep, with 4 mm ridges between cups at rim height, two low moulded posts (18 mm across, 6 mm above the rim) on the centre line where four cups meet, and outer walls tapering in 6 mm from rim to base. Rows at x 36 (far: dots 1 and 4), 31 (dots 2 and 5) and 26 (dots 3 and 6); the left column (dots 1-3) at the carton's y + 2.5 and the right column (dots 4-6) at its y - 2.5. Balls: ten solid beech balls, 40 mm across, 24 g, painted red. Ball racks: two planed pine boards, 30 (x) x 6 (y) x 1.5 cm, fixed, centred at (30, +28) and (30, -28), each with five drilled sockets 24 mm across and 6 mm deep at x 18, 24, 30, 36 and 42. A ball sits in every socket, its centre 3.2 cm above the table. The cartons start empty.",
+  "scoring": "Read from the ball positions (in a real trial, a photo from above after the arms move away, and a ruler). A cup is filled when a ball sits in it: seen from above its centre is within 15 mm of the cup's centre, the centre is no more than 10 mm above where a ball seated alone in a cup rests (its top no more than 1 cm higher), and neither gripper holds it (both TCPs at least 4 cm from its centre). Any other ball whose centre lies within a carton's 15.6 x 10.6 cm outline (on a ridge or rim, on another ball, or held over it) is a stray ball on that carton. A cell is correct when its filled cups are exactly its letter's dots and it has no stray ball: carton 1 (left) dots 1, 2, 5 (h); carton 2 dots 2, 4 (i); carton 3 (right) dots 1, 4, 5 (d), with dots 1-3 down the left (+y) column from the far row and 4-6 down the right. 1.0: all three cells correct and every ball on a carton slower than 1 cm/s (from its positions over 0.25 s) for 1 s; this ends the trial. Otherwise, at the run limit, 1/3 for each correct cell, at most 0.67 (0, 0.33, 0.67): 1.0 needs the 1 s of stillness. 0 at any moment, staying 0, in a real trial only: a carton torn, crushed or moved more than 1 cm (in simulation the cartons are fixed and rigid). Balls anywhere off the cartons do not count; a dropped ball may be replaced with a spare. Order of moves is free. Examples: nothing 0; columns swapped in every cell (jef) 0; whole row mirrored (fej) 0; built for a reader across the table 0; dots numbered across the rows 0; cells upside down 0; right letters reversed (dih) 0.33.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the ten balls back in the racks, one per socket, and empty the cartons. Nothing is consumed.",
+  "fidelity": "Rigid bodies on GPU physics at 240 Hz. The board, cartons and racks are fixed; real pulp gives a little. Each cup collides as a floor and eight flat sloped walls following its taper, each socket as a square hole. Balls are spheres, friction 0.6/0.5, no bounce, with angular damping in place of rolling resistance. Solid wooden balls are used; lighter ping-pong balls are also common.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZZ88SZ"
+}
