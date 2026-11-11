@@ -1,0 +1,22 @@
+{
+  "title": "Write four named notes on a staff board printed with a bass clef, one note head in each bar",
+  "category": "Societal relevance",
+  "keywords": [
+    "music education",
+    "bass clef",
+    "staff notation",
+    "note names",
+    "reading a convention",
+    "pick and place",
+    "precision placement"
+  ],
+  "instruction": "Use the note heads in the trays to write the notes D, F, C and E on the staff, one note in each bar from left to right. Put each note on one of the five lines or in one of the four spaces between them.",
+  "context": "Music classrooms drill note names on staff boards with loose note heads. Notes go where the printed clef puts them: the bass clef (piano left hand, cello, bassoon, trombone, tuba, low voices) places every letter two staff steps away from the more common treble clef, so a helper that assumes treble writes every note wrong.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table. Staff board, fixed (taped down in a real trial): white melamine-faced board 25 cm (x) by 63 cm (y) by 1.2 cm, spanning x 17.5 to 42.5 and y -25 to +38, printed in matte black with no letters, key or time signature. Staff: five lines 8 mm thick at x 21, 25.5, 30, 34.5 and 39 (lines 1 to 5, line 1 nearest the arms), running along y from +36.5 to -23.8, so pitch rises away from the arms. Bass clef at the left end (Bravura's F clef), 16.1 by 12.4 cm, within y +35.7 to +23.3, from line 5 down to between lines 1 and 2; its head is on line 4 and its two dots, 1.6 cm across, are centred at x 36.75 and 32.25. Bar lines 6 mm thick from line 1 to line 5 at y +22, +11, 0 and -11, and a final double bar (6 mm thin line at y -22, 12 mm thick line at y -23.2): bars 1 to 4, each 11 cm wide, left to right as seen from the arms. Note heads: four loose discs of black-lacquered beech, 4.0 cm across, 1.8 cm thick, 16 g each. Trays: two fixed beech trays along the board's near edge, one in front of each half, 4.8 cm (x) by 18 cm (y) inside, 5 mm floor, rim 5 mm wide and 1 cm tall, centred at (14.5, +22) and (14.5, -22). Each holds two heads lying flat at x 14.5: at y +27 and +17 in the left tray, -27 and -17 in the right.",
+  "scoring": "Measured from the heads' positions (a photo from above and a ruler, against the printed lines). Targets: bar 1 D on line 3 (x 30), bar 2 F on line 4 (x 34.5), bar 3 C in space 2 (x 27.75, midway between lines 2 and 3), bar 4 E in space 3 (x 32.25). A bar passes when all five hold: (1) exactly one head's centre, seen from above, is over the board between the bar's two bar lines; (2) that centre is at least 2.5 cm from both of them; (3) it is within 7.5 mm, front to back, of the target's centre line (neighbouring lines and spaces are 22.5 mm apart, so a 7.5 mm gap counts for neither); (4) the head tilts less than 10 degrees and its underside is within 3 mm of the board; (5) both grippers' TCPs are at least 4 cm from its centre and it moves slower than 1 cm/s. 1.0 once all four bars pass together for 1 s, which ends the trial. Otherwise, at the run limit, 0.25 for each bar that passes (0, 0.25, 0.5, 0.75 or 1.0). Nothing fails permanently: heads may be lifted and placed again. A bar earns 0 if it is empty, holds two heads, or its head is on or within 2.5 cm of a bar line, on the wrong line or space, between a line and a space, above or below the staff, on its edge, on another head or still held. A head in no bar (tray, clef area, either end of the board beyond the bars, table, floor) counts for and against nothing; a head over the board in front of or behind the staff, within a bar's span, is in that bar. Doing nothing scores 0; reading the clef as treble (D line 4, F space 1 or line 5, C space 3, E line 1 or space 4) scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the four heads back in the trays, lying flat at x 14.5 and y +27, +17, -17 and -27. Nothing is consumed.",
+  "fidelity": "Rigid bodies at 240 Hz on GPU physics. The heads are rigid discs with convex-hull colliders and wood-on-melamine friction. The board and trays are fixed. Real staff boards use thin magnetic note heads; these are 18 mm wooden discs a two-finger gripper can hold, round rather than oval, without stems. The staff is enlarged (4.5 cm line spacing, 8 mm lines) so it reads at camera resolution. The print is a texture on a flat board.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-E3YC4S"
+}
