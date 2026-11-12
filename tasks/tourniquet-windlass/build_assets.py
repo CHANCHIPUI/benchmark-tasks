@@ -33,6 +33,7 @@ CHOCK = (0.55, 0.40, 0.24)         # wood
 BAND = (0.10, 0.30, 0.62)          # a blue training tourniquet
 ROD = (0.05, 0.05, 0.06)
 CLIP = (0.20, 0.22, 0.25)
+BLADDER = (0.14, 0.14, 0.16)       # dark grey nylon
 CASE = (0.16, 0.17, 0.19)
 CHROME = (0.80, 0.82, 0.85)
 TUBE = (0.12, 0.12, 0.13)
@@ -199,6 +200,7 @@ def build_tourniquet():
     case = material(stage, f"{r}/Looks/case", CASE, roughness=0.4, metallic=0.3)
     chrome = material(stage, f"{r}/Looks/chrome", CHROME, roughness=0.25, metallic=0.8)
     tube = material(stage, f"{r}/Looks/tube", TUBE, roughness=0.7)
+    bladder = material(stage, f"{r}/Looks/bladder", BLADDER, roughness=0.8)
     needle_mat = material(stage, f"{r}/Looks/needle", NEEDLE, roughness=0.5)
     dial(TEX / "dial.png")
     dial_mat = material(stage, f"{r}/Looks/dial", (1, 1, 1), roughness=0.6, texture="./textures/dial.png")
@@ -220,10 +222,12 @@ def build_tourniquet():
             box(stage, f"{base}/chock_{'lr'[y > 0]}{'ab'[s > 0]}", g.CHOCK,
                 (s * (g.CHOCK_IN + g.CHOCK[0] / 2), y - g.BAND_Y, g.CHOCK[2] / 2), wood)   # touching the thigh
     cylinder(stage, f"{base}/band", g.LEG_R + g.BAND_T, g.BAND_W, (0.0, 0.0, g.LEG_Z), "Y", band, collide=True)
+    # the pressure bladder under the band, wrapped once round the thigh, showing either side of it
+    cylinder(stage, f"{base}/bladder", g.LEG_R + g.BLADDER_T, g.BLADDER_W, (0.0, 0.0, g.LEG_Z), "Y", bladder)
     # the band's tail, fastened round the side toward the arms
     box(stage, f"{base}/band_tail", (0.004, g.BAND_W * 0.9, 0.07), (-(g.LEG_R + g.BAND_T) - 0.002, 0.0, g.LEG_Z + 0.01),
         band, collide=False)
-    # the clip's plate on the thigh, under the hook (the prongs are fixed shapes in task.py)
+    # the clip's base plate on the thigh, under the channel (the walls, lead-ins and lips are fixed shapes in task.py)
     box(stage, f"{base}/clip_plate", g.PLATE, (0.0, g.CLIP_Y - g.BAND_Y, g.LEG_Z + g.LEG_R + g.PLATE[2] / 2), clip,
         collide=False)
 

@@ -36,7 +36,7 @@ STEP = math.radians(2.0)  # how far the hand's angle advances each move
 LEAD_MAX = math.radians(10.0)  # and how far it may run ahead of the rod's measured angle
 FIRST_ALIGN = math.radians(-90.0)  # the rod first lies along the thigh 30 degrees in (gauge about 90)
 REGRASP_AT = math.radians(-20.0)   # the right hand's wrist is near its limit here: it takes a fresh grip
-LOCK_AT = math.radians(88.0)       # along the thigh again, the gauge in the green (about 268)
+LOCK_AT = math.radians(89.0)       # along the thigh again, the gauge in the green (about 269)
 LEAN = 15.0              # the twisting hand leans this far toward the robot
 HOLD_LEAN = 30.0         # the holding hand leans further, which keeps the two arms apart
 
@@ -122,11 +122,12 @@ def let_go(arm, up=0.06):
 
 def lock(rod, arm):
     """Lift the held (hip) end until the rod's measured tilt puts its knee end past the clip's lips, onto its plate (the
-    arm gives under the strap's spring, so it lifts more than that); the lips then hold it down."""
-    for _ in range(12):
+    arm gives under the strap's spring, so it lifts more than that); the lips then hold it down. The clip's lead-in
+    guides the rod's end into its channel on the way down."""
+    for _ in range(30):
         theta, tilt = rod.read()
         knee = 1.0 if math.sin(theta) < 0 else -1.0             # which way the rod's +x end points: knee or hip
-        if knee * abs(g.CLIP_Y) * math.sin(tilt) >= g.LOCKED_DEPTH + 0.0003:   # how far down its knee end is at the hook
+        if knee * g.LOCK_R * math.sin(tilt) >= g.LOCKED_DEPTH + 0.0003:   # how far down its knee end is at the clip
             break
         yield from arm.move(arm.pos + [0.0, 0.0, 0.003], None, 0.25)
         yield from wait(0.15)

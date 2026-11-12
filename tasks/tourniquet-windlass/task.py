@@ -1,7 +1,7 @@
 """On the station table, in front of the arms: a training thigh (a firm foam cylinder, 12.7 cm across) lying across the
 table, hip end on the robot's left. A blue windlass tourniquet is strapped round it, snug, its black windlass rod on
-top, 30 degrees off lying along the thigh. A clip on the thigh beside the band, toward the knee, has one hook for the
-rod. Beyond the thigh, an aneroid gauge on the band's bladder reads 60 mmHg; its dial is green from 250 to 300.
+top, 30 degrees off lying along the thigh. A C-shaped snap clip on the thigh beside the band, toward the knee, takes
+the rod. Beyond the thigh, an aneroid gauge on the band's bladder reads 60 mmHg; its dial is green from 250 to 300.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 -E control_hz=20 \\
          --scorer task_score ...
@@ -38,17 +38,35 @@ TOURNIQUET = UsdBody("tourniquet", usd="assets/tourniquet.usda", pos=(g.LEG_X, g
                      drives=(("twist", 0.0, g.TWIST_DAMPING), ("press", g.TILT_K, g.TILT_D), ("needle", 0.05, 0.002)),
                      friction=(0.8, 0.7))
 
-# the clip's hook: two prongs either side of where the rod lies along the thigh, on the clip's plate (its floor)
-_PRONG_X = g.ROD_R + g.CLIP_GAP + g.PRONG_T / 2
-_PRONG_H = g.PRONG_TOP - g.HOOK_FLOOR
-HOOK = [Shape(f"clip_prong_{'ab'[s > 0]}", pos=(g.LEG_X + s * _PRONG_X, g.BAND_Y + g.CLIP_Y,
-                                                 TOP + g.HOOK_FLOOR + _PRONG_H / 2),
-              size=(g.PRONG_T, g.PRONG_L, _PRONG_H), color=GREY) for s in (-1, 1)]
-HOOK.append(Shape("clip_plate", pos=(g.LEG_X, g.BAND_Y + g.CLIP_Y, TOP + g.HOOK_FLOOR - g.PLATE[2] / 2),
-                  size=g.PLATE, color=GREY))
+# the clip: two walls either side of where the rod lies along the thigh, on the clip's base plate (the channel's floor).
+# Each wall is a box up to the lips' top with a 45 degree lead-in above it that collides; the lips themselves are
+# shown but do not collide: the rod passes them as it snaps in, and task code then holds it down as they would.
+_IN = g.ROD_R + g.CLIP_GAP                 # the walls' inner faces, from the rod's line (6.5 mm)
+_WALL_H = g.LIP_Z[1]                       # up to the lips' top (7.5 mm)
+_LEAD = (g.PRONG_TOP - g.HOOK_FLOOR) - _WALL_H   # the lead-in rises from there to the walls' top (9 mm)
+_CY = g.BAND_Y + g.CLIP_Y
+_FLOOR = TOP + g.HOOK_FLOOR
+HOOK = []
+for s in (-1, 1):
+    side = "ab"[s > 0]
+    HOOK.append(Shape(f"clip_wall_{side}", pos=(g.LEG_X + s * (_IN + g.PRONG_T / 2), _CY, _FLOOR + _WALL_H / 2),
+                      size=(g.PRONG_T, g.PRONG_L, _WALL_H), color=GREY))
+    # the lead-in: a slab whose top face runs from the channel's edge at the lips' top out to the wall's outer top edge
+    run = math.hypot(g.PRONG_T, _LEAD)
+    ang = math.atan2(_LEAD, g.PRONG_T)          # 34 degrees: a 1 mm rise across the 1.5 mm wall
+    mid = np.array([s * (_IN + g.PRONG_T / 2), _WALL_H + _LEAD / 2])
+    normal = np.array([-s * math.sin(ang), math.cos(ang)])   # up and in, toward the channel
+    centre = mid - normal * 0.0005
+    phi = -s * ang                                # about y: the slab's x axis along the slope
+    HOOK.append(Shape(f"clip_lead_{side}", pos=(g.LEG_X + centre[0], _CY, _FLOOR + centre[1]),
+                      size=(run, g.PRONG_L, 0.001), rot_xyzw=(0.0, math.sin(phi / 2), 0.0, math.cos(phi / 2)),
+                      color=GREY))
+    HOOK.append(Shape(f"clip_lip_{side}", pos=(g.LEG_X + s * (_IN - g.LIP_IN / 2), _CY, _FLOOR + sum(g.LIP_Z) / 2),
+                      size=(g.LIP_IN, g.PRONG_L, g.LIP_Z[1] - g.LIP_Z[0]), color=GREY, collide=False))
+HOOK.append(Shape("clip_plate", pos=(g.LEG_X, _CY, _FLOOR - g.PLATE[2] / 2), size=g.PLATE, color=GREY))
 OBJECTS = [TOURNIQUET] + HOOK
 
-# -- monitor: the band's pull on the windlass, the gauge, the hook, and the score's state ----------------------------
+# -- monitor: the band's pull on the windlass, the gauge, the clip, and the score's state ----------------------------
 _STATE: dict = {}
 HOLD_STEPS = 20           # control steps (1 s) locked, green and with the arms clear before it counts as let go
 ROD_SIZE = np.array([g.ROD_L, 2 * g.ROD_R, 2 * g.ROD_R])
@@ -69,7 +87,17 @@ def _edge_points(size, step: float = 0.005) -> np.ndarray:
 
 
 ROD_EDGES = _edge_points(ROD_SIZE)
-FIXED_BOXES = [(np.eye(3), np.asarray(s.pos, float) - [0, 0, TOP], np.asarray(s.size, float)) for s in HOOK]
+
+
+def _rotation(xyzw) -> np.ndarray:
+    x, y, z, w = xyzw
+    return np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+                     [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+                     [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)]])
+
+
+FIXED_BOXES = [(_rotation(s.rot_xyzw), np.asarray(s.pos, float) - [0, 0, TOP], np.asarray(s.size, float))
+               for s in HOOK]
 FIXED_BOXES = [(R, c, size, _edge_points(size)) for R, c, size in FIXED_BOXES]
 
 
@@ -100,9 +128,9 @@ def _set_press_target(environment, tilt: float) -> None:
 
 
 def hook_dip(theta: float, tilt: float) -> float:
-    """How far down the rod's centre line is at the hook (the rod's end on the knee side, -y)."""
+    """How far down the rod's centre line is at the clip's floor's far edge (the rod's end on the knee side, -y)."""
     end = 1.0 if math.sin(theta) < 0 else -1.0             # the rod's +x end points toward the knee
-    return end * abs(g.CLIP_Y) * math.sin(tilt)
+    return end * g.LOCK_R * math.sin(tilt)
 
 
 @on_reset
@@ -115,7 +143,7 @@ def _reset_state(environment=None) -> None:
 
 @before_reset
 def _restart(environment) -> None:
-    """Untwist the windlass, lift the rod out of the hook and level it, and zero the gauge before a reset (the reset
+    """Untwist the windlass, lift the rod out of the clip and level it, and zero the gauge before a reset (the reset
     moves the tourniquet only by its root, not its joints)."""
     from scenekit import write_joint_positions
 
@@ -161,7 +189,7 @@ def rod_box(theta: float, tilt: float):
 
 
 def _clearance(environment, theta: float, tilt: float) -> float:
-    """How far either arm is from the rod and the hook, using the URDF's collision hulls of every link, the gripper
+    """How far either arm is from the rod and the clip, using the URDF's collision hulls of every link, the gripper
     body and both fingers at their simulated poses."""
     from yam_arena.analysis import world_hulls
 
@@ -191,11 +219,11 @@ def _monitor(environment) -> None:
     S["aligned"] = abs(math.remainder(theta - math.pi / 2, math.pi)) <= g.LOCK_ALIGN    # along the thigh
     S["dip"] = dip = hook_dip(theta, tilt)
     if not S["locked"] and S["aligned"] and dip >= g.LOCKED_DEPTH:
-        S["locked"] = True                                  # down in the hook: it snaps in and stays down
+        S["locked"] = True                                  # seated in the clip: it snaps in and stays down
         end = 1.0 if math.sin(theta) < 0 else -1.0
         _set_press_target(environment, end * g.TILT_MAX)
     elif S["locked"] and dip < g.UNLOCK_DEPTH:
-        S["locked"] = False                                 # lifted back out of the hook
+        S["locked"] = False                                 # lifted back out past the lips
         _set_press_target(environment, 0.0)
     S["pressure"] = p = g.pressure(S["twist"])
     _set_needle(environment, p)
@@ -206,8 +234,8 @@ def _monitor(environment) -> None:
 
 
 def success(objects) -> bool:
-    """The gauge in the green (250 mmHg or more) with the rod locked in the clip's hook and no part of either arm
-    within 1 cm of the rod or the hook (yam_arena ends the trial once this has held for SUCCESS_HOLD_S)."""
+    """The gauge in the green (250 mmHg or more) with the rod locked in the clip and no part of either arm
+    within 1 cm of the rod or the clip (yam_arena ends the trial once this has held for SUCCESS_HOLD_S)."""
     return bool(_STATE["locked"] and _STATE["pressure"] >= g.GREEN and _STATE["clear"])
 
 
