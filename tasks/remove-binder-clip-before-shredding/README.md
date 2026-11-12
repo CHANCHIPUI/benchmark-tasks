@@ -43,6 +43,6 @@ The shredder runs in `_run_shredder()` once per control step:
 
 ## Sources
 
-All meshes are built in `shred_usd.py` from boxes, cylinders, prisms and tubes. Both textures (oak and the printed invoice face, a generic layout with no names or logos) are drawn by `make_textures.py`. No third-party assets are used.
+All meshes are built in `shred_usd.py` from boxes, cylinders, prisms and tubes. Both textures (oak and the printed invoice face, a generic layout with no names or logos) are drawn by `make_textures.py`. The word "INVOICE" on the invoice face is set in the DejaVu Sans font, which is under the Bitstream Vera Fonts license (the DejaVu Fonts License, https://dejavu-fonts.github.io/License.html); DejaVu's own changes are in the public domain. The font file is not included: `make_textures.py` loads it from the system, and only the rendered images are in `textures/`. No other third-party assets are used.
 
 Sizes: the shredder's head and slot follow personal 10-sheet shredders with a 220 to 230 mm feed opening; its bin is made shallower than a real one (the machine is 12 cm tall instead of about 30 cm) so that the slot is within the arms' reach. The invoices are A4 sheets folded in three (210 x 99 mm). The clip is a standard 41 mm binder clip. The rack is a small oak desk letter rack, and the dish a desk clip dish.
