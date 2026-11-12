@@ -146,3 +146,17 @@ the table top.
 
 Stop the pendulum and leave it upright and still. Slide the weight back up to 60. Give the key a few turns if it has
 run down, and stand the metronome on its tape outline, scale facing the arms.
+
+## Fonts and licenses
+
+`build_assets.py` draws the tempo scale texture, `assets/textures/scale.png`, with two DejaVu fonts:
+- DejaVu Sans, for the tempo numbers (`DejaVuSans.ttf`);
+- DejaVu Serif Italic, for the tempo names (`DejaVuSerif-Italic.ttf`).
+
+Both are DejaVu fonts 2.37, as packaged in Ubuntu's `fonts-dejavu-core` (`/usr/share/fonts/truetype/dejavu/`).
+They are under the DejaVu Fonts License: Bitstream Vera fonts copyright (c) 2003 Bitstream, Inc., under the
+Bitstream Vera Fonts license, with the DejaVu changes in the public domain. The full text is at
+<https://dejavu-fonts.github.io/License.html>. The license lets anyone use and redistribute the fonts free of
+charge, which covers rendering text from them into an image. This folder holds only that rendered texture; no font
+files are included or modified. Everything else in this folder was written for this task.
+
