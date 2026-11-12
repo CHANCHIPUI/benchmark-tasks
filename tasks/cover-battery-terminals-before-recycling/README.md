@@ -46,4 +46,7 @@ trace (`trace.jsonl`): each battery's position, whether it is in the box and cov
   (`assets.py`); no brand.
 - Terminal cover: an open-bottom sleeve like the snap-on covers such packs ship with. Mesh our own.
 - Collection box: a 300 x 200 x 120 mm Euro stacking box. Mesh our own.
-- Labels: our own artwork (`make_textures.py`), set in DejaVu Sans (free licence).
+- Labels: our own artwork (`make_textures.py`), set in the DejaVu Sans font. DejaVu Sans is under the Bitstream Vera
+  Fonts license (the DejaVu Fonts License, https://dejavu-fonts.github.io/License.html); DejaVu's own changes are in
+  the public domain. The font file is not included: `make_textures.py` loads it from the system, and only the rendered
+  label images are in `textures/`.
