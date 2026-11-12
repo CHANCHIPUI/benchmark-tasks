@@ -18,33 +18,45 @@ HERE = Path(__file__).resolve().parent
 BUILD = HERE / "build"
 
 # -- layout -----------------------------------------------------------------------------------------------------------
-HOUSING_X = (0.255, 0.415)        # outer, along x
+HOUSING_X = (0.215, 0.375)        # outer, along x
 HOUSING_HALF_Y = 0.185            # outer half width
 FLOOR = 0.003                     # housing floor top
 WALL_T, WALL_TOP = 0.003, 0.025   # housing wall thickness and top
 
-MODULE_X = (0.26, 0.41)           # 15 cm long
+MODULE_X = (0.22, 0.37)           # 15 cm long
 MODULE_W = 0.07                   # 7 cm wide (y)
 MODULE_Y = (0.145, 0.065, -0.065, -0.145)   # M1..M4, robot's left to right
 LID = 0.043                       # module lid height (4 cm tall on the 3 mm floor)
 
-POST_X = {"front": 0.28, "back": 0.39}
+POST_X = {"front": 0.24, "back": 0.35}
 PAD_R, PAD_TOP = 0.010, 0.049     # nickel-plated terminal pad, 6 mm tall
-STUD_R, STUD_TIP = 0.003, 0.061   # M6 stud, 12 mm above the pad
+STUD_R, STUD_TIP = 0.004, 0.064   # M8 stud, 15 mm above the pad
+STUD_COL = 0.007                  # the stud's square collider
 
 # Each module's (+, -) terminals: modules alternate so that the series string runs
 # M1- (front, main -) > M1+ back > bar A > M2- back > M2+ front > plug > M3- front > M3+ back > bar B > M4- back > M4+ front (main +).
 POLARITY = {0: {"front": "-", "back": "+"}, 1: {"front": "+", "back": "-"},
             2: {"front": "-", "back": "+"}, 3: {"front": "+", "back": "-"}}
+MODULE_V = 25.6                   # nominal volts per module (8S LFP)
 
 BAR_SIZE = (0.025, 0.11, 0.005)   # x (width), y (length), z (thickness)
-BAR_HOLE, BAR_HOLE_Y = 0.008, 0.04
+BAR_HOLE, BAR_HOLE_Y = 0.0095, 0.04
 BAR_MASS = 0.12
 BARS = {"busbar_a": (POST_X["back"], 0.105), "busbar_b": (POST_X["back"], -0.105)}
 BAR_Z = PAD_TOP + BAR_SIZE[2] / 2
+BAR_TOP = PAD_TOP + BAR_SIZE[2]
 
-SOCKET_X, SOCKET_HALF = (0.275, 0.325), (0.025, 0.028)
-SOCKET_CENTRE = (0.30, 0.0)
+NUT_AF, NUT_H = 0.013, 0.008      # M8 flange nut (ISO 4161): 13 mm across flats, 8 mm tall ...
+FLANGE_R, FLANGE_H = 0.00875, 0.0016   # ... on a 17.5 mm serrated flange 1.6 mm thick
+FRONT_NUT_H = 0.0068              # the front posts' plain M8 hex nuts (ISO 4032)
+NUT_MASS = 0.02
+NUT_Z = BAR_TOP + NUT_H / 2       # a fitted nut's centre, on the busbar
+NUT_TIGHT_COL = 0.0080            # a fitted nut's hex collider (two crossed squares): clear of the driver's socket bore
+FLANGE_COL = 0.0126               # its flange collider (two crossed squares): wider than the busbar's hole all round
+NUT_HOLE = 0.0102                 # a loose nut's hole collider (octagon, 10.2 mm across flats) clear of the 7 mm square stud collider
+
+SOCKET_X, SOCKET_HALF = (0.235, 0.285), (0.025, 0.028)
+SOCKET_CENTRE = (0.26, 0.0)
 POCKET_HALF = (0.016, 0.023)      # 32 x 46 mm pocket
 POCKET_FLOOR, RIM = 0.023, LID    # 2 cm deep
 PLUG_SIZE = (0.030, 0.044, 0.045)
@@ -52,9 +64,14 @@ PLUG_MASS = 0.12
 PLUG_Z = POCKET_FLOOR + PLUG_SIZE[2] / 2
 HANDLE = (0.008, 0.030, 0.010)    # grip bar on the plug's top
 
-TRAY_CENTRE = (0.18, 0.0)
-TRAY_INNER = (0.09, 0.26)         # x, y
+TRAY_CENTRE = (0.155, 0.0)
+TRAY_INNER = (0.08, 0.26)         # x, y
 TRAY_WALL, TRAY_FLOOR, TRAY_TOP = 0.004, 0.003, 0.015
+
+
+def nut_seats():
+    """The four busbar nuts on the back posts: (nut name, post name, x, y)."""
+    return [(f"nut_{p}", p, x, y) for p, x, y, _ in posts() if abs(x - POST_X["back"]) < 1e-9]
 
 
 def posts():
@@ -84,6 +101,7 @@ LOOKS = {
     "label_wall": U.Look(color=(1.0, 1.0, 1.0), roughness=0.45, texture="hv_warning.png", tile=0.016),
     "grey_pp": U.Look(color=(0.16, 0.17, 0.18), roughness=0.7),
     "handle_grey": U.Look(color=(0.08, 0.08, 0.09), roughness=0.5),
+    "dark_steel": U.Look(color=(0.05, 0.05, 0.05), metallic=0.6, roughness=0.5),
 }
 
 
@@ -131,7 +149,8 @@ def _pack() -> str:
         parts.append((f"mark_{name}", U.cylinder(0.0045, 0.0008, (x, mark_y, LID + 0.0004), segments=20),
                       "red_mark" if pol == "+" else "black_mark"))
         cols.append(_col(f"c_pad_{name}", (x - 0.008, y - 0.008, LID), (x + 0.008, y + 0.008, PAD_TOP), root))
-        cols.append(_col(f"c_stud_{name}", (x - 0.00275, y - 0.00275, PAD_TOP), (x + 0.00275, y + 0.00275, STUD_TIP), root))
+        h = STUD_COL / 2
+        cols.append(_col(f"c_stud_{name}", (x - h, y - h, PAD_TOP), (x + h, y + h, STUD_TIP), root))
     # Front posts carry cable lugs held by nuts: M2+ and M3- to the plug socket, M1- and M4+ out as the main leads.
     xf = POST_X["front"]
     for i, y in enumerate(MODULE_Y):
@@ -139,19 +158,19 @@ def _pack() -> str:
         d = toward * np.sign(y)
         parts.append((f"lug_ring{i}", U.cylinder(0.0085, 0.002, (xf, y, PAD_TOP + 0.001), segments=24), "tin"))
         parts.append((f"lug_tongue{i}", _box((xf - 0.0055, min(y, y + d * 0.022), PAD_TOP), (xf + 0.0055, max(y, y + d * 0.022), PAD_TOP + 0.002)), "tin"))
-        parts.append((f"nut{i}", U.cylinder(0.0058, 0.005, (xf, y, PAD_TOP + 0.0045), segments=6), "zinc"))
-        cols.append(_col(f"c_lug{i}", (xf - 0.008, y - 0.008, PAD_TOP), (xf + 0.008, y + 0.008, PAD_TOP + 0.007), root))
+        parts.append((f"nut{i}", _hex_nut(FRONT_NUT_H).moved((xf, y, PAD_TOP + 0.002 + FRONT_NUT_H / 2)), "zinc"))
+        cols.append(_col(f"c_lug{i}", (xf - 0.008, y - 0.008, PAD_TOP), (xf + 0.008, y + 0.008, PAD_TOP + 0.002 + FRONT_NUT_H), root))
         if abs(y) < 0.1:   # to the socket's front face, beside its label
             s = np.sign(y)
-            path = [(xf, y + d * 0.020, 0.0505), (xf - 0.002, s * 0.036, 0.0505), (0.271, s * 0.025, 0.042), (0.266, s * 0.021, 0.028),
-                    (0.268, s * 0.019, 0.016), (0.276, s * 0.019, 0.014)]
+            path = [(xf, y + d * 0.020, 0.0505), (xf - 0.002, s * 0.036, 0.0505), (0.231, s * 0.025, 0.042), (0.226, s * 0.021, 0.028),
+                    (0.228, s * 0.019, 0.016), (0.236, s * 0.019, 0.014)]
         else:              # main leads, over the side wall and back along the table
             s = np.sign(y)
             path = [(xf, y + d * 0.020, 0.0505), (xf, s * 0.180, 0.047), (xf + 0.004, s * 0.192, 0.030), (xf + 0.012, s * 0.198, 0.006),
-                    (0.33, s * 0.205, 0.0036), (0.40, s * 0.210, 0.0036), (0.425, s * 0.210, 0.0036)]
+                    (0.29, s * 0.205, 0.0036), (0.36, s * 0.210, 0.0036), (0.385, s * 0.210, 0.0036)]
         parts.append((f"cable{i}", U.tube(_smooth(path), 0.0035, sides=12), "hv_orange"))
         if abs(y) > 0.1:
-            parts.append((f"lead_plug{i}", _box((0.425, np.sign(y) * 0.210 - 0.011, 0.0), (0.455, np.sign(y) * 0.210 + 0.011, 0.016),
+            parts.append((f"lead_plug{i}", _box((0.385, np.sign(y) * 0.210 - 0.011, 0.0), (0.415, np.sign(y) * 0.210 + 0.011, 0.016),
                                                 bevel=0.0015, round_xy=0.003), "hv_orange"))
     # Service plug socket: a black block with a 32 x 46 mm pocket 2 cm deep.
     sx0, sx1 = SOCKET_X
@@ -173,6 +192,39 @@ def _pack() -> str:
     parts.append(("label_wall", _box((x0 - 0.0005, -0.008, 0.008), (x0, 0.008, 0.024)), "label_wall"))
     U.write_usda(str(BUILD / "pack.usda"), root, parts, LOOKS, cols, mass=5.0, friction=(0.6, 0.5))
     return "build/pack.usda"
+
+
+def _hex_nut(h: float, z0: float | None = None) -> U.Mesh:
+    """An M8 hex nut h tall, from z0 (default: centred on the origin), with chamfered corners."""
+    r = NUT_AF / 2 / np.cos(np.pi / 6)
+    outline = [(r * np.cos(np.pi / 6 + k * np.pi / 3), r * np.sin(np.pi / 6 + k * np.pi / 3)) for k in range(6)]
+    z0 = -h / 2 if z0 is None else z0
+    return U.prism(outline, z0, z0 + h, bevel=0.0007)
+
+
+def _nut(tight: bool) -> str:
+    """A busbar flange nut, origin at its centre. Fitted: kinematic; a hex collider clear of the driver's bore and a
+    flange collider that holds the busbar down (the thread holds it). Loose: a free body whose square hole colliders
+    ride on the stud."""
+    root = "BusbarNutFitted" if tight else "BusbarNutLoose"
+    lo, mid, hi = -NUT_H / 2, -NUT_H / 2 + FLANGE_H, NUT_H / 2
+    flange = U.lathe([(0.0, lo), (FLANGE_R - 0.0004, lo), (FLANGE_R, lo + 0.0004), (FLANGE_R - 0.0012, mid), (0.0, mid)], 36)
+    parts = [("hex", _hex_nut(hi - mid, mid), "zinc"), ("flange", flange, "zinc"),
+             ("bore", U.cylinder(0.0042, NUT_H + 0.0004, (0, 0, 0), segments=16), "dark_steel")]
+    if tight:   # crossed squares: round to within 4 %
+        cols = []
+        for name, side, z0, z1 in (("c_hex", NUT_TIGHT_COL, mid, hi), ("c_flange", FLANGE_COL, lo, mid)):
+            size, c = (side, side, z1 - z0), (0, 0, (z0 + z1) / 2)
+            cols += [U.collider(f"{name}_a", size, c, root), U.collider(f"{name}_b", size, c, root, yaw_deg=45.0)]
+    else:       # an octagonal ring: flats 13 mm apart like the hex, round a hole that clears the stud's collider
+        a, b = NUT_HOLE / 2, NUT_AF / 2
+        rc, w = (a + b) / 2, b - a
+        length = 2 * b * np.tan(np.pi / 8)
+        cols = [U.collider(f"c_ring{k}", (w, length, NUT_H), (rc * np.cos(k * np.pi / 4), rc * np.sin(k * np.pi / 4), 0), root,
+                           yaw_deg=45.0 * k) for k in range(8)]
+    name = "nut_fitted" if tight else "nut_loose"
+    U.write_usda(str(BUILD / f"{name}.usda"), root, parts, LOOKS, cols, mass=NUT_MASS, friction=(0.9, 0.8))
+    return f"build/{name}.usda"
 
 
 def _smooth(points, n: int = 6) -> np.ndarray:
@@ -244,7 +296,8 @@ def _tray() -> str:
 
 def build() -> dict[str, str]:
     BUILD.mkdir(exist_ok=True)
-    return {"pack": _pack(), "busbar": _busbar(), "plug": _plug(), "tray": _tray()}
+    return {"pack": _pack(), "busbar": _busbar(), "plug": _plug(), "tray": _tray(),
+            "nut_fitted": _nut(True), "nut_loose": _nut(False)}
 
 
 if __name__ == "__main__":

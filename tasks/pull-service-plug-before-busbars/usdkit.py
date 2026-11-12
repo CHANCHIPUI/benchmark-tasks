@@ -25,17 +25,26 @@ HERE = Path(__file__).resolve().parent
 class Mesh:
     v: np.ndarray  # [n, 3]
     f: np.ndarray  # [m, 3], counter-clockwise from outside
+    uv: np.ndarray | None = None  # [n, 2] texture coordinates (0..1 over the image); None: box projection in metres
+    smooth: bool = False  # True: write no normals or texture coordinates (for meshes whose points change at run time)
 
     def moved(self, t) -> "Mesh":
-        return Mesh(self.v + np.asarray(t, float), self.f)
+        return Mesh(self.v + np.asarray(t, float), self.f, self.uv)
 
     def turned(self, deg: float, axis: str = "z") -> "Mesh":
         c, s = np.cos(np.radians(deg)), np.sin(np.radians(deg))
         r = {"x": [[1, 0, 0], [0, c, -s], [0, s, c]], "y": [[c, 0, s], [0, 1, 0], [-s, 0, c]], "z": [[c, -s, 0], [s, c, 0], [0, 0, 1]]}[axis]
-        return Mesh(self.v @ np.array(r).T, self.f)
+        return Mesh(self.v @ np.array(r).T, self.f, self.uv)
 
     def scaled(self, s) -> "Mesh":
-        return Mesh(self.v * np.asarray(s, float), self.f)
+        return Mesh(self.v * np.asarray(s, float), self.f, self.uv)
+
+
+def quad(width: float, height: float) -> Mesh:
+    """A flat rectangle in the xy plane facing +z, centred on the origin, its image upright along +y."""
+    w, h = width / 2, height / 2
+    v = np.array([[-w, -h, 0.0], [w, -h, 0.0], [w, h, 0.0], [-w, h, 0.0]])
+    return Mesh(v, np.array([[0, 1, 2], [0, 2, 3]]), np.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]]))
 
 
 def join(*meshes: Mesh) -> Mesh:
@@ -283,8 +292,22 @@ def _fmt(a: np.ndarray, digits: int = 5) -> str:
 
 def _mesh_usda(name: str, mesh: Mesh, mat: str, root: str, look: Look, crease: float, indent: str = "        ", hidden: bool = False) -> str:
     v, f = mesh.v, mesh.f
+    if mesh.smooth:
+        vis = f'\n{indent}    token visibility = "invisible"' if hidden else ""
+        return f"""
+{indent}def Mesh "{name}" (
+{indent}    prepend apiSchemas = ["MaterialBindingAPI"]
+{indent})
+{indent}{{{vis}
+{indent}    rel material:binding = </{root}/Looks/{mat}>
+{indent}    uniform bool doubleSided = 0
+{indent}    int[] faceVertexCounts = [{", ".join("3" for _ in range(len(f)))}]
+{indent}    int[] faceVertexIndices = [{", ".join(str(int(i)) for i in f.reshape(-1))}]
+{indent}    point3f[] points = [{_fmt(v)}]
+{indent}    uniform token subdivisionScheme = "none"
+{indent}}}"""
     normals = _corner_normals(v, f, crease).reshape(-1, 3)
-    uv = (_corner_uvs(v, f) / look.tile).reshape(-1, 2)
+    uv = mesh.uv[f].reshape(-1, 2) if mesh.uv is not None else (_corner_uvs(v, f) / look.tile).reshape(-1, 2)
     vis = f'\n{indent}    token visibility = "invisible"' if hidden else ""
     return f"""
 {indent}def Mesh "{name}" (
@@ -306,10 +329,27 @@ def _mesh_usda(name: str, mesh: Mesh, mat: str, root: str, look: Look, crease: f
 {indent}}}"""
 
 
-def collider(name: str, size, center, root: str, material: str = "PhysicsMaterial") -> str:
-    """A box collider (not rendered: purpose "guide")."""
+def collider(name: str, size, center, root: str, material: str = "PhysicsMaterial", yaw_deg: float = 0.0) -> str:
+    """A box collider (not rendered: purpose "guide"), turned `yaw_deg` about z."""
     sx, sy, sz = size
     cx, cy, cz = center
+    if yaw_deg:
+        h = np.radians(yaw_deg) / 2
+        return f"""
+    def Cube "{name}" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {{
+        rel material:binding:physics = </{root}/{material}>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = ({cx:.6f}, {cy:.6f}, {cz:.6f})
+        quatf xformOp:orient = ({np.cos(h):.6f}, 0, 0, {np.sin(h):.6f})
+        float3 xformOp:scale = ({sx:.6f}, {sy:.6f}, {sz:.6f})
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }}"""
     return f"""
     def Cube "{name}" (
         prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
