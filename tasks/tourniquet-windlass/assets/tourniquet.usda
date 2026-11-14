@@ -69,20 +69,6 @@ def Xform "tourniquet" (
             }
         }
 
-        def Material "clip"
-        {
-            token outputs:surface.connect = </tourniquet/Looks/clip/surface.outputs:surface>
-
-            def Shader "surface"
-            {
-                uniform token info:id = "UsdPreviewSurface"
-                color3f inputs:diffuseColor = (0.2, 0.22, 0.25)
-                float inputs:metallic = 0
-                float inputs:roughness = 0.6
-                token outputs:surface
-            }
-        }
-
         def Material "case"
         {
             token outputs:surface.connect = </tourniquet/Looks/case/surface.outputs:surface>
@@ -282,17 +268,6 @@ def Xform "tourniquet" (
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
-        def Cube "clip_plate" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </tourniquet/Looks/clip>
-            double size = 1
-            float3 xformOp:scale = (0.019, 0.01, 0.003)
-            double3 xformOp:translate = (0, -0.062, 0.1305)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
-        }
-
         def Cylinder "gauge_case" (
             prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
         )
@@ -416,7 +391,7 @@ def Xform "tourniquet" (
             rel physics:body1 = </tourniquet/windlass>
             point3f physics:localPos0 = (0, 0, 0.135)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.5, 0, 0, -0.8660254)
+            quatf physics:localRot0 = (0.4539905, 0, 0, 0.8910065)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
@@ -435,8 +410,8 @@ def Xform "tourniquet" (
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
-            float physics:lowerLimit = -12
-            float physics:upperLimit = 12
+            float physics:lowerLimit = -30
+            float physics:upperLimit = 30
         }
 
         def PhysicsRevoluteJoint "needle" (
@@ -466,7 +441,7 @@ def Xform "tourniquet" (
         point3f physics:centerOfMass = (0, 0, 0)
         float3 physics:diagonalInertia = (0.000002, 0.000002, 0.000002)
         float physics:mass = 0.01
-        quatf xformOp:orient = (0.5, 0, 0, -0.8660254)
+        quatf xformOp:orient = (0.4539905, 0, 0, 0.8910065)
         double3 xformOp:translate = (0, 0, 0.135)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
 
@@ -487,7 +462,7 @@ def Xform "tourniquet" (
     )
     {
         float physics:mass = 0.03
-        quatf xformOp:orient = (0.5, 0, 0, -0.8660254)
+        quatf xformOp:orient = (0.4539905, 0, 0, 0.8910065)
         double3 xformOp:translate = (0, 0, 0.14850000000000002)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
 

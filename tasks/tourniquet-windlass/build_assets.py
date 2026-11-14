@@ -4,11 +4,11 @@
 
 - assets/textures/dial.png: the gauge's dial, 0 to 300 mmHg, with a green arc from 250.
 - assets/tourniquet.usda: an articulation fixed to the world. Its base holds the training thigh, the chocks, the band,
-  the clip's plate and the gauge. The windlass turns on ``twist`` (revolute, about the vertical through the band's top);
+  the bladder and the gauge. The windlass turns on ``twist`` (revolute, about the vertical through the band's top);
   the rod tips on ``press`` (revolute, about the horizontal across it at its middle), so either end can be pushed down
-  into the clip's hook. The gauge's needle turns on ``needle``. task.py
-  applies the band's unwinding torque, sets the needle from the twist, and adds the hook's prongs as fixed shapes (the
-  rod is part of the articulation, so only shapes outside it can stop it).
+  into one of the clip's hooks. The gauge's needle turns on ``needle``. task.py applies the band's unwinding torque,
+  sets the needle from the twist, and adds the clip's hooks as fixed shapes (the rod is part of the articulation, so
+  only shapes outside it can stop it).
 
 The asset's origin is on the table under the thigh's axis, at the band, so task.py places it at (LEG_X, BAND_Y, TOP).
 """
@@ -32,7 +32,6 @@ FOAM = (0.78, 0.62, 0.50)          # the trainer's skin-toned foam
 CHOCK = (0.55, 0.40, 0.24)         # wood
 BAND = (0.10, 0.30, 0.62)          # a blue training tourniquet
 ROD = (0.05, 0.05, 0.06)
-CLIP = (0.20, 0.22, 0.25)
 BLADDER = (0.14, 0.14, 0.16)       # dark grey nylon
 CASE = (0.16, 0.17, 0.19)
 CHROME = (0.80, 0.82, 0.85)
@@ -196,7 +195,6 @@ def build_tourniquet():
     wood = material(stage, f"{r}/Looks/wood", CHOCK, roughness=0.8)
     band = material(stage, f"{r}/Looks/band", BAND, roughness=0.85)
     rod_mat = material(stage, f"{r}/Looks/rod", ROD, roughness=0.5)
-    clip = material(stage, f"{r}/Looks/clip", CLIP, roughness=0.6)
     case = material(stage, f"{r}/Looks/case", CASE, roughness=0.4, metallic=0.3)
     chrome = material(stage, f"{r}/Looks/chrome", CHROME, roughness=0.25, metallic=0.8)
     tube = material(stage, f"{r}/Looks/tube", TUBE, roughness=0.7)
@@ -227,10 +225,6 @@ def build_tourniquet():
     # the band's tail, fastened round the side toward the arms
     box(stage, f"{base}/band_tail", (0.004, g.BAND_W * 0.9, 0.07), (-(g.LEG_R + g.BAND_T) - 0.002, 0.0, g.LEG_Z + 0.01),
         band, collide=False)
-    # the clip's base plate on the thigh, under the channel (the walls, lead-ins and lips are fixed shapes in task.py)
-    box(stage, f"{base}/clip_plate", g.PLATE, (0.0, g.CLIP_Y - g.BAND_Y, g.LEG_Z + g.LEG_R + g.PLATE[2] / 2), clip,
-        collide=False)
-
     # the gauge: a dial on a short post, tilted up toward the arms, its tube running to the band's bladder
     q_dial, (dx, dy, dz) = dial_frame()
     centre = Gf.Vec3d(g.GAUGE_XY[0] - g.LEG_X, g.GAUGE_XY[1] - g.BAND_Y, g.GAUGE_Z)
@@ -274,7 +268,7 @@ def build_tourniquet():
     box(stage, f"{hub}/strap", g.HUB, (0.0, 0.0, g.HUB[2] / 2), band, collide=False)
     joint(stage, "revolute", f"{r}/joints/twist", base, hub, (0.0, 0.0, hub_z), q0, "Z")
 
-    # the rod: across the strap; an end pushed down tips it on ``press``
+    # the rod: across the strap; an end pushed down tips it on ``press`` (positive tips its +x end down)
     rod = f"{r}/rod"
     body(stage, rod, g.ROD_MASS, (0.0, 0.0, g.ROD_Z), orient=q0)
     cylinder(stage, f"{rod}/bar", g.ROD_R, g.ROD_L, (0, 0, 0), "X", rod_mat, collide=True)

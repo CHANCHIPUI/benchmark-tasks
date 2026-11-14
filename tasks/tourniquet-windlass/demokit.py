@@ -73,8 +73,53 @@ class Arm:
     def set_grip(self, grip: float, seconds: float = 0.8):
         yield from self.move(self.pos, self.rot, seconds, grip)
 
+    SEEDS = ([0.0, 1.0, 1.0, -0.6, 0.0, 0.0], [0.0, 0.8, 0.6, -0.6, 0.0, 1.5], [0.0, 0.8, 0.6, -0.6, 0.0, -1.5],
+             [0.0, 1.2, 0.9, -0.3, 0.0, 2.0], [0.0, 1.2, 0.9, -0.3, 0.0, -2.0])
+
+    def solve_far(self, pos, rot) -> np.ndarray:
+        """Joint angles for a pose far from the current one: IK from the current angles and from a few standard seeds,
+        keeping the nearest exact solution (or the most accurate if none is exact)."""
+        from yam_arena import ik
+
+        quat = ik.matrix_to_quat_xyzw(rot)
+        best = None
+        for q0 in [self.q] + [np.array(q, float) for q in self.SEEDS]:
+            q, err, rerr = ik.solve(pos, quat, q_init=q0, base_pos=self.base, iters=250)
+            exact = err < 0.001 and rerr < math.radians(0.5)
+            key = (not exact, float(np.abs(q - self.q).sum()) if exact else err)
+            if best is None or key < best[0]:
+                best = (key, q, err)
+        self.worst_mm = max(self.worst_mm, best[2] * 1000)
+        return best[1]
+
+    def move_joints(self, pos, rot, seconds: float = 1.5, grip: float | None = None):
+        """Generator: a smooth move in joint space to ``pos``/``rot`` (for approaches from afar, where a straight-line
+        move could pass through poses the arm can't reach)."""
+        from yam_arena import ik
+
+        q0, q1, g0 = self.q.copy(), self.solve_far(pos, rot), self.grip
+        g1 = g0 if grip is None else grip
+        n = max(1, round(seconds * CONTROL_HZ))
+        for k in range(1, n + 1):
+            s = ik.smoothstep(k / n)
+            self.grip = g0 + s * (g1 - g0)
+            self.q = q0 + s * (q1 - q0)
+            yield
+        self.pos, self.rot = np.asarray(pos, float), np.asarray(rot, float)
+
     def go_home(self, seconds: float = 2.5):
-        yield from self.move(self.home[0], self.home[1], seconds, grip=1.0)
+        """Back to the ready pose in joint space, grippers open."""
+        from yam_arena import ik
+        from yam_arena.constants import READY
+
+        q0, q1, g0 = self.q.copy(), np.array(READY, float), self.grip
+        n = max(1, round(seconds * CONTROL_HZ))
+        for k in range(1, n + 1):
+            s = ik.smoothstep(k / n)
+            self.grip = g0 + s * (1.0 - g0)
+            self.q = q0 + s * (q1 - q0)
+            yield
+        self.pos, self.rot = self.home[0].copy(), self.home[1].copy()
 
     def command(self) -> np.ndarray:
         return np.r_[self.q, self.grip]
