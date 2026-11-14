@@ -1,10 +1,6 @@
-"""On an office desk, in front of the right arm: a light grey personal paper shredder (30 x 16 cm, 12 cm tall) with a
-23 cm feed slot on top, a green ready light and a dark red jam light. In front of it, an oak letter rack holds a stack of
-three folded invoices upright, 21 cm long and 9.9 cm tall. A black 41 mm binder clip grips the stack's top edge near its
-left end, its two steel handles folded up. To the left stands a white ceramic dish holding three more binder clips.
-
-The shredder starts by itself when paper is 1.5 cm into its slot and draws it in at 4 cm/s. A clip that reaches the slot
-jams it: the feed stops for good, the red light comes on and the stack stays stuck. Pinching the clip's handles opens it.
+"""A clipped stack of folded invoices lies broad-face down on the station desk.
+The robot removes its spring clip, reorients the paper and feeds it into a personal shredder.
+The clip grips by friction; only the powered feed is scripted after the insertion sensor.
 """
 
 from __future__ import annotations
@@ -22,6 +18,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))  # lets this fi
 import shred_usd as S  # noqa: E402
 import steptime  # noqa: E402
 from scenekit import UsdBody, before_reset, on_reset, on_step  # noqa: E402
+from yam_arena.analysis import link_hulls
 from yam_arena.constants import FINGER_CLOSED  # noqa: E402
 from yam_arena.demo import Waypoint  # noqa: E402
 from yam_arena.task_file import TABLE_TOP  # noqa: E402
@@ -30,23 +27,23 @@ SCENE = "station"
 TOP = TABLE_TOP[SCENE]
 USD = S.build()
 
-STACK_XY = (0.165, -0.23)          # the invoices' centre, standing in the rack, long side along y
-CLIP_XY = (0.165, -0.17)           # the clip on the stack's top edge, 4.5 cm from its left end
+STACK_XY = (0.15, 0.0)          # stack centre; broad face down, long side along y
 STACK_T, STACK_L, STACK_H = S.STACK
-STACK_Z = S.RACK_FLOOR + STACK_H / 2
-EDGE_Z = S.RACK_FLOOR + STACK_H    # the stack's top edge: 10.4 cm up
+FLAT_ANGLE = math.radians(85.5)
+STACK_Z = STACK_H / 2 * math.cos(FLAT_ANGLE) + STACK_T / 2 * math.sin(FLAT_ANGLE)
+FLAT_Q = (0.0, math.sin(FLAT_ANGLE / 2), 0.0, math.cos(FLAT_ANGLE / 2))
+CLIP_XY = (STACK_XY[0] + STACK_H / 2 * math.sin(FLAT_ANGLE), 0.06)
+CLIP_Z = STACK_Z + STACK_H / 2 * math.cos(FLAT_ANGLE)
 SLOT_TOP = S.SHRED_TOP
 
 SHREDDER = UsdBody("shredder", usd=USD["shredder"], pos=(0.0, 0.0, TOP), size=(0.16, 0.30, S.SHRED_TOP), friction=(0.6, 0.5))
 DISH = UsdBody("clip_dish", usd=USD["dish"], pos=(0.0, 0.0, TOP), size=S.DISH, friction=(0.6, 0.5))
-RACK = UsdBody("letter_rack", usd=USD["rack"], pos=(*STACK_XY, TOP + 0.0002), size=S.RACK, mass=S.RACK_MASS,
-               friction=(0.6, 0.5))
 INVOICES = UsdBody("invoices", usd=USD["invoices"], pos=(*STACK_XY, TOP + STACK_Z + 0.0002), size=S.STACK,
-                   mass=S.STACK_MASS, friction=(0.6, 0.5), solver_iters=32, torsional_patch=0.008)
-CLIP = UsdBody("binder_clip", usd=USD["clip"], pos=(*CLIP_XY, TOP + EDGE_Z + 0.0002), size=(0.02, S.CLIP_L, 0.045),
-               articulation=True, joint_pos=(("jaw", 0.0),), drives=(("jaw", 5000.0, 5.0, 15.0),),
-               friction=(0.5, 0.45), solver_iters=32)
-OBJECTS = [SHREDDER, DISH, RACK, INVOICES, CLIP]
+                   rot_xyzw=FLAT_Q, mass=S.STACK_MASS, friction=(0.6, 0.5), solver_iters=64, torsional_patch=0.008)
+CLIP = UsdBody("binder_clip", usd=USD["clip"], pos=(*CLIP_XY, TOP + CLIP_Z + 0.0002), rot_xyzw=FLAT_Q, size=(0.02, S.CLIP_L, 0.045),
+               articulation=True, joint_pos=(("jaw", 0.0),), drives=(("jaw", 1000.0, 0.2, 5.0),),
+               friction=(0.5, 0.45), solver_iters=64, torsional_patch=0.008)
+OBJECTS = [SHREDDER, DISH, INVOICES, CLIP]
 
 # -- the shredder and the clip, once per control step ---------------------------------------------------------------------
 FEED_SPEED = 0.04                  # m/s
@@ -65,6 +62,8 @@ def _clip_outline() -> np.ndarray:
 
 
 CLIP_PTS = _clip_outline()
+GRIP_LINKS = ("gripper", "tip_left", "tip_right")
+GRIP_HULLS = {name: link_hulls()[name] for name in GRIP_LINKS}
 
 _SH: dict = {}
 
@@ -89,6 +88,8 @@ def _rot(q) -> np.ndarray:
 def _yaw_quat(q) -> np.ndarray:
     r = _rot(q)
     yaw = math.atan2(r[1, 1], r[0, 1]) - math.pi / 2      # the stack's long axis (local y) in the table plane
+    if r[2, 2] < 0:  # either short edge may enter; the rollers must not turn the paper upside down
+        return np.array([-math.sin(yaw / 2), math.cos(yaw / 2), 0.0, 0.0])
     return np.array([0.0, 0.0, math.sin(yaw / 2), math.cos(yaw / 2)])
 
 
@@ -202,8 +203,15 @@ def grippers(environment) -> list[dict]:
         q7, q8 = arm_joints(environment, side, ["joint7", "joint8"])
         opening = float(-(q7 + q8))
         tip = p + 0.013 * r[:, 2]
-        pads = [tip + sx * (opening / 2 + 0.005) * r[:, 0] + sy * 0.018 * r[:, 1] for sx in (-1, 1) for sy in (-1, 0, 1)]
-        out.append({"side": side, "tcp": p, "rot": r, "opening": opening, "pads": pads})
+        pads = [tip + sx * (opening / 2 + dx) * r[:, 0] + dy * r[:, 1]
+                for sx in (-1, 1) for dx in (0.0, 0.005, 0.010)
+                for dy in (-0.018, -0.009, 0.0, 0.009, 0.018)]
+        robot = environment.unwrapped.scene[f"{side}_robot"]
+        poses = _np(robot.data.body_link_pose_w)[0]
+        origin = _np(environment.unwrapped.scene.env_origins[0])
+        hull_poses = {name: (poses[robot.body_names.index(name)][:3] - origin,
+                              _rot(poses[robot.body_names.index(name)][3:7])) for name in GRIP_LINKS}
+        out.append({"hulls": hull_poses, "side": side, "tcp": p, "rot": r, "opening": opening, "pads": pads})
     return out
 
 
@@ -262,6 +270,15 @@ def _put_back(environment) -> None:
     _lights()
 
 
+def clip_overlaps_edge(spos, squat, cpos) -> bool:
+    """The clip has not cleared the paper while its jaw region overlaps the clipped edge.
+    Conservative during opening: the clip must be pulled clear, not merely squeezed.
+    """
+    rel = (np.asarray(cpos) - np.asarray(spos)) @ _rot(squat)
+    return bool(abs(rel[0]) < 0.008 and abs(rel[1]) < STACK_L / 2 + S.CLIP_L / 2
+                and STACK_H / 2 - 0.012 < rel[2] < STACK_H / 2 - S.LIP_Z[0] + 0.001)
+
+
 @on_step
 def _run_shredder(environment) -> None:
     """The clip's handles and the shredder's sensor, feed and jam, once per control step."""
@@ -275,14 +292,11 @@ def _run_shredder(environment) -> None:
     # the clip: open while a gripper pinches its handles
     sh["pinched"] = any(_pinching(g, cpos, cquat) for g in gs)
     set_joint_targets(environment, "binder_clip", {"jaw": S.JAW_OPEN if sh["pinched"] else S.JAW_CLOSED})
-    # on or off the stack: off for good once lifted clear of the paper's edge
-    if sh["clip_on"]:
-        rel = (cpos - spos) @ _rot(squat)
-        on = (abs(rel[0]) < 0.008 and abs(rel[1]) < STACK_L / 2 + S.CLIP_L / 2
-              and STACK_H / 2 - 0.012 < rel[2] < STACK_H / 2 - S.LIP_Z[0] + 0.001)
-        if not on:
-            sh["clip_on"] = False
-            sh["events"].append(("clip off", _T.get("step", 0) + 1))
+    # Track current overlap every step: removing and reattaching the clip cannot bypass the feed interlock.
+    on = clip_overlaps_edge(spos, squat, cpos)
+    if on != sh["clip_on"]:
+        sh["events"].append(("clip on" if on else "clip off", _T.get("step", 0) + 1))
+    sh["clip_on"] = on
     # a clip in the slot jams the shredder: the feed stops for good, and the stack stays stuck where it is
     if not sh["jammed"] and any(in_slot(p) for p in clip_points(cpos, cquat)):
         sh["jammed"] = True
@@ -293,46 +307,22 @@ def _run_shredder(environment) -> None:
     # the sensor: paper 1.5 cm into the slot starts the cutters, which draw it in at 4 cm/s
     if not (sh["feeding"] or sh["jammed"] or sh["shredded"]):
         low = min(stack_corners(spos, squat), key=lambda p: p[2])
-        if in_slot(low, START_DEPTH):
+        corners = stack_corners(spos, squat)
+        aligned = (abs(_rot(squat)[2, 2]) > math.cos(math.radians(12))
+                   and corners[:, 0].min() >= S.SLOT_X[0] - 0.001
+                   and corners[:, 0].max() <= S.SLOT_X[1] + 0.001
+                   and corners[:, 1].min() >= S.SLOT_Y[0]
+                   and corners[:, 1].max() <= S.SLOT_Y[1])
+        if aligned and in_slot(low, START_DEPTH):
             sh["feeding"] = True
             sh["started_with_clip"] = sh["clip_on"]
             sh["events"].append(("start", _T.get("step", 0) + 1, sh["clip_on"]))
             _set_drive(environment, {"mode": "feed", "p0": spos.copy(), "q0": squat.copy(), "t": 0.0})
-    if sh["feeding"] and spos[2] + STACK_H / 2 <= TOP + SLOT_TOP - GONE_DEPTH:
+    if sh["feeding"] and max(stack_corners(spos, squat)[:, 2]) <= TOP + SLOT_TOP - GONE_DEPTH:
         sh["feeding"], sh["shredded"] = False, True       # past the cutters: it settles out of sight under the throat
         sh["events"].append(("shredded", _T.get("step", 0) + 1))
         _set_drive(environment, None)
-    if os.environ.get("TASK_DEMO") == "pulltest":
-        _pull_test(environment, spos, squat)
     _lights()
-
-
-def _pull_test(environment, spos, squat) -> None:
-    """Debug only (TASK_DEMO=pulltest): hold the stack where it starts and pull the clip straight up with a force rising
-    5 N/s from step 20, until it comes off. Measures the force the clip's grip resists."""
-    import torch
-
-    sh = _SH
-    step = _T.get("step", 0)
-    force = max(0.0, (step - 20) * 0.25) if sh["clip_on"] else 0.0
-    sh["pull_force"] = force
-    if not sh.get("drive"):
-        _set_drive(environment, {"mode": "hold", "p0": np.asarray(INVOICES.pos), "q0": np.array([0.0, 0.0, 0.0, 1.0]), "t": 0.0})
-    _lift(environment, True)
-    stack = environment.unwrapped.scene["invoices"]       # the hand holding the stack: an equal force down, under the clip
-    cpos, _ = _pose(environment, "binder_clip")
-    origin = _np(environment.unwrapped.scene.env_origins[0])
-    down = torch.tensor([[[0.0, 0.0, -force]]], dtype=torch.float32, device=stack.device)
-    at = torch.tensor([[[*(cpos + origin)]]], dtype=torch.float32, device=stack.device)
-    stack.permanent_wrench_composer.add_forces_and_torques_index(forces=down, torques=torch.zeros_like(down), positions=at,
-                                                                 is_global=True)
-    asset = environment.unwrapped.scene["binder_clip"]
-    comp = asset.permanent_wrench_composer
-    comp.reset()
-    if force > 0.0:
-        body = asset.find_bodies("body")[0][0]
-        f = torch.tensor([[[0.0, 0.0, force]]], dtype=torch.float32, device=asset.device)
-        comp.add_forces_and_torques_index(forces=f, torques=torch.zeros_like(f), body_ids=[body], is_global=True)
 
 
 def _slerp(a, b, t):
@@ -345,7 +335,6 @@ def _slerp(a, b, t):
 
 # -- scoring ----------------------------------------------------------------------------------------------------------------
 CLEAR = 0.03                       # m: fingertips this far from the slot's opening are clear
-NEAR = 0.03                        # m: a tool point this near the clip holds it
 REST = 0.01                        # m/s
 
 _T: dict = {}
@@ -355,7 +344,7 @@ _T: dict = {}
 def _reset(_env=None) -> None:
     """Failures stay failed for the whole trial: only a reset clears them."""
     _T.clear()
-    _T.update(failed=None, step=0)
+    _T.update(failed=None, step=0, held=0, checked_step=-1, goal=False)
 
 
 _reset()
@@ -378,11 +367,25 @@ def clip_on_shredder(clip) -> bool:
 
 
 def clip_held(clip) -> bool:
-    return any(np.linalg.norm(g["tcp"] - np.asarray(clip.pos)) < NEAR for g in _SH.get("grippers", []))
+    """Conservative 1 cm clearance between the clip outline and the actual gripper collision hulls."""
+    pts = clip_points(clip.pos, clip.quat_xyzw)
+    for g in _SH.get("grippers", []):
+        for name, (p, r) in g["hulls"].items():
+            local = (pts - p) @ r
+            for h in GRIP_HULLS[name]:
+                # Every clip point must lie outside at least one hull face by 1 cm.
+                # This is conservative near edges and includes the open fingers.
+                if np.any(np.max(local @ h.planes[:, :3].T - h.planes[:, 3], axis=1) < 0.01):
+                    return True
+    return False
 
 
 def clip_put_down(clip) -> bool:
-    return bool(not _SH["clip_on"] and np.linalg.norm(clip.lin_vel) < REST and not clip_held(clip)
+    pts = clip_points(clip.pos, clip.quat_xyzw)
+    on_table = (pts[:, 0].min() >= -0.19 and pts[:, 0].max() <= 0.91
+                and pts[:, 1].min() >= -0.65 and pts[:, 1].max() <= 0.65
+                and TOP - 0.003 <= pts[:, 2].min() <= TOP + S.DISH[2] + 0.005)
+    return bool(on_table and not _SH["clip_on"] and np.linalg.norm(clip.lin_vel) < REST and not clip_held(clip)
                 and not clip_on_shredder(clip))
 
 
@@ -393,7 +396,10 @@ def grippers_clear() -> bool:
 def _update(objects) -> None:
     if _T["failed"]:
         return
-    if _SH["started_with_clip"]:
+    if (objects["binder_clip"].pos[2] < TOP - 0.03
+            or (not _SH["shredded"] and not _SH["feeding"] and objects["invoices"].pos[2] < TOP - 0.03)):
+        _T["failed"] = "paper or clip fell below the desk"
+    elif _SH["started_with_clip"]:
         _T["failed"] = "the shredder started with the clip on the stack"
     elif _SH["jammed"]:
         _T["failed"] = "a clip entered the slot (jam)"
@@ -411,9 +417,15 @@ def score(objects) -> float:
     if _T["failed"]:
         return 0.0
     clip = objects["binder_clip"]
-    if _SH["shredded"] and clip_put_down(clip) and grippers_clear():
+    _T["goal"] = bool(_SH["shredded"] and clip_put_down(clip) and grippers_clear())
+    if _T["checked_step"] != _T["step"]:
+        _T["held"] = _T["held"] + 1 if _T["goal"] else 0
+        _T["checked_step"] = _T["step"]
+    if _T["held"] >= 20:
         return 1.0
-    on_desk = _SH["shredded"] or _SH["feeding"] or objects["invoices"].pos[2] > TOP - 0.02
+    p = objects["invoices"].pos
+    on_desk = (_SH["shredded"] or _SH["feeding"]
+               or (-0.19 <= p[0] <= 0.91 and -0.65 <= p[1] <= 0.65 and p[2] > TOP - 0.02))
     if not _SH["clip_on"] and on_desk:
         return 0.3
     return 0.0
@@ -425,7 +437,7 @@ def success(objects) -> bool:
     _T["step"] += 1
     s = score(objects)
     _log(objects, s)
-    return s == 1.0
+    return bool(_T["goal"] and not _T["failed"])
 
 
 def _log(objects, s: float) -> None:
@@ -440,106 +452,18 @@ def _log(objects, s: float) -> None:
            "jaw": round(clip.joints.get("jaw", 0.0), 5),
            "stack": [round(float(v), 4) for v in st.pos], "stack_q": [round(float(v), 4) for v in st.quat_xyzw],
            "clip": [round(float(v), 4) for v in clip.pos], "clip_q": [round(float(v), 4) for v in clip.quat_xyzw],
-           "clip_v": round(float(np.linalg.norm(clip.lin_vel)), 4), "rack": [round(float(v), 4) for v in objects["letter_rack"].pos],
+           "clip_v": round(float(np.linalg.norm(clip.lin_vel)), 4),
            "put_down": clip_put_down(clip), "on_shredder": clip_on_shredder(clip), "clear": grippers_clear(),
            "slot_dist": [round(min(_slot_distance(p) for p in g["pads"]), 4) for g in gs],
            "tcp": [[round(float(v), 4) for v in g["tcp"]] for g in gs], "opening": [round(g["opening"], 4) for g in gs],
-           "events": _SH["events"], "pull_force": _SH.get("pull_force")}
+           "events": _SH["events"], "held": _T["held"]}
     with open(os.path.join(out, "steps.jsonl"), "a") as f:
         f.write(json.dumps(row) + "\n")
 
 
-# -- scripted demo ----------------------------------------------------------------------------------------------------------
-YAW = math.pi / 2                  # the right arm's fingers close along x
-OPEN = -0.0469
-HIGH = 0.16                        # TCP while moving over the desk
-PINCH_H = EDGE_Z + 0.0105 + 0.013  # fingertips 1 cm above the paper edge, round the handles
-GRIP_H = EDGE_Z - 0.06 + 0.013     # fingertips 6 cm below the stack's top
-CARRY_H = GRIP_H + (SLOT_TOP + 0.015 - S.RACK_FLOOR)        # the stack's lower edge 1.5 cm above the shredder
-FEED_H = GRIP_H + (SLOT_TOP - 0.013 - S.RACK_FLOOR)         # the lower edge 1.3 cm into the slot
-DISH_DROP = (S.DISH_C[0], S.DISH_C[1], 0.065)
-SLOT_XY = S.SLOT_C
-AWAY = (0.22, -0.33)
-
-
-def _wp(t, xy, h, finger, label, yaw=YAW) -> Waypoint:
-    return Waypoint(t, (float(xy[0]), float(xy[1]), TOP + h), finger, label, yaw)
-
-
-def _take_clip_off() -> list[Waypoint]:
-    return [_wp(2.0, CLIP_XY, 0.18, OPEN, "above the clip"),
-            _wp(1.5, CLIP_XY, PINCH_H, OPEN, "down round the handles"),
-            _wp(0.8, CLIP_XY, PINCH_H, FINGER_CLOSED, "pinch the handles"),
-            _wp(0.4, CLIP_XY, PINCH_H, FINGER_CLOSED, "the jaws open"),
-            _wp(1.2, CLIP_XY, HIGH, FINGER_CLOSED, "lift the clip off")]
-
-
-def _clip_to(xy, h, label, high=HIGH) -> list[Waypoint]:
-    return [_wp(2.0, xy, high, FINGER_CLOSED, f"carry the clip {label}"),
-            _wp(1.0, xy, h, FINGER_CLOSED, "lower it"),
-            _wp(0.6, xy, h, OPEN, "let go"),
-            _wp(0.8, xy, high, OPEN, "up")]
-
-
-def _grip_stack() -> list[Waypoint]:
-    return [_wp(2.0, STACK_XY, HIGH, OPEN, "above the stack"),
-            _wp(1.5, STACK_XY, GRIP_H, OPEN, "down round the stack"),
-            _wp(0.8, STACK_XY, GRIP_H, FINGER_CLOSED, "grip it"),
-            _wp(0.3, STACK_XY, GRIP_H, FINGER_CLOSED, "settle"),
-            _wp(2.0, STACK_XY, CARRY_H, FINGER_CLOSED, "lift it out of the rack")]
-
-
-def _feed(fingers_in: bool = False) -> list[Waypoint]:
-    h = FEED_H if not fingers_in else GRIP_H + (SLOT_TOP - 0.065 - S.RACK_FLOOR)
-    return [_wp(2.0, SLOT_XY, CARRY_H, FINGER_CLOSED, "carry it over the slot"),
-            _wp(1.5, SLOT_XY, h, FINGER_CLOSED, "lower it into the slot"),
-            _wp(0.6, SLOT_XY, h, OPEN, "let the shredder take it"),
-            _wp(1.0, SLOT_XY, CARRY_H + 0.01, OPEN, "up"),
-            _wp(1.5, AWAY, HIGH + 0.03, OPEN, "move clear")]
-
-
-def _wait(t) -> list[Waypoint]:
-    return [_wp(t, AWAY, HIGH + 0.03, OPEN, "wait clear")]
-
-
+# -- scripted demonstration: only physical arm actions ---------------------------------------------------------------
 def demo():
-    """Open loop, so it uses nothing a policy could not see. The right arm pinches the clip's handles, lifts the clip off
-    and drops it in the dish, then grips the stack, lifts it out of the rack, lowers it into the slot and lets go.
-    TASK_DEMO picks a variant for checking the scorer: failure (feed the stack with the clip on), nothing, cliponly (the
-    clip into the dish, the stack left in the rack), clipslot (the clip dropped into the slot), clipontop (the clip left
-    on the shredder's top, then the stack fed), byclip (the clip gripped by its body and lifted: the stack comes with it),
-    fingers (the clip off, then the stack pushed in with the fingertips inside the slot), poke (the clip off, the
-    closed fingertips poked 1 cm into the empty slot and out again, then the job finished), pulltest (debug: the clip's grip)."""
-    mode = os.environ.get("TASK_DEMO", "success")
-    if mode == "pulltest":
-        return {"right": [_wp(2.0, AWAY, HIGH + 0.03, OPEN, "hover"), _wp(8.0, AWAY, HIGH + 0.03, OPEN, "wait")]}
-    if mode == "nothing":
-        return {"right": [_wp(2.0, AWAY, HIGH + 0.03, OPEN, "hover"), _wp(8.0, AWAY, HIGH + 0.03, OPEN, "wait")]}
-    if mode == "failure":
-        return {"right": _grip_stack() + _feed() + _wait(5.0)}
-    if mode == "byclip":
-        body_h = EDGE_Z + 0.001 + 0.013                     # fingertips on the clip's spine, below the handles
-        return {"right": [_wp(2.0, CLIP_XY, 0.18, OPEN, "above the clip"),
-                          _wp(1.5, CLIP_XY, body_h, OPEN, "down round its body"),
-                          _wp(0.8, CLIP_XY, body_h, FINGER_CLOSED, "grip its body"),
-                          _wp(1.5, CLIP_XY, body_h + 0.05, FINGER_CLOSED, "lift: the stack comes too"),
-                          _wp(2.0, CLIP_XY, body_h + 0.05, FINGER_CLOSED, "hold"),
-                          _wp(1.5, CLIP_XY, body_h + 0.002, FINGER_CLOSED, "back down"),
-                          _wp(0.6, CLIP_XY, body_h + 0.002, OPEN, "let go")] + _wait(2.0)}
-    plan = _take_clip_off()
-    if mode == "clipslot":
-        return {"right": plan + _clip_to(SLOT_XY, SLOT_TOP + 0.035, "over the slot", HIGH + 0.03) + _wait(3.0)}
-    if mode == "clipontop":
-        return {"right": plan + _clip_to((0.29, -0.095), SLOT_TOP + 0.042, "onto the shredder", HIGH + 0.03) + _grip_stack() + _feed()
-                + _wait(5.0)}
-    plan += _clip_to(DISH_DROP[:2], DISH_DROP[2], "to the dish")
-    if mode == "cliponly":
-        return {"right": plan + _wait(3.0)}
-    if mode == "poke":
-        poke = [_wp(1.5, SLOT_XY, HIGH, FINGER_CLOSED, "over the empty slot"),
-                _wp(1.0, SLOT_XY, SLOT_TOP + 0.013 - 0.01, FINGER_CLOSED, "fingertips 1 cm into the slot"),
-                _wp(1.0, SLOT_XY, HIGH, FINGER_CLOSED, "out again")]
-        return {"right": plan + poke + _grip_stack() + _feed() + _wait(5.0)}
-    if mode == "fingers":
-        return {"right": plan + _grip_stack() + _feed(fingers_in=True) + _wait(3.0)}
-    return {"right": plan + _grip_stack() + _feed() + _wait(5.0)}
+    if os.environ.get("TASK_DEMO") == "nothing":
+        return {"right": [Waypoint(10.0, (0.22, -0.33, TOP + 0.19), -0.0469, "wait clear", math.pi / 2)]}
+    from flat_demo import make
+    return make(TOP, CLIP_XY, CLIP_Z, SLOT_TOP, S.DISH_C)

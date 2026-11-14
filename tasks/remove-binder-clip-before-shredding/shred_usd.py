@@ -1,8 +1,7 @@
-"""The shredder, the letter rack, the folded invoices, the binder clip and the clip dish: sizes and USD files.
+"""The shredder, the folded invoices, the binder clip and the clip dish: sizes and USD files.
 
 Lengths are metres. The shredder and the dish are fixed bodies written in station coordinates: their origin is on the
-table top under the midpoint between the arm bases (x forward, y left, z up). The rack's origin is the middle of its
-underside, the invoices' origin their centre, and the clip's origin the middle of the paper edge it grips. build()
+table top under the midpoint between the arm bases (x forward, y left, z up). The invoices' origin is their centre, and the clip's origin the middle of the paper edge it grips. build()
 writes the files into build/ (not committed: they are generated each time the task file loads).
 
 The clip is one articulation with a free base: its body (spine, the fixed jaw and the handles) and a moving jaw on a
@@ -24,24 +23,21 @@ BUILD = HERE / "build"
 
 # -- shredder (station frame, origin on the table top) -----------------------------------------------------------------
 SHRED_X = (0.25, 0.41)
-SHRED_Y = (-0.38, -0.08)
+SHRED_Y = (-0.43, -0.13)
 SHRED_TOP = 0.12
 BIN_TOP = 0.04
-SLOT_C = (0.32, -0.23)
+SLOT_C = (0.32, -0.28)
 SLOT_L, SLOT_W = 0.23, 0.016
 SLOT_X = (SLOT_C[0] - SLOT_W / 2, SLOT_C[0] + SLOT_W / 2)
 SLOT_Y = (SLOT_C[1] - SLOT_L / 2, SLOT_C[1] + SLOT_L / 2)
 LIGHT_R = 0.0075
-GREEN_XY = (0.272, -0.104)
-RED_XY = (0.272, -0.126)
-SWITCH_XY = (0.272, -0.352)
+GREEN_XY = (0.272, -0.154)
+RED_XY = (0.272, -0.176)
+SWITCH_XY = (0.272, -0.402)
 
-# -- invoices, rack, clip, dish ---------------------------------------------------------------------------------------
+# -- invoices, clip, dish ---------------------------------------------------------------------------------------
 STACK = (0.0035, 0.21, 0.099)          # thick (x), long (y), tall (z)
 STACK_MASS = 0.015
-RACK = (0.05, 0.26, 0.03)              # across (x), long (y), tall (z)
-RACK_SLOT_W, RACK_FLOOR = 0.0045, 0.005
-RACK_MASS = 0.35
 CLIP_L = 0.041
 SPINE_HW = 0.0095                      # half the spine's width across the paper
 SPINE_Z = (0.0025, 0.0040)             # above the paper edge
@@ -50,7 +46,7 @@ HANDLE_BOX = ((-0.005, 0.005), (-0.0135, 0.0135), (0.0065, 0.026))   # pinch reg
 HANDLE_TOP = 0.027
 CLIP_MASS, JAW_MASS = 0.010, 0.002
 JAW_CLOSED, JAW_OPEN = 0.004, -0.004   # drive targets (m, + toward the fixed jaw)
-DISH_C = (0.18, -0.03)
+DISH_C = (0.18, 0.25)
 DISH = (0.09, 0.09, 0.025)
 DISH_WALL = 0.005
 
@@ -91,7 +87,7 @@ def _quat_wxyz_y(deg: float):
     return (math.cos(a), 0.0, math.sin(a), 0.0)
 
 
-def _collider(name, lo, hi, root, material="PhysicsMaterial", indent="    ", offset=0.002, rot_y_deg=0.0) -> str:
+def _collider(name, lo, hi, root, material="PhysicsMaterial", indent="    ", offset=0.0003, rot_y_deg=0.0) -> str:
     """A box collider (not rendered), from corner lo to corner hi, optionally turned about y through its centre."""
     lo, hi = np.asarray(lo, float), np.asarray(hi, float)
     c, s = (lo + hi) / 2, hi - lo
@@ -227,21 +223,6 @@ def _shredder() -> str:
 
 
 # -- letter rack --------------------------------------------------------------------------------------------------------
-def _rack() -> str:
-    root = "LetterRack"
-    rx, ry, rz = RACK
-    h = RACK_SLOT_W / 2
-    parts = [("base", _box((-rx / 2, -ry / 2, 0), (rx / 2, ry / 2, RACK_FLOOR + 0.001), bevel=0.001, round_xy=0.002), "oak"),
-             ("front", _box((-rx / 2, -ry / 2, 0), (-h, ry / 2, rz), bevel=0.0025, round_xy=0.002), "oak"),
-             ("back", _box((h, -ry / 2, 0), (rx / 2, ry / 2, rz), bevel=0.0025, round_xy=0.002), "oak")]
-    cols = [_collider("c_base", (-rx / 2, -ry / 2, 0), (rx / 2, ry / 2, RACK_FLOOR), root),
-            _collider("c_front", (-rx / 2, -ry / 2, RACK_FLOOR), (-h, ry / 2, rz), root),
-            _collider("c_back", (h, -ry / 2, RACK_FLOOR), (rx / 2, ry / 2, rz), root)]
-    BUILD.mkdir(exist_ok=True)
-    U.write_usda(str(BUILD / "rack.usda"), root, parts, LOOKS, cols, mass=RACK_MASS, friction=(0.6, 0.5))
-    return "build/rack.usda"
-
-
 # -- the folded invoices --------------------------------------------------------------------------------------------------
 def _invoices() -> str:
     root = "Invoices"
@@ -341,7 +322,7 @@ def _clip() -> str:
                           ', "PhysicsArticulationRootAPI", "PhysxArticulationAPI"', """
         bool physxArticulation:enabledSelfCollisions = 0
         int physxArticulation:solverPositionIterationCount = 32
-        int physxArticulation:solverVelocityIterationCount = 4
+        int physxArticulation:solverVelocityIterationCount = 16
         float physxArticulation:sleepThreshold = 0
         float physxArticulation:stabilizationThreshold = 0"""),
               _body_block("jaw", JAW_MASS, (-0.004, 0.0, -0.007), (3e-7, 1e-7, 3e-7), jaw_cols, _meshes(jaw, root, ind))]
@@ -360,9 +341,9 @@ def _clip() -> str:
             float physics:lowerLimit = -0.006
             float physics:upperLimit = 0.0034
             uniform token drive:linear:physics:type = "force"
-            float drive:linear:physics:stiffness = 5000
-            float drive:linear:physics:damping = 5
-            float drive:linear:physics:maxForce = 15
+            float drive:linear:physics:stiffness = 1000
+            float drive:linear:physics:damping = 0.2
+            float drive:linear:physics:maxForce = 5
             float physxJoint:armature = 0.00001
         }}"""
     text = _header(root) + f"""
@@ -413,7 +394,7 @@ def _dish() -> str:
 
 
 def build() -> dict[str, str]:
-    return {"shredder": _shredder(), "rack": _rack(), "invoices": _invoices(), "clip": _clip(), "dish": _dish()}
+    return {"shredder": _shredder(), "invoices": _invoices(), "clip": _clip(), "dish": _dish()}
 
 
 if __name__ == "__main__":

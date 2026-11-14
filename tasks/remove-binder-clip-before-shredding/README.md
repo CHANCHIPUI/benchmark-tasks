@@ -1,48 +1,44 @@
-# Take the binder clip off a stack of old invoices before feeding the stack into a desktop shredder
-
-A task file for the `yam_arena` embodiment ([yam-isaac-lab-arena](https://github.com/kairosiann/yam-isaac-lab-arena), Isaac Lab-Arena 0.3.1).
+# Remove the binder clip before shredding
 
 Instruction: "Shred these old invoices."
 
-A personal paper shredder stands on an office desk. In front of it, three old invoices, folded as they came by post, stand in an oak letter rack, held together by a black binder clip on their top edge. Personal shredders take staples and small paper clips, but a binder clip must come off first: fed in, it reaches the cutters and jams or damages them. The instruction does not mention the clip. The robot must pinch the clip's handles to open it, lift it off and put it down away from the shredder, then lift the stack out of the rack and feed it edge first into the 23 x 1.6 cm slot.
+Three folded invoices lie broad-face down on a desk, held by a full-size binder clip. The clip raises one edge only a few millimetres; there is no paper rack. A personal shredder and a dish for clips stand beside them. The robot must acquire the thin stack, remove the sprung clip, orient the paper and feed it into the slot. Feeding the metal clip jams the shredder.
 
-## Run a trial
+## Run and score
 
-Dream-1:
+Run from this folder with the `yam_arena` embodiment ([yam-isaac-lab-arena](https://github.com/kairosiann/yam-isaac-lab-arena), Isaac Lab-Arena 0.3.1):
 
 ```bash
-inspect-robots run --embodiment yam_arena --policy dream \
-  -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Shred these old invoices." \
-  --scorer task_score --max-steps 1200 --store-frames --log-dir runs/dream
+inspect-robots run --embodiment yam_arena --policy yam_scripted \
+  -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=640 -E cam_height=360 \
+  --instruction "Shred these old invoices." --scorer task_score \
+  --max-steps 1200 --store-frames --log-dir runs/demo
 ```
 
-Scripted demo (scores 1.0): the same command with `--policy yam_scripted`. `TASK_DEMO` picks a variant for checking the scorer (see `demo()` in `task.py`): `failure` feeds the stack with the clip on, `nothing` does nothing, `cliponly` puts the clip in the dish and stops, `clipslot` drops the clip into the slot, `clipontop` leaves the clip on the shredder's top and then feeds the stack, `byclip` lifts the clip by its body (the stack comes with it), and `fingers` pushes the stack in with the fingertips inside the slot. `pulltest` (debug) holds the stack and pulls the clip straight up with a force rising 5 N/s, to measure its grip.
+For Dream-1 use `--policy dream`, `-E cam_width=320 -E cam_height=176`, and `--log-dir runs/dream`.
 
-The run prints `task_score`. `score()` latches a failure (the shredder started with the clip on the stack, a clip entered the slot, or a fingertip entered the slot) and then returns 0 for the rest of the trial. Otherwise it returns 1.0 once the stack is shredded, the clip is off the stack and put down at rest away from the shredder and the grippers, and every fingertip is at least 3 cm from the slot (`success()` then holds for 1 s and ends the trial); and 0.3 with the clip off the stack and the stack still on the desk or in the shredder. With `TASK_SCORE_DIR` set, every step's state is written to `steps.jsonl` there.
+The command reports `task_score`. `task.json` defines the complete numeric scoring. Failures are latched until reset. Full credit requires one continuous second of the completed, released state; the same condition controls termination. Partial credit is 0.3 for removing the clip while retaining the paper over the desk or in the operating shredder. Paper or clip falling below the desk invalidates the trial. The release check includes the grippers' actual collision hulls, including open fingers.
 
-The shredder runs in `_run_shredder()` once per control step:
+The scripted demonstration lifts the stack by the clip's body, turns it upright and supports the paper with the other arm. It then changes its grip to squeeze the clip's handles, removes and puts down the clip, and feeds the paper edge-first. All motion is produced through the embodiment's normal arm joint actions. `flat_demo.py` supplies Cartesian wrist orientations to the stock waypoint player; no object is attached or repositioned by the demonstration.
 
-- **The clip.** The clip is an articulation: a body with the fixed jaw and the handles, and a moving jaw on a prismatic joint whose drive presses it against the paper with up to 15 N (its spring). It holds the stack by friction. While a gripper's fingers are closed on the folded-up handle pair, across it, the drive opens the jaw by 4 mm, as squeezing a real clip's handles opens it. The clip counts as off once it has been lifted clear of the paper's edge.
-- **The feed.** When the stack's lowest corner is 1.5 cm into the slot, the shredder starts: from then on the stack's velocity is set every control step so that it follows a steady 4 cm/s descent, squared up to the slot over the first five steps, with a force cancelling its weight. It never jumps, so a clip on it is carried along by its grip. Once its upper edge is 2 cm below the top, it has passed the cutters: it stops below the dark throat and strips appear in the bin's window.
-- **The jam.** If any part of a clip goes below the top surface inside the slot's outline, the feed stops for good, the stack is held where it is, and the red jam light comes on.
+`TASK_DEMO` selects diagnostic plans: `nothing`, `pickup`, `cliponly`, or `failure` (feeding with the clip attached). `TASK_SCORE_DIR` enables per-step scoring measurements; it does not affect the controller or score.
+
+## Simulation fidelity
+
+The three folded sheets are one rigid body. The real clip bends the paper locally; here the stack lies at the small slope imposed by the clip and desk contacts. The clip's free articulation has a sprung sliding jaw with a 5 N force limit. The handles' squeeze is detected geometrically and opens the jaw; friction holds the paper, with no attachment joint between clip and paper.
+
+The full-size shredder head retains its slot dimensions. The collection bin is shortened so the slot is 12 cm above the desk. This changes waste capacity and working height, but not the spring-clip manipulation, paper dimensions or insertion tolerance. All dimensions and materials are in `task.json`.
+
+The powered feed is approximated by a velocity drive at 4 cm/s after an aligned paper edge reaches the sensor 1.5 cm into the slot. The drive squares the stack to the throat over 0.25 s and cancels its weight while feeding; it never jumps the paper or helps acquire it. A clip entering the opening stops the feed permanently and lights the jam indicator. The paper settles below the throat when fully consumed and strips become visible through the bin window. The cuts and individual shreds are not simulated.
+
+For a real trial use a real shredder with an operator at its power switch; stop if metal or fingers approach the cutters and score zero. Replace the paper and reattach the clip between trials.
 
 ## Runtime and seeds
 
-- Demo: 476 steps (23.8 s simulated) to full score, about 2.5 minutes of simulation (about 0.3 s per step on the slowest 30 steps at 320 x 176) plus start-up.
-- Dream-1: up to 1,200 steps (1 minute simulated).
-- `object_jitter=0` keeps the layout fixed, so no seed is needed. The scripted demo is open loop and deterministic.
+The scripted demonstration reaches 1.0 at 709 steps (35.45 seconds simulated). Its exclusive GPU run at 640 x 360 took 209.62 seconds including startup; its slowest 30 steps took 9.40 seconds. Dream-1 reached 0.0 after 1,200 steps (60 seconds simulated), in one continuous session, taking 344.02 seconds including startup. The run limit is 1,200 steps. `object_jitter=0` fixes the layout; the scripted controller is deterministic and needs no random seed.
 
-## Files
+## Files and assets
 
-- `task.py`: the objects, the shredder's and the clip's logic, the scorer and the scripted demo.
-- `shred_usd.py`: the shredder, rack, invoices, clip and dish: meshes, colliders and the clip's joint, written as USD into `build/` when the task loads.
-- `make_textures.py`: draws the textures in `textures/`.
-- `scenekit.py`, `usdkit.py`: helpers that add USD bodies and articulations to a task file, and write meshes and materials.
-- `steptime.py`: records each step's wall time.
+`task.py` defines the scene, clip and shredder behavior, and scoring. `flat_demo.py` defines physical arm motions. `shred_usd.py` generates meshes and colliders into `build/`; `scenekit.py` and `usdkit.py` supply task-local USD helpers. `steptime.py` measures step runtime.
 
-## Sources
-
-All meshes are built in `shred_usd.py` from boxes, cylinders, prisms and tubes. Both textures (oak and the printed invoice face, a generic layout with no names or logos) are drawn by `make_textures.py`. The word "INVOICE" on the invoice face is set in the DejaVu Sans font, which is under the Bitstream Vera Fonts license (the DejaVu Fonts License, https://dejavu-fonts.github.io/License.html); DejaVu's own changes are in the public domain. The font file is not included: `make_textures.py` loads it from the system, and only the rendered images are in `textures/`. No other third-party assets are used.
-
-Sizes: the shredder's head and slot follow personal 10-sheet shredders with a 220 to 230 mm feed opening; its bin is made shallower than a real one (the machine is 12 cm tall instead of about 30 cm) so that the slot is within the arms' reach. The invoices are A4 sheets folded in three (210 x 99 mm). The clip is a standard 41 mm binder clip. The rack is a small oak desk letter rack, and the dish a desk clip dish.
+All meshes are built from boxes, cylinders, prisms and tubes. The textures are drawn by `make_textures.py`. The generic invoice uses DejaVu Sans under the [DejaVu Fonts License / Bitstream Vera Fonts License](https://dejavu-fonts.github.io/License.html); DejaVu changes are public domain. Only the rendered image is included, not the font file. No other third-party assets are used. The paper is A4 folded into thirds (210 by 99 mm), the binder clip is 41 mm wide, and the shredder's 230 mm feed length follows personal 10-sheet machines.
