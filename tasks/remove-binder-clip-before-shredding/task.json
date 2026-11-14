@@ -16,5 +16,6 @@
   "run_limit": "1,200 steps (1 minute at 20 Hz)",
   "reset_notes": "Nothing is consumed: the shredded stack is restored with the scene. In a real trial, use a new stack of folded paper each time.",
   "fidelity": "GPU PhysX, 240 Hz. Three folded sheets are one rigid stack; the clip naturally raises one edge 8 mm instead of locally bending paper. A sprung sliding jaw grips by friction (drive limited to 5 N); squeezing the handles commands it open. A detected, aligned insertion starts a scripted 4 cm/s roller feed; it does not move paper before insertion. Clip entry stops the feed. The full-size head has a shortened collection bin, preserving the slot, grip forces and insertion tolerances.",
-  "scores": "Dream-1 run: 0.0; demo: 1.0"
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BKBMBT"
 }
