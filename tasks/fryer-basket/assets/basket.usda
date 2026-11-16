@@ -1,0 +1,1333 @@
+#usda 1.0
+(
+    defaultPrim = "basket"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "basket" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.4
+
+    def "Looks"
+    {
+        def Material "chrome"
+        {
+            token outputs:surface.connect = </basket/Looks/chrome/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.81, 0.83)
+                float inputs:metallic = 0.8
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+        }
+
+        def Material "coating"
+        {
+            token outputs:surface.connect = </basket/Looks/coating/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.06, 0.06, 0.07)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "c_floor" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.241, 0.184, 0.002)
+        double3 xformOp:translate = (0, 0, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "c_front" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.002, 0.184, 0.102)
+        double3 xformOp:translate = (-0.1195, 0, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "c_back" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.002, 0.184, 0.102)
+        double3 xformOp:translate = (0.1195, 0, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "c_side_l" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.241, 0.002, 0.102)
+        double3 xformOp:translate = (0, -0.091, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "c_side_r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.241, 0.002, 0.102)
+        double3 xformOp:translate = (0, 0.091, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "w0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.07666666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.06133333333333334, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.04599999999999999, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.03066666666666667, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, -0.015333333333333338, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 1.3877787807814457e-17, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w7" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.015333333333333338, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w8" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.03066666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w9" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.045999999999999985, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w10" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.06133333333333332, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w11" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.07666666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w12" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0.09200000000000003, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w13" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.10543749999999999, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w14" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.090375, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w15" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.0753125, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w16" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.06025, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w17" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.04518749999999999, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w18" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.030125, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w19" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.015062500000000006, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w20" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w21" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.015062500000000006, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w22" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.030125000000000013, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w23" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.04518749999999999, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w24" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.06025, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w25" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.0753125, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w26" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.09037499999999998, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w27" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.10543749999999999, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w28" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w29" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.07666666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w30" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.06133333333333334, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w31" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.04599999999999999, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w32" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.03066666666666667, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w33" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, -0.015333333333333338, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w34" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 1.3877787807814457e-17, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w35" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.015333333333333338, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w36" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.03066666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w37" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.045999999999999985, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w38" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.06133333333333332, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w39" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.07666666666666666, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w40" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0.09200000000000003, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w41" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.10543749999999999, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w42" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.090375, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w43" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.0753125, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w44" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.06025, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w45" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.04518749999999999, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w46" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.030125, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w47" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.015062500000000006, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w48" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w49" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.015062500000000006, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w50" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.030125000000000013, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w51" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.04518749999999999, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w52" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.06025, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w53" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.0753125, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w54" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.09037499999999998, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w55" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.102
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.10543749999999999, 0.092, 0.051)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w56" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w57" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w58" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w59" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w60" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.022)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w61" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.022)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w62" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.022)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w63" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.022)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w64" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.042)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w65" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.042)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w66" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.042)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w67" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.042)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w68" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.062)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w69" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.062)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w70" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.062)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w71" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.062)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w72" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.082)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w73" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.082)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w74" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.082)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w75" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.082)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w76" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.1205, 0, 0.102)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w77" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.092, 0.102)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w78" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.1205, 0, 0.102)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w79" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.092, 0.102)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w80" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.07155555555555555, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w81" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.05111111111111111, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w82" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.03066666666666666, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w83" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, -0.010222222222222216, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w84" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.010222222222222216, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w85" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.030666666666666675, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w86" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.05111111111111111, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w87" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.241
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0.07155555555555557, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w88" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.10041666666666667, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w89" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.08033333333333334, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w90" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.06025, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w91" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.04016666666666667, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w92" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (-0.020083333333333328, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w93" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w94" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.020083333333333314, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w95" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.040166666666666656, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w96" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.06025, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w97" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.08033333333333334, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "w98" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.184
+        rel material:binding = </basket/Looks/chrome>
+        double radius = 0.0012
+        double3 xformOp:translate = (0.10041666666666665, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "handle_stem" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </basket/Looks/chrome>
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.006, 0.05)
+        double3 xformOp:translate = (-0.1205, 0, 0.127)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "handle" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </basket/Looks/coating>
+        double size = 1
+        quatf xformOp:orient = (-0.34202015, 0, 0.9396926, 0)
+        float3 xformOp:scale = (0.191, 0.022, 0.008)
+        double3 xformOp:translate = (-0.1936572443178624, 0, 0.2133862167250645)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "hook_tab" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </basket/Looks/chrome>
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.06, 0.003)
+        double3 xformOp:translate = (0.1305, 0, 0.10049999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "hook_lip" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </basket/Looks/chrome>
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.06, 0.009)
+        double3 xformOp:translate = (0.13899999999999998, 0, 0.09749999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

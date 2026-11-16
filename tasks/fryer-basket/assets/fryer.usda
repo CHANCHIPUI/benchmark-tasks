@@ -1,0 +1,289 @@
+#usda 1.0
+(
+    defaultPrim = "fryer"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "fryer" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    def "Looks"
+    {
+        def Material "steel"
+        {
+            token outputs:surface.connect = </fryer/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.64, 0.66)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "steel_dark"
+        {
+            token outputs:surface.connect = </fryer/Looks/steel_dark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.35, 0.36, 0.38)
+                float inputs:metallic = 0.4
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "panel"
+        {
+            token outputs:surface.connect = </fryer/Looks/panel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.1, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "knob"
+        {
+            token outputs:surface.connect = </fryer/Looks/knob/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.08, 0.08, 0.09)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "oil"
+        {
+            token outputs:surface.connect = </fryer/Looks/oil/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.4, 0.24, 0.05)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.15
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "cabinet" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.4, 0.267, 0.018)
+        double3 xformOp:translate = (0.2, 0, 0.029000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "foot_0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.02
+        rel material:binding = </fryer/Looks/knob>
+        double radius = 0.012
+        double3 xformOp:translate = (0.03, 0.10350000000000001, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "foot_1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.02
+        rel material:binding = </fryer/Looks/knob>
+        double radius = 0.012
+        double3 xformOp:translate = (0.03, -0.10350000000000001, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "foot_2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.02
+        rel material:binding = </fryer/Looks/knob>
+        double radius = 0.012
+        double3 xformOp:translate = (0.37, 0.10350000000000001, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "foot_3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.02
+        rel material:binding = </fryer/Looks/knob>
+        double radius = 0.012
+        double3 xformOp:translate = (0.37, -0.10350000000000001, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "deck_front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.015, 0.267, 0.152)
+        double3 xformOp:translate = (0.0075, 0, 0.114)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "deck_back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.1, 0.267, 0.152)
+        double3 xformOp:translate = (0.35, 0, 0.114)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "deck_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.285, 0.013, 0.152)
+        double3 xformOp:translate = (0.1575, -0.127, 0.114)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "deck_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.285, 0.013, 0.152)
+        double3 xformOp:translate = (0.1575, 0.127, 0.114)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "vat_floor" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel_dark>
+        double size = 1
+        float3 xformOp:scale = (0.285, 0.241, 0.002)
+        double3 xformOp:translate = (0.1575, 0, 0.03900000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rack" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel_dark>
+        double size = 1
+        float3 xformOp:scale = (0.275, 0.231, 0.004)
+        double3 xformOp:translate = (0.1575, 0, 0.046000000000000006)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "head" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.1, 0.267, 0.094)
+        double3 xformOp:translate = (0.35, 0, 0.237)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "panel" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/panel>
+        double size = 1
+        float3 xformOp:scale = (0.002, 0.25899, 0.07)
+        double3 xformOp:translate = (0.299, 0, 0.24)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "knob" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.016
+        rel material:binding = </fryer/Looks/knob>
+        double radius = 0.013
+        double3 xformOp:translate = (0.292, -0.119, 0.25)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Capsule "hanger_lip" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.2
+        rel material:binding = </fryer/Looks/steel>
+        double radius = 0.004
+        double3 xformOp:translate = (0.308, 0, 0.288)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "carry_l" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/knob>
+        double size = 1
+        float3 xformOp:scale = (0.06, 0.015, 0.025)
+        double3 xformOp:translate = (0.12, -0.14100000000000001, 0.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "carry_r" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/knob>
+        double size = 1
+        float3 xformOp:scale = (0.06, 0.015, 0.025)
+        double3 xformOp:translate = (0.12, 0.14100000000000001, 0.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "oil" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </fryer/Looks/oil>
+        double size = 1
+        float3 xformOp:scale = (0.285, 0.241, 0.002)
+        double3 xformOp:translate = (0.1575, 0, 0.109)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

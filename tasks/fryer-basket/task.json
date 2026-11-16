@@ -1,0 +1,21 @@
+{
+  "title": "Lift a loaded fry basket out of the oil and hang it on the fryer's hanger to drain",
+  "category": "Impact on jobs",
+  "keywords": [
+    "commercial kitchen",
+    "deep fryer",
+    "long-handled load",
+    "keeping a container level",
+    "hooking",
+    "safety"
+  ],
+  "instruction": "Lift the fry basket out of the oil and hang it on the fryer's hanger to drain.",
+  "context": "Restaurant cooks (1.4M in the US), fast food cooks (0.6M) and fast food and counter workers (3.9M) fry food all shift; O*NET lists running deep-fat fryers as a fast food cook's core task. Countertop units like this one, in concessions and small kitchens, share the floor fryer's workflow: lift the basket out of the oil by its handle, level, and hang it by its hook on the fryer's hanger to drain, touching only the coated grip.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. An Avantco F100 10 lb countertop electric fryer, as supplied (26.7 wide, 40 deep, 29.2 tall; 9.5 x 12 x 6 in tank), stands with its front at x 27, centred at y +5, switched off and unplugged, its tank holding water at room temperature to the MAX line (about 4.9 L; surface about 11 above the table). Its deck is 19 up; its control head covers the tank's back from 30 behind the front (flat top 28.4 up; thermostat dial at the right of its red panel); its basket hanger is the head's rolled top front edge (an 8 mm lip, top at the listed 29.2). Its own 177FBASKET wire basket (9.5 in front to back, 7.25 in across, 4 in deep; about 0.4 kg; weigh it) rests on the tank's bottom grate, back wall 26.2 behind the front; its 9.5 in handle is a 5 cm bare riser then a 19 cm flat coated grip rising toward the arms at about 40 degrees, tape marking where its coating ends; its front hook (on the end opposite the handle) reaches 2.0 back, lip 0.9 down. In it: a half-pound batch of 30 straight-cut fries (1 x 1 x 7, about 7.7 g each, thawed frozen fries) in three layers, a fresh batch every 5 trials. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged at the end of the trial from the video (all cameras) and a photo of the fryer. Take the first line that applies. 0: any part of the robot went into the water/oil, or touched the basket's wire, rim, riser or hook (any contact visible in any camera or to an observer beside the fryer watching the riser and hook), at any time; only the coated grip, up to its tape, may be touched. Fries are counted by those outside the basket (table, deck, tank); a broken fry counts as out if any piece is out. Shaking the basket is neither required nor penalised. 1.0 (success, ends the trial): for the whole last 1 s, the basket hangs from the hanger edge by its hook, its floor 2 cm or more above the oil, its centre over the tank's opening, all 30 fries in it, no part of the robot within 2 cm of it. 0: any part of the basket rests on the fryer (deck, rims or head top) other than its hook on the hanger. 0.5: its floor 2 cm or more above the oil, centre over the opening, all 30 fries in it, and held by its coated grip or hanging by its hook. 0.25: the same with 1 to 3 fries out. 0: anything else.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put any spilled fries back in the basket in three layers, lower the basket onto the bottom grate with its back wall 26.2 cm behind the fryer's front, top the water up to the MAX line, and wipe any water off the deck and the arms.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The fryer is fixed; the basket (thin collision shells, riser, coated grip, hook; 0.40 kg, estimated (the maker lists no net weight)) and 30 fries are free bodies. The oil is a drawn surface only: no buoyancy, drag or dripping. Deck, hanger and hook sizes are measured from the maker's photos (README); real fries are softer.",
+  "scores": "Dream-1 run: 0.0 (its hands reached the basket but never lifted it out of the oil); demo: 1.0",
+  "media": "M-7ETAQT"
+}
