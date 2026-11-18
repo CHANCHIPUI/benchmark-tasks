@@ -6,15 +6,15 @@ a pressure gauge on a bladder under the band reads 60 mmHg; its dial is green fr
 
 To do it, the robot has to:
 - turn the windlass rod, which twists the band tighter and raises the gauge;
-- keep hold of it: the band's pull turns the rod back the moment nothing holds or locks it;
+- keep hold of it against the band's pull, about 2 N m in the green: the band turns the rod back the moment nothing
+  holds or locks it;
 - go on far enough: the rod has to turn about 210 degrees, and a gripper's wrist runs out of travel partway, so the
   robot has to plan its grip or regrip on the way (the demo regrips while the other hand holds the rod);
 - lock it only when the gauge is green. The tourniquet's own clip has a hook on each edge of the band, beside the
   windlass, and the rod lines up with one of them twice every half turn. Turning anticlockwise, the first two times
   come 30 and 78 degrees in, with the gauge at about 90 and 140; locking there looks done but scores 0.25. The rod
   lines up again 210 degrees in, with the gauge at about 270;
-- lock it by pushing the rod's end down into the hook, past the hook's lips (or by lifting the other end), then let
-  go.
+- lock it by pushing the rod down into the hook, past the hook's lips (about 10 N directly over the hook), then let go.
 
 ## Why it matters
 
@@ -30,36 +30,47 @@ The task tests three things:
   and the clip lines up twice before the gauge gets there.
 - **Holding against a load.** The rod is always pulled back, so a regrip needs something else holding it first,
   and letting go before it is locked undoes the work.
-- **Locking a snap fit.** The rod's end has to go down into a hook only 13 mm wide, on the hook's line, while the
-  band pulls the rod sideways.
+- **Locking a snap fit.** The rod's end has to go down into a hook only 13 mm wide, on the hook's line, and be pushed
+  past the hook's lips, while the band pulls the rod sideways.
 
 No task on the board tightens a tourniquet. The closest are #917 (release a phlebotomy tourniquet before withdrawing
 the needle), #918 (add a fresh pad on top of a soaked dressing and hold it) and #409 (two-rescuer CPR on a manikin).
 
 ## Changes in this version
 
-- The tourniquet's own windlass clip is used, as supplied: a hook on each edge of the band, beside the windlass. The
-  earlier versions removed it and glued a clip to the thigh. The rod now locks lying along the band, its end tipped
-  down into a hook, as on the real C-A-T; the start angle, the angles where it lines up, the demo and the calibration
-  checks follow from that.
-- The domain is now Other (emergency care).
-- The scoring is a list read from the top, and a rod locked under the green scores 0.25 whether or not the robot is
-  still near it. The gauge only counts as green with the robot off the band, bladder, thigh and gauge, so pressing
-  them can't fake the reading.
-- Kept from the last version: the hooks' lips reach 1 mm over a 12 mm rod in a 13 mm channel (an 11 mm opening), and
-  the 5 x 42 cm bladder wraps once round the 40 cm thigh.
+This version answers the review of TK-EL693A. The tourniquet's own clip, the domain, the scoring order and the
+bladder's size are unchanged from the last version.
+
+- **Winding resistance.** The band now pulls the rod back with 1.8 N m at 250 mmHg and 1.94 N m where the rod locks
+  (270 mmHg), up from 0.22 N m. The pull is proportional to the gauge's pressure, and builds up over the first quarter
+  turn as the strap wraps the rod. A drag of 0.2 N m s/rad stands in for the strap's friction. The value is derived
+  from the only published windlass-torque measurement we found, scaled to this thigh. See "Simulation fidelity" for
+  the derivation, and "Calibration" for measuring it on the trainer with a luggage scale.
+- **Snap force.** The clip's lips now resist the rod. Pushing it past them takes 10 N at the hook, and pulling it back
+  out takes 10 N again. The rod counts as locked only once it is past them. We found no published value, so 10 N is an
+  estimate. "Calibration" describes measuring it with a kitchen scale.
+- **Demo.** Re-tuned for the new loads, and still 1.0.
+  - The right hand turns the rod with its hand running up to 40 degrees (the demo's cap) ahead of the rod.
+  - The left holds the rod against the band while the right regrips.
+  - To lock the rod, the left takes its other end and pushes it down past the hook's lips while the right keeps the
+    rod on the hook's line. Before, the right lifted its own end.
+  - The `--early-lock` demo variant was dropped. The scoring rule for a lock under the green (0.25) is unchanged.
+- **Dream-1** was re-run on the new loads: 0 (it never brought the gauge to green or locked the rod).
+- **Bladder.** The custom heat-sealed bladder is replaced by a piece of a standard mountain-bike inner tube. The
+  README gives the parts, a 10-minute preparation, the connection to the gauge and bulb, the sealed port, and a
+  leak check.
 
 ## Files
 
 | File | What |
 |---|---|
-| `task.py` | The yam_arena task file: the tourniquet, the clip's hooks, the band's pull, the gauge, the lock, the monitor, `success()` and `score()` |
+| `task.py` | The yam_arena task file: the tourniquet, the clip's hooks and their lips' snap, the band's pull, the gauge, the lock, the monitor, `success()` and `score()` |
 | `geometry.py` | Dimensions and layout: the thigh, the band and windlass, the clip, the gauge, the pressure rule, the scoring tolerances |
 | `build_assets.py` | Writes `assets/tourniquet.usda` and the dial's texture (needs `pxr`, PIL and the DejaVu fonts) |
 | `assets/` | The tourniquet on its training thigh, with the gauge |
 | `scenekit.py` | USD bodies and reset hooks for yam_arena task files |
 | `demokit.py` | Helpers for the scripted demo |
-| `demo.py` | The scripted full-score demo, and variants that lock early, keep holding, let go to regrip, or keep a hand on after locking |
+| `demo.py` | The scripted full-score demo, and variants that keep holding, let go to regrip, or keep a hand on after locking |
 
 `scenekit.py` hooks `yam_arena.scene` and the embodiment's step and reset without modifying yam_arena, so the task
 runs with the standard `yam_arena` embodiment and `task_score` scorer. Tested with yam-isaac-lab-arena at `bd62771`
@@ -86,50 +97,53 @@ inspect-robots run --embodiment yam_arena --policy dream \
 `task_score` prints the trial's score: 1.0 on success, otherwise `score()` at the end of the episode.
 
 - **Seeds:** there is one fixed layout and no randomisation (`object_jitter=0`), so the seed has no effect.
-- **Runtime:** a full 2,400-step Dream-1 trial took 7 min 41 s on an RTX 5090 (mean inference latency 0.72 s),
-  plus about a minute to start Isaac Sim. A successful trial ends earlier: the scripted demo stops after 614 steps.
+- **Runtime:** a full 2,400-step Dream-1 trial took 5 min 56 s on an RTX 5090 (mean inference latency 0.64 s),
+  plus about a minute to start Isaac Sim. A successful trial ends earlier: the scripted demo stops after 804 steps.
 
-Dream-1 scored 0. Its hands reached the rod; it first moved the rod at about 24 s and turned it at most 17 degrees,
-raising the gauge to 77 mmHg, and the band turned it back each time. It never locked it. The run used one continuous
-Dream-1 session, with no errors or retries.
+Dream-1 scored 0 on this version (the new band resistance and clip snap). Its right hand went to the rod and the
+band several times, but the gauge never reached the green and the rod was never locked in a hook; nothing else was
+disturbed. 1,314 of its 2,400 action rows were beyond the arm's limits and were clipped. 50 inference requests (median
+latency 0.50 s) in one continuous Dream-1 session, with no errors or retries.
 
 ## Scripted demo
 
 ```bash
 python demo.py task.py demo_out                     # full score: demo_*_cam.mp4, setup.png, result.json
-python demo.py task.py early_out --early-lock       # turns it clockwise, locks at the first hook, gauge ~160: 0.25
 python demo.py task.py hold_out --hold              # turns it into the green but keeps holding it: 0.5
 python demo.py task.py slip_out --slip              # lets go to regrip with nothing holding the rod: 0
 python demo.py task.py keep_out --keep-hold         # locks it in the green but keeps a hand on it: 0.5
 ```
 
-1. The right hand takes the rod's end toward the arms and the hip from above and turns it anticlockwise (seen from
-   above). It passes the first two times the rod lines up with a hook (30 and 78 degrees in, gauge about 90 and 140)
-   and goes on to about 194 degrees, where its wrist is near the end of its travel.
-2. The left hand, its grip leaning 45 degrees along the rod so the arms keep clear, takes the rod's other end and
-   holds it still. The right lets go, returns to its ready pose, and takes the same end again with its wrist turned
-   the other way round; the left lets go.
-3. The right turns the rod on to 210 degrees, where the end it does not hold lines up with the hip-side hook, with the
-   gauge in the green. It holds the rod on the hook's line, correcting for the wrist's give, rolls its hand 12
-   degrees about the rod so one finger is under it, and lifts its own end, tipping the hand with the rod and watching
-   the rod's tilt. The other end goes down into the hook, whose lead-in
-   steers it into the channel, and snaps past the lips onto the hook's floor. The right then lets go and backs off.
+1. **First grip.** The right hand takes the rod's end toward the arms and the hip from above and turns the rod
+   anticlockwise (seen from above).
+   - It passes the first two times the rod lines up with a hook: 30 and 78 degrees in, gauge about 90 and 140.
+   - It goes on to about 175 degrees (gauge about 235), where its wrist is near the end of its travel.
+   - Against the band's pull, up to 1.7 N m here, the hand runs up to 40 degrees (the demo's cap) ahead of the rod: the wrist
+     gives and the fingers splay round the rod. The hand also tips to keep the rod level.
+2. **Regrip.** The left hand takes the rod's other end, its grip leaning 45 degrees along the rod so the arms keep
+   clear.
+   - It pushes on to about 196 degrees (gauge about 256) and holds the rod there against 1.85 N m.
+   - The right lets go, returns to its ready pose and takes the same end again with its wrist turned the other way
+     round. It takes up the pull, and the left lets go.
+3. **Into the green.** The right turns the rod to 210 degrees (gauge 270), where the end it does not hold lines up
+   with the hip-side hook, and holds it within a quarter of a degree of the hook's line against 1.94 N m.
+4. **Lock.** The left takes that other end beyond the hook, 7.3 cm from the rod's middle, leaning out along the rod.
+   - It tips the end down, leading the rod's measured tilt, while the right keeps the rod on the hook's line and tips
+     its own end up with it. While the end comes down between the hook's walls, the left goes on only with the rod
+     within half a degree of the hook's line.
+   - The end goes into the hook's channel and meets the lips at 16 degrees. It is pushed past them at 19.9 degrees,
+     against their 10 N, and seats on the hook's floor at 21.
+   - Both hands let go and back off.
 
-While turning, the hand's angle runs up to 10 degrees ahead of the rod's, because the wrist gives under the band's
-pull. Every move follows the rod's measured angle and tilt, and the script checks the gauge on its needle before
-locking.
+Every move follows the rod's measured angle and tilt, and the script checks the gauge on its needle before locking.
 
-The demo succeeds (1.0) in 614 steps (31 s). The first grip turned the rod 195 degrees (the gauge at 255), and after
-the regrip the second took it to 210 (270), within a quarter of a degree of the hip-side hook's line. As the right
-hand lifted its end, the rod tipped until its other end seated in the hook at 21 degrees, and the lock latched.
+The demo succeeds (1.0) in 804 steps (40 s).
 
 The variants:
-- `--early-lock` turns the rod the other way, clockwise, 102 degrees to where it first lines up with a hook (the
-  knee-side one, gauge at 161), and locks it there the same way: 0.25 (403 steps).
-- `--hold` keeps hold in the green without locking: 0.5 (670 steps).
-- `--slip` lets go to regrip with nothing holding the rod: 0 (466 steps), because the band turns it back to where it
+- `--hold` keeps hold in the green without locking: 0.5 (726 steps).
+- `--slip` lets go to regrip with nothing holding the rod: 0 (470 steps), because the band turns it back to where it
   started.
-- `--keep-hold` locks it in the green but keeps a hand on it: 0.5 (751 steps).
+- `--keep-hold` locks it in the green but keeps a hand on it: 0.5 (932 steps).
 
 ## Scoring
 
@@ -155,11 +169,12 @@ first row that applies.
 - **In simulation:**
   - **The gauge** reads 60 mmHg plus 1 mmHg per degree the rod has been turned, either way, from where it started;
     the needle shows it, and a stop holds it at 300.
-  - **Locked:** the rod lies within 1.5 degrees of a hook's line, seen from above, and is seated: its end tipped at
-    least 20.5 degrees down, within 0.5 mm of resting on the hook's floor at its outer end (it seats at 21). The
-    hooks' floors, walls and lead-ins collide, but their lips are drawn without colliding. Instead, from then on task
-    code holds the rod down, as the lips would, until it is lifted back until its centre line is above them (tipped
-    under 18.7 degrees).
+  - **Locked:** the rod lies within 1.5 degrees of a hook's line, seen from above, and has been pushed past the hook's
+    lips against their spring. That means it is tipped to 19.9 degrees or more, its centre line below the lips'
+    undersides; it seats at 21.
+    - The lips hold it down from then on.
+    - It unlocks only if pulled back up to under 19.6 degrees, which takes 10 N at the hook.
+    - "Simulation fidelity" describes the lips' spring.
   - **Let go:** for the last 20 control steps, both arms stay at least 1 cm from the rod and the clip. The check uses
     yam_arena's collision hulls of every link, the gripper body and both fingers, at their simulated poses.
   - **Held:** part of either arm within 1 cm of the rod. A held rod counts toward 0.5 only within 5 degrees of level,
@@ -188,13 +203,41 @@ the table top.
     lips, which then close over it. The simulation models each hook as a channel 13 mm wide, 0.5 mm clear of the rod
     each side, with lips reaching 1 mm in (an 11 mm opening for the 12 mm rod) 7 to 8 mm above its floor, and a
     lead-in above them.
-  - **Bladder.** Under the band, a 5 x 42 cm air bladder of heat-sealed TPU-coated nylon is wrapped once round the
-    thigh (39.9 cm round), overlapping itself by 2 cm. Its 5 mm rubber tube comes out under the band on the knee
-    side, below the thigh, and runs along the table to the gauge's post. With the band snug, pump the bladder through
-    a port on the tube (a blood-pressure cuff's bulb) until the gauge reads 60, then take the bulb off and cap the port,
-    so nothing in reach can change the pressure. It is only a
-    little wider than the band, so it reads close to the pressure under the band; a much wider one would bulge out
-    either side of the band and read low.
+  - **Bladder.** Under the band, a 5 x 42 cm air bladder is wrapped once round the thigh (39.9 cm round), overlapping
+    itself by 2 cm. It is only a little wider than the band, so it reads close to the pressure under the band. A much
+    wider bladder would bulge out either side of the band and read low. It is made from a bicycle inner tube in about
+    10 minutes:
+    - **Parts** (about US$15, plus the gauge):
+      - a 26 x 1.95-2.125 in mountain-bike inner tube, which lays flat about 5.1 cm wide. For example, the Sunlite
+        26 x 1.95-2.125 lists a flat-fold width of 51 mm, at about US$8. A 700c road tube is too narrow: it lays flat
+        only about 2.5 cm wide;
+      - a 51 mm (2 in) binder clip;
+      - a 1/4 in straight barbed hose connector, or a reducer from 1/4 in to the gauge tubing's size;
+      - two small zip ties and some electrical tape;
+      - a sphygmomanometer Y connector, a sphygmomanometer bulb with its release valve, and a pinch clamp.
+    - **Make it:**
+      1. Cut a 47 cm piece of the tube, away from the valve.
+      2. Fold one end over twice, about 1.5 cm each time, and clamp it flat across its whole width with the binder
+         clip. Fold the clip's handles flat.
+      3. Push the barbed connector 2 cm into the other end. Gather the rubber round it, pull the two zip ties tight
+         over it 1 cm apart, and wrap the neck with tape. That leaves 42 cm of bladder between the clip and the neck.
+      4. Connect the bladder through the Y connector to the gauge's tube and the bulb.
+    - **Fit it:**
+      - Wrap the bladder flat round the thigh at y 0, with its ends overlapping 2 cm on the far side of the thigh (away
+        from the arms) and the clipped end underneath; the clip makes a small lump under the band there, which the
+        calibration checks take into account.
+      - The neck turns out from under the band's knee-side edge. Its tube runs along the table to the gauge's post.
+      - Route the band over the bladder and fasten it snug.
+    - **Seal it:**
+      1. Pump the bladder to 60 mmHg and close the bulb's valve.
+      2. Wait 5 minutes: the gauge must not fall more than 2 mmHg.
+      3. Close the bulb's branch with the pinch clamp and take the bulb off, so nothing in reach can change the
+         pressure.
+      4. At the 210-degree check under "Calibration", lock the rod and watch the gauge for 2 minutes: it must not fall
+         more than 4 mmHg. For comparison, OIML R16-1 allows a clinical sphygmomanometer 4 mmHg a minute.
+      5. If it leaks, re-clip or re-tie the leaking end.
+    - The tube is stretchy rubber, so only pump it under the snug band. The calibration checks below tie the reading to
+      the rod's turn.
   - **Start.** The rod starts level, turned 30 degrees clockwise (seen from above) from where its end would line up
     with the hip-side hook: one end toward the arms and the hip, 54 degrees off the band's line.
 - **Gauge.** An aneroid gauge, 12 cm across, reading 0 to 300 mmHg, with a stop at 300 and green tape stuck on the dial
@@ -207,6 +250,28 @@ the table top.
 
   Start the band tighter or looser if not. Also check that the rod sweeps over the clip while level, and that pushed
   down into a hook it snaps in and stays in when let go.
+- **Band pull and snap force.** Measure both on the trainer before the first trials, and the pull again every 10
+  trials.
+  - **Band pull:**
+    1. Tie a loop of thin cord round the rod 6 cm from its middle, and hook a digital luggage scale (0-50 kg, 10 g
+       steps) on it.
+    2. With the rod turned anticlockwise to 78, 150 and then 210 degrees, pull the scale level and at right angles to
+       the rod, in the tightening direction, until the rod just moves on. Read the peak.
+    3. Ease the rod back slowly and read the scale while it holds the rod still.
+    4. The band's pull is the mean of the two readings in kg, times 9.81 x 0.06 m.
+
+    The simulation uses 0.86, 1.51 and 1.94 N m at those angles: 1.5, 2.6 and 3.3 kg on the scale. If the trainer
+    differs by more than a quarter, set `TAU_GREEN` in `geometry.py` to the 210-degree pull times 250/270 (it is the
+    pull at 250 mmHg).
+  - **Snap force:**
+    1. Stand the thigh, on its chocks, on a kitchen scale (5 kg, 1 g steps) and zero it.
+    2. Turn the rod 30 degrees, where an end lines up with the hip-side hook. The band pulls only weakly there.
+    3. Press the rod straight down with a fingertip directly over the hook (5 cm from the rod's middle, where the
+       simulation applies its 10 N), slowly, until it snaps in. A press at the rod's tip reads about a third less.
+    4. The snap force is the peak reading minus the reading when the end first touched the lips, times 9.81.
+    5. Pull the seated end straight up with the luggage scale's cord until it comes out, and read the peak.
+
+    The simulation uses 10 N, about 1.0 kg, both ways. Set `F_SNAP` in `geometry.py` to the mean of three tries.
 - **Arms** start at the ready pose with open grippers.
 - **Safety.** A training thigh only, never a person. The rod snaps back when released unlocked; keep hands clear of
   it and of the arms.
@@ -216,33 +281,73 @@ the table top.
 - Rigid bodies, 240 Hz physics, 20 Hz control.
 - **The tourniquet** is an articulation fixed to the world. Its base is the thigh, the chocks, the band, the bladder
   and the gauge.
-  - The windlass turns about the vertical on top of the band, and the rod can tip on it about its middle (a spring of
-    0.3 N m/rad, the strap holding it level, up to 30 degrees either way).
-  - The band's pull is a torque from task code, 0.06 N m per radian of turn, back toward where it started.
+  - The windlass turns about the vertical on top of the band. The rod can tip on it about its middle, up to 30
+    degrees either way, against a spring of 0.3 N m/rad: the strap holding it level.
+  - **The band's pull** is a torque from task code, against the turn:
+    - 1.8 N m x (gauge reading / 250 mmHg), building up linearly over the first 90 degrees as the strap wraps the rod;
+    - 0.22 N m at 30 degrees, 0.86 at 78, 1.51 at 150, 1.8 at 190 (250 mmHg) and 1.94 at 210, where the rod locks;
+    - a drag of 0.2 N m s/rad stands in for the strap's friction, so a rod let go unwinds at about a turn a second.
   - **The clip.** Each hook's floor, walls and lead-in are fixed shapes that collide, laid along the line a seated
-    rod takes. Their lips are drawn but don't collide, so the rod passes them without spreading the hook (the snap's
-    force is not modelled). Once the rod is seated, task code holds it down, as the lips would, until it is lifted
-    back above them. The plate joining the hooks across the band is drawn only.
+    rod takes. The plate joining the hooks across the band is drawn only. The lips are drawn, and task code gives
+    them their snap:
+    - When the rod lies on a hook's line and its end comes down to the lips (its axis 4.4 mm above where it seats),
+      task code adds the lips' spring to the rod's tilt spring. It pushes back, rising to 10 N at the hook as the end
+      reaches the point where it is past them (its axis 1 mm above where it seats).
+    - The rod counts as locked only if it is still pushed down past that point a control step (50 ms) after the spring
+      came on, so it takes at least 10 N.
+    - The lips then hold it down, pressing it onto the hook's floor with about 5 N net of the strap's pull. Pulling it back up past them takes
+      10 N again.
+    - Task code switches the tilt joint's drive between the strap's spring and the strap's plus the lips'. PhysX
+      applies the drive implicitly at every physics step. No joint breaks, so side loads can't unlock the rod.
+- **Where the band's pull comes from.** It is derived, not measured on this trainer.
+  - **The measurement.** Fultz et al., "Tourniquet Pressure Magnitudes and Distribution During Limb Applications",
+    J Spec Oper Med 2026;26(2):61 (doi:10.55460/J.Spec.Oper.Med.2026.BYA5-RH3Y), measured a median windlass-rod torque
+    at occlusion of 3.31 N m on adult thighs, at a median 336 mmHg. They used a SOF-T Gen 5, a 3.8 cm windlass
+    tourniquet like the C-A-T.
+  - **Scaled to this thigh.** The band's tension, and so its pull on the rod, goes with the pressure and the limb's
+    radius (Laplace). Their thighs' size isn't given in the abstract. Assuming about 54.5 cm round, the median thigh in
+    Slaven et al., J Spec Oper Med 2015;15(1):39 (doi:10.55460/4g5t-09t4), scaling to 250 mmHg and this 40 cm thigh
+    gives 3.31 x 250/336 x 40/54.5 = 1.8 N m.
+  - **The floor.** It can't be less than about 0.9 N m. 250 mmHg under a 3.8 cm band on a 6.35 cm radius takes 80 N
+    of tension, and both sides of the strap pull on the rod at about 5.5 mm: 2 x 80 x 0.0055 = 0.88 N m. Real bands
+    lose much of their pull to friction. Pulling a C-A-T's strap with a known force on thighs gives only about a
+    quarter of the Laplace pressure (Hooke et al., Mil Med 2021;186(S1):378, doi:10.1093/milmed/usaa266; Valliere et
+    al., J Am Coll Surg 2018;227(3):332, doi:10.1016/j.jamcollsurg.2018.06.005), so the real pull sits well above this
+    floor.
+  - **The range.** The same abstract gives 2.50 N m at 261 mmHg on upper arms, about the same torque per mmHg as on
+    thighs; read that way, 250 mmHg would take about 2.4 N m. So the real pull is likely 1.8-2.5 N m; the sim uses the
+    lower end until the trainer is measured.
+  - **The arms' force.** At 1.94 N m, a grip 5 cm from the rod's middle needs about 39 N across the fingers, close to
+    the YAM's limit; gripping or pushing at the rod's end (about 7 cm) needs about 28 N. The demo turns the rod with a
+    wrist twist and lets the fingers splay round it, and pushes at the rod's end to lock it.
+  - Measure it on the trainer as under "Calibration".
+- **The thigh's underside** is 2 mm off the table; the band and bladder (about 6 mm together) pass under it at y 0,
+  where the chocks lift the real thigh clear.
+- **The snap force is estimated.** We found no published value for a C-A-T clip, so 10 N is an estimate for a
+  thumb-pressed plastic clip. Measure it as under "Calibration".
 - **Monitor:** after each control step, task code:
-  - adds up the rod's turn (the joint reads modulo a turn) and sets the gauge's needle from it;
-  - latches the lock when the rod lies within 1.5 degrees of a hook's line with its end tipped down to the hook's
-    floor (within 0.5 mm). It then holds the rod there, by moving the strap spring's target down, until it is lifted
-    back above the lips;
+  - adds up the rod's turn (the joint reads modulo a turn), sets the gauge's needle from it and sets the band's pull;
+  - switches the lips' spring on and off as above, and latches and unlatches the lock;
   - checks how close the collision hulls of either arm, fingers included, come to the rod and the clip.
-- **Band pull, assumed:** 0.06 N m per radian, so 0.22 N m with the gauge in the green (4.4 N at the demo's grip, 5
-  cm out). It was not measured, and a real C-A-T at 250 to 270 mmHg very likely pulls harder: a rough estimate from
-  the band's tension is 1 to 2 N m. A real robot then has to hold several times more torque while it regrips, and the
-  real lips take a firmer push. Measure it on the trainer (a spring scale on the rod's end) before real trials.
-- **Lips:** in simulation the lips' hold is task code pulling the seated rod down with a weak spring (about 0.05 N m),
-  far weaker than the real lips; the lock latches and stays latched until the rod is lifted back above them.
-- **Simplified:** the real pressure under a band rises faster than linearly, and the real strap twists and bunches
-  under the rod; here pressure is linear in the turn and the strap is not modelled. The clip's position and the rod's
-  size follow the C-A-T's instructions for use and published sizes, not a measurement, so the calibration checks
-  above set the real build's start. The rod and clip are drawn dark so they show against the blue band.
-- **Resets:** the reset untwists the rod, levels it, and resets the gauge.
+- **Simplified:**
+  - Pressure is linear in the turn here; the real pressure under a band rises faster than linearly.
+  - The real strap twists and bunches under the rod; here it is not modelled.
+  - The band's pull is the same turning either way and doesn't depend on speed beyond the drag. A real strap's
+    friction makes it pull back less than it resists.
+  - The clip's position and the rod's size follow the C-A-T's instructions for use and published sizes, not a
+    measurement, so the calibration checks above set the real build's start.
+  - The rod and clip are drawn dark so they show against the blue band.
+- **Resets:** the reset untwists the rod, levels it, switches off the lips' spring and resets the gauge.
 
 ## Reset between trials
 
-Lift the rod out of the clip, untwist it back to its start (level, one end toward the arms and the hip, 30 degrees
-clockwise from lining up with the hip-side hook), and check the gauge reads 60 mmHg (re-pump through the port if not). Every 10 trials, re-check the gauge at the 30,
-78 and 210 degree hook positions, as in the calibration above.
+1. Pull the rod's seated end up out of the clip, past the lips.
+2. Untwist the rod back to its start: level, one end toward the arms and the hip, 30 degrees clockwise from lining up
+   with the hip-side hook.
+3. Check that the gauge reads 60 mmHg. If it doesn't, put the bulb back on its branch, open the clamp, re-pump, then
+   clamp the branch and take the bulb off again.
+
+Every 10 trials:
+- re-check the gauge at the 30, 78 and 210-degree hook positions, as under "Calibration";
+- re-check the band's pull at 210 degrees with the luggage scale;
+- check that the bladder holds its pressure.

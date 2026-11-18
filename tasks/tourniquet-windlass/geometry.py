@@ -61,19 +61,44 @@ THETA0 = math.pi - PHI - math.radians(30)   # the rod starts 30 degrees short of
 #                                             hook on the hip side (+y), one end toward the arms and the hip
 
 # -- mechanics: the band unwinds the rod unless something holds it; twisting either way tightens -----------------------------
-K_TWIST = 0.06                    # N m per rad of twist
-TWIST_DAMPING = 0.03              # N m s / rad
+# The band's pull on the rod is proportional to the band's tension, so to the pressure under it (Laplace), times the
+# strap's lever arm on the rod, which builds up over the first quarter turn as the strap wraps round it. TAU_GREEN is
+# derived from the one published windlass-torque measurement (Fultz et al., J Spec Oper Med 2026: median 3.31 N m to
+# occlude adult thighs at about 336 mmHg) scaled to this 40 cm thigh and 250 mmHg; the frictionless floor (band tension
+# from Laplace, 80 N, on the strap's 5.5 mm lever, both sides) is 0.9 N m.
+TAU_GREEN = 1.8                   # N m against the turn with the gauge at 250 mmHg (1.94 at 270)
+TAU_RAMP = math.radians(90)       # the strap's lever arm builds up over this much turn
+TWIST_DAMPING = 0.2               # N m s / rad: the strap's drag (a let-go rod unwinds at about a turn a second)
 TILT_K = 0.3                      # N m / rad, the strap holding the rod level
 TILT_D = 0.02
 P_SNUG = 60.0                     # mmHg under the band as strapped
 P_PER_DEG = 1.0                   # mmHg per degree of twist
 GREEN = 250.0                     # the gauge's green arc starts here
 GAUGE_MAX = 300.0
-LOCK_TILT = SEAT_TILT - 0.0005 / (HOOK_R + HOOK_L / 2)   # the rod counts as locked when it lines up with a hook and
-#                                                         # tips down to within 0.5 mm of the floor at its outer end
-UNLOCK_TILT = SEAT_TILT - 0.002 / HOOK_R   # and comes out when lifted until its centre line is 2 mm up, above the lips
+LOCK_TILT = SEAT_TILT - 0.0005 / (HOOK_R + HOOK_L / 2)   # seated: tipped down to within 0.5 mm of the hook's floor
 LOCK_ALIGN = math.radians(1.5)    # seen from above, the rod lies within this of a hook's line (the channel
 #                                 # itself lets it lie within 0.6 degrees)
+
+# -- the snap: a hook's lips resist the rod going in, and coming out, until its widest part passes them ---------------------
+# Coming down a hook's channel, the 12 mm rod meets the lips' top edges (11 mm apart, 8 mm above the floor) with its axis
+# 4.4 mm above where it seats, and passes them once its axis is below their undersides (7 mm, 1 mm above where it seats).
+# In between the lips push back on it like a spring, up to F_SNAP; once it is past they hold it down, and pulling it back
+# out takes F_SNAP again. F_SNAP is an estimate (no published value): measure it on the trainer as the README says.
+F_SNAP = 10.0                     # N, at the hook, to push the rod past the lips (or pull it back out)
+_S_CONTACT = (LIP_Z[1] + math.sqrt(ROD_R ** 2 - (ROD_R + CLIP_GAP - LIP_IN) ** 2)) - ROD_R   # 4.4 mm above seated
+_S_PAST = LIP_Z[0] - ROD_R                                                                    # 1.0 mm above seated
+DIP_CONTACT = SEAT_TILT - _S_CONTACT / HOOK_R   # the rod's end meets the lips (16.0 degrees)
+DIP_SNAP = SEAT_TILT - _S_PAST / HOOK_R         # and is past them (19.9 degrees; it seats at 21)
+K_LIP = F_SNAP * HOOK_R / (DIP_SNAP - DIP_CONTACT)   # N m / rad: the lips' spring about the rod's middle (7.4)
+DIP_HOLD = 2 * DIP_SNAP - DIP_CONTACT           # a locked rod's lips spring toward here: pulling it back up past them
+#                                                 takes F_SNAP, and it presses on the floor with about 7 N
+UNSNAP = math.radians(0.3)                      # pulled up this far above DIP_SNAP, it is out
+
+
+def band_torque(twist_deg: float) -> float:
+    """The band's pull against the turn (N m), either way, at this many degrees of twist."""
+    lever = min(1.0, math.radians(abs(twist_deg)) / TAU_RAMP)
+    return TAU_GREEN * pressure(twist_deg) / GREEN * lever
 
 
 def pressure(twist_deg: float) -> float:

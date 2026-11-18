@@ -41,8 +41,9 @@ TOURNIQUET = UsdBody("tourniquet", usd="assets/tourniquet.usda", pos=(g.LEG_X, g
 
 # the clip: a hook on each edge of the band, toward the arms. Each hook is a short channel along where a seated rod lies
 # (tipped SEAT_TILT down, PHI to the side of the band's line): a floor, a wall either side up to the lips' top with a
-# lead-in above it, all colliding, and the lips themselves, shown but not colliding: the rod passes them as it snaps in,
-# and task code then holds it down as they would. A plate joins the hooks across the band (shown only).
+# lead-in above it, all colliding, and the lips themselves, shown but not colliding: task code gives them their snap,
+# a spring on the rod's tilt that pushes back as the rod's end comes down between them, up to F_SNAP, then lets it
+# through and holds it down (and back out only for F_SNAP again). A plate joins the hooks across the band (shown only).
 def _quat(R) -> tuple[float, float, float, float]:
     """XYZW quaternion of a rotation matrix."""
     w = math.sqrt(max(0.0, 1.0 + R[0, 0] + R[1, 1] + R[2, 2])) / 2
@@ -164,6 +165,25 @@ def _set_press_target(environment, tilt: float) -> None:
     set_joint_targets(environment, "tourniquet", {"press": tilt})
 
 
+def _set_press(environment, mode: str, sign: float = 1.0) -> None:
+    """The rod's tilt spring: the strap's alone ("free"); with the lips' spring pushing the rod's end back up from
+    where it meets them ("lip"); or with the lips holding a snapped-in rod down ("held"). ``sign`` is the press joint's
+    sign that tips the end toward the clip down. The two springs add, so the drive gets their summed stiffness and
+    the matching target, and PhysX applies it implicitly at every physics step."""
+    import torch
+
+    stiffness, target = g.TILT_K, 0.0
+    if mode in ("lip", "held"):
+        rest = g.DIP_CONTACT if mode == "lip" else g.DIP_HOLD
+        stiffness = g.TILT_K + g.K_LIP
+        target = sign * g.K_LIP * rest / stiffness
+    asset = _asset(environment)
+    ids = asset.find_joints(["press"])[0]
+    asset.write_joint_stiffness_to_sim_index(
+        stiffness=torch.tensor([[stiffness]], dtype=torch.float32, device=asset.device), joint_ids=ids)
+    _set_press_target(environment, target)
+
+
 def near_tilt(theta: float, tilt: float) -> float:
     """How far the rod's end toward the arms (the clip's side) is tipped down, in radians (the press joint tips the
     rod's +x end down for a positive tilt)."""
@@ -179,7 +199,7 @@ def aligned(theta: float) -> bool:
 def _reset_state(environment=None) -> None:
     _STATE.update(twist=0.0, last_q=0.0, tilt=0.0, dip=0.0, locked=False, pressure=g.P_SNUG, aligned=False, theta=g.THETA0,
                   clearance=1.0, clear=True, clear_steps=0, held=False, rod_gap=1.0,
-                  body_gap=1.0, pressing=False, green=False)
+                  body_gap=1.0, pressing=False, green=False, lip="free", torque=0.0, snaps=0)
     if environment is not None:
         _restart(environment)
 
@@ -191,7 +211,7 @@ def _restart(environment) -> None:
     from scenekit import write_joint_positions
 
     _torque(environment, 0.0)
-    _set_press_target(environment, 0.0)
+    _set_press(environment, "free")
     _set_needle(environment, g.P_SNUG)
     write_joint_positions(environment, "tourniquet", {"twist": 0.0, "press": 0.0,
                                                       "needle": -g.needle_angle(g.P_SNUG)})
@@ -286,15 +306,27 @@ def _monitor(environment) -> None:
     S["theta"] = theta = g.THETA0 + math.radians(S["twist"])
     S["aligned"] = aligned(theta)
     S["dip"] = dip = near_tilt(theta, tilt)
-    if not S["locked"] and S["aligned"] and dip >= g.LOCK_TILT:
-        S["locked"] = True                                  # seated in a hook: it snaps in and stays down
-        _set_press_target(environment, g.TILT_MAX if math.cos(theta) < 0 else -g.TILT_MAX)
-    elif S["locked"] and dip < g.UNLOCK_TILT:
-        S["locked"] = False                                 # lifted back out past the lips
-        _set_press_target(environment, 0.0)
+    # the snap: the lips' spring engages once the rod's end, on a hook's line, comes down to them; the rod is past them
+    # (locked) only if it is still pushed down past them a control step later, against the spring, so it takes F_SNAP
+    mode = S["lip"]
+    if S["locked"]:
+        if dip < g.DIP_SNAP - g.UNSNAP:
+            S["locked"], mode = False, "free"               # pulled back up past the lips (F_SNAP again)
+    elif S["aligned"] and dip >= g.DIP_CONTACT:
+        if mode == "lip" and dip >= g.DIP_SNAP:
+            S["locked"], mode = True, "held"                # pushed past the lips: snapped in, held down
+            S["snaps"] += 1
+        else:
+            mode = "lip"
+    else:
+        mode = "free"
+    if mode != S["lip"]:
+        _set_press(environment, mode, 1.0 if math.cos(theta) < 0 else -1.0)
+        S["lip"] = mode
     S["pressure"] = p = g.pressure(S["twist"])
     _set_needle(environment, p)
-    _torque(environment, -g.K_TWIST * math.radians(S["twist"]))
+    S["torque"] = tau = -math.copysign(g.band_torque(S["twist"]), S["twist"])
+    _torque(environment, tau)
     hulls = _robot_hulls(environment)
     S["rod_gap"], S["clearance"] = _clearance(hulls, theta, tilt)
     S["held"] = S["rod_gap"] < g.CLEAR                       # part of the robot within 1 cm of the rod
