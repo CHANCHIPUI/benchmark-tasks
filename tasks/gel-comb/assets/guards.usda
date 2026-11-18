@@ -1,0 +1,146 @@
+#usda 1.0
+(
+    defaultPrim = "guards"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "guards" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+
+    def "Looks"
+    {
+        def Material "clear"
+        {
+            token outputs:surface.connect = </guards/Looks/clear/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.86, 0.9)
+                float inputs:metallic = 0
+                float inputs:opacity = 0.6
+                float inputs:roughness = 0.2
+                token outputs:surface
+            }
+        }
+
+        def Material "platinum"
+        {
+            token outputs:surface.connect = </guards/Looks/platinum/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.8, 0.82)
+                float inputs:metallic = 1
+                float inputs:roughness = 0.2
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "cathode_guard" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </guards/Looks/clear>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.015, 0.011)
+        double3 xformOp:translate = (0, 0.11349999999999999, 0.0105)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "cathode_wire" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.08199999999999999
+        rel material:binding = </guards/Looks/platinum>
+        double radius = 0.0006
+        double3 xformOp:translate = (0, 0.116, 0.009)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "cathode_riser" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.037
+        rel material:binding = </guards/Looks/platinum>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.014, 0.116, 0.0275)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "cathode_riser_c" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.003, 0.03)
+        double3 xformOp:translate = (0.014, 0.116, 0.031)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "anode_guard" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </guards/Looks/clear>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.015, 0.011)
+        double3 xformOp:translate = (0, -0.11349999999999999, 0.0105)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "anode_wire" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.08199999999999999
+        rel material:binding = </guards/Looks/platinum>
+        double radius = 0.0006
+        double3 xformOp:translate = (0, -0.116, 0.009)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "anode_riser" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.037
+        rel material:binding = </guards/Looks/platinum>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.014, -0.116, 0.0275)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "anode_riser_c" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        uniform token purpose = "guide"
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.003, 0.03)
+        double3 xformOp:translate = (0.014, -0.116, 0.031)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

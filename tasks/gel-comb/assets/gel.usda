@@ -1,0 +1,277 @@
+#usda 1.0
+(
+    defaultPrim = "gel"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "gel" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.024
+
+    def "Looks"
+    {
+        def Material "agarose"
+        {
+            token outputs:surface.connect = </gel/Looks/agarose/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.86, 0.88, 0.84)
+                float inputs:metallic = 0
+                float inputs:opacity = 0.8
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "well"
+        {
+            token outputs:surface.connect = </gel/Looks/well/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.32, 0.34)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "slab_back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.00675, 0.07, 0.005)
+        double3 xformOp:translate = (-0.031625, 0, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "slab_front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.06075, 0.07, 0.005)
+        double3 xformOp:translate = (0.004625000000000002, 0, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00373, 0.005)
+        double3 xformOp:translate = (-0.027, -0.033135, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, -0.024, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_2" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, -0.016, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_3" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, -0.008, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_4" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, 0, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_5" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, 0.008, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_6" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, 0.016, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_7" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00146, 0.005)
+        double3 xformOp:translate = (-0.027, 0.024, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rib_8" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/agarose>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0025, 0.00373, 0.005)
+        double3 xformOp:translate = (-0.027, 0.033135, 0.0025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, 0.028, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, 0.02, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, 0.012, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, 0.004, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, -0.004, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, -0.012, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_7" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, -0.02, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "well_8" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </gel/Looks/well>
+        double size = 1
+        float3 xformOp:scale = (0.0015, 0.00554, 0.001)
+        double3 xformOp:translate = (-0.027, -0.028, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+
