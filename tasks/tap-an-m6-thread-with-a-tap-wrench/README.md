@@ -60,8 +60,8 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
 
 ## Runtime and seeds
 
-- Demo: about 5,400 steps (270 s simulated); about 42 minutes on an RTX 3070 Ti laptop GPU at 640 x 360 (about 0.45 s
-  a step), including start-up.
+- Demo: 5,267 steps (263 s simulated) to full score; about 40 minutes on an RTX 3070 Ti laptop GPU at 640 x 360
+  (about 0.45 s a step), including start-up.
 - `object_jitter=0` keeps the layout fixed, so no seed is needed. The scripted demo is open loop.
 
 ## Real-world kit
