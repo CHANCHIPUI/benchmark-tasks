@@ -2,8 +2,8 @@
 
 A task file for the `yam_arena` embodiment ([yam-isaac-lab-arena](https://github.com/kairosiann/yam-isaac-lab-arena), Isaac Lab-Arena 0.3.1).
 
-A round aluminium tool adapter plate for a robot wrist (ISO 9409-1-50-4-M6 on its robot face, ISO 9409-1-63-4-M6 on
-its tool face) is held in a drill-press vise with one pre-drilled 5 mm tool hole ringed in blue. The robot takes a
+The square aluminium blank of a robot wrist's tool adapter plate (80 x 80 x 6 mm, with the four tool holes for an
+ISO 9409-1-63-4-M6 tool) is held in a drill-press vise with one pre-drilled 5 mm tool hole ringed in blue. The robot takes a
 T-handle tap wrench with an M6 plug tap out of its stand, starts the tap square in the marked hole, taps right through
 with a back-off of at least a quarter turn after every turn in, stops at the red band on the tap, turns the tap back
 out and stands the wrench back in its stand.
@@ -34,8 +34,9 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
   fixed-base chain of three slides and three hinges (x, y, z; tilt about x and y at the tap's point; turn about the
   tap's axis). With no drives the wrench is free: it is carried, dropped or stood like any rigid body.
 - The countersink and the drilled hole's wall are a separate body (eight convex wedges); the plate's own collider leaves
-  an 8 mm square clearance round the hole, so the tap never touches the hole's wall once the thread rule holds it. A PhysX contact view between
-  it and the wrench, read after every physics step, gives the push (mean over each 50 ms control step).
+  an 8 mm square clearance round the hole, so the tap never touches the hole's wall once the thread rule holds it. A
+  PhysX contact view between the countersink body and the wrench, read after every physics step, gives the push (mean
+  over each 50 ms control step).
 - The thread rule, every control step:
   - Bite: the point seated in the countersink (within 0.5 mm of the hole's axis, 1.5 to 4 mm below the plate's face),
     pushed 3 N or more, the tap within 10 deg of the hole's axis, and turning clockwise. The countersink body is then
@@ -67,12 +68,26 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
 
 - Tap: HSS M6 x 1.0 D3 straight-flute plug hand tap (Regal Cutting Tools 020169AS), with a 2 mm red paint-marker band
   whose lower edge is 13.5 mm above the point.
-- Wrench: Starrett 93B T-handle tap wrench. Its body and T-bar sizes are estimates (20 mm knurled body, 6.4 x
-  100 mm bar).
+- Wrench: Starrett 93B T-handle tap wrench (20 mm knurled body, 6.4 x 100 mm T-bar).
 - Vise: Wilton 11744 4 in drill-press vise, bolted to the table; two 150 x 32 x 3 mm hardened parallels.
-- Adapter plates: 6061-T6, turned from 80 mm round bar, as drawn in task.json's setup; four trials per plate.
+- Blanks: 80 mm squares sawn from 6 mm 6082-T6 aluminium plate (1st Choice Metals, 6 mm 6082T6 plate, a 300 x 300 mm
+  piece at £14.63 ex VAT gives nine), the four tool holes marked from a printed template, centre-punched, drilled
+  5.0 mm and countersunk 7.0 mm on a drill press; about 10 minutes a blank, four trials per blank. The flange's
+  clearance holes are made after tapping and are not on the trial blank.
 - Stand: grey PLA block 40 x 40 x 60 mm with a 12 mm hole chamfered to 24 mm, taped to the table.
-- Gauges: M6 x 1.0 6H GO thread plug gauge; M6 x 60 mm DIN 976 threaded rod, 75 mm engineer's square, feeler gauges.
+- Gauges: M6 x 1.0 6H GO thread plug gauge, 75 mm engineer's square, feeler gauges.
+
+## Scoring a real trial
+
+1. Before anyone touches the vise, the wrench or the tap, photograph the end state. The photo and the video decide tap
+   out, in its stand, and released and still; back-offs and chip runs are read from the overhead video.
+2. Take the wrench off the tap. If the tap is out of the hole, turn it back into its own thread by hand until it meets
+   cutting resistance or its red band reaches the plate, whichever comes first; never further, so it cuts nothing new.
+   A tap still in the hole stays as it is.
+3. Square: pull the tap's top end straight up lightly (about 10 N) and stand the engineer's square on the blank against
+   the tap's 6.48 mm shank at four positions 90 deg apart; the largest gap 40 mm above the face must be 1.40 mm or less.
+4. Turn the tap out by hand. Through: the GO gauge screws through the blank. Started: it screws in at least 2 turns.
+5. Read the tier from task.json's "scoring".
 
 ## Estimates
 

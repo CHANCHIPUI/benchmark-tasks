@@ -41,12 +41,11 @@ WRENCH_I = (7.8e-5, 9.4e-5, 1.8e-5)
 
 # -- the plate (plate frame: origin on the top face at the marked hole's axis) ------------------------------------------
 PLATE_T = 0.006
-DISC_R = 0.040
+DISC_R = 0.040            # half the blank's side: an 80 x 80 mm square
 HOLE_R = 0.0025           # 5.0 mm drilled
 CSK_R = 0.0035            # countersunk 90 deg to 7.0 mm
 CLEAR_HALF = 0.004        # the collider's clearance hole: 8 mm square (the tap's 6 mm thread passes freely)
 TOOL_PCD_R = 0.0315       # ISO 9409-1-63-4-M6 tool holes
-FLANGE_PCD_R = 0.025      # ISO 9409-1-50-4-M6 screw holes
 # the seat: the countersink and the drilled hole as the tap meets them before it bites (a separate kinematic body)
 SEAT_BORE_R = 0.0026      # octagon's corner radius slightly above 2.5 mm so the 4.6 mm point fits its flats
 SEAT_OUT_R = 0.0039
@@ -404,34 +403,25 @@ def Xform "{root}"
 
 
 # -- the adapter plate (fixed), the seat (kinematic, moved away when the tap bites) ----------------------------------
-DISC_C = np.array([0.0, TOOL_PCD_R])      # the disc's centre in the plate frame: the marked hole is on the -y side
+DISC_C = np.array([0.0, TOOL_PCD_R])      # the blank's centre in the plate frame: the marked hole is on the -y side
 
 
 def plate() -> str:
-    """Plate frame: origin on the top face at the marked hole's axis; the disc's centre is 31.5 mm toward +y."""
+    """The trial blank: an 80 x 80 x 6 mm square of aluminium plate with the four tool holes drilled and countersunk
+    (the flange's clearance holes are made after tapping). Plate frame: origin on the top face at the marked hole's
+    axis; the blank's centre is 31.5 mm toward +y."""
     root = "AdapterPlate"
     cx, cy = DISC_C
-    parts = [("disc", uk.lathe([(0.0, -PLATE_T), (DISC_R - 0.0005, -PLATE_T), (DISC_R, -PLATE_T + 0.0005),
-                                (DISC_R, -0.0005), (DISC_R - 0.0005, 0.0), (0.0, 0.0)], 72).moved((cx, cy, 0)), "alu")]
+    parts = [("blank", uk.box((2 * DISC_R, 2 * DISC_R, PLATE_T), bevel=0.0005).moved((cx, cy, -PLATE_T / 2)), "alu")]
     zt = 0.00004
-    # the hole pattern, as seen from above: angles about the disc's centre, from +x
-    # tool holes (63 mm circle) at -90 (marked), 0, 90, 180; robot-side screw holes (50 mm circle) 22.5 deg off them
+    # the tool holes (a 63 mm circle) on the blank's centre lines: -90 deg (marked, toward the robot's right), 0, 90, 180
     tool = [-90.0, 0.0, 90.0, 180.0]
-    screws = [a + 22.5 for a in (-90.0, 0.0, 90.0, 180.0)]
-    dowel = -90.0 + 22.5 + 45.0
     for i, a in enumerate(tool):
         p = (cx + TOOL_PCD_R * math.cos(math.radians(a)), cy + TOOL_PCD_R * math.sin(math.radians(a)))
         parts.append((f"th{i}", disc(HOLE_R, zt, 24).moved((*p, 0)), "hole"))
         parts.append((f"tc{i}", annulus(HOLE_R, CSK_R, zt, 24).moved((*p, 0)), "alu_cut"))
-    for i, a in enumerate(screws):
-        p = (cx + FLANGE_PCD_R * math.cos(math.radians(a)), cy + FLANGE_PCD_R * math.sin(math.radians(a)))
-        parts.append((f"sh{i}", disc(0.0033, zt, 24).moved((*p, 0)), "hole"))
-        parts.append((f"sc{i}", annulus(0.0033, 0.0062, zt, 32).moved((*p, 0)), "alu_cut"))
-    p = (cx + FLANGE_PCD_R * math.cos(math.radians(dowel)), cy + FLANGE_PCD_R * math.sin(math.radians(dowel)))
-    parts.append(("dowel", disc(0.003, zt, 24).moved((*p, 0)), "hole"))
-    parts.append(("dowelc", annulus(0.003, 0.0034, zt, 24).moved((*p, 0)), "alu_cut"))
     parts.append(("mark", annulus(0.0047, 0.0060, 2 * zt, 40), "marker"))
-    # colliders: the disc's square bounds less an 8 mm square clearance hole at the marked hole
+    # colliders: the blank less an 8 mm square clearance hole at the marked hole
     h = CLEAR_HALF
     x0, x1, y0, y1 = cx - DISC_R, cx + DISC_R, cy - DISC_R, cy + DISC_R
     zc, t = -PLATE_T / 2, PLATE_T
@@ -462,14 +452,14 @@ def seat() -> str:
 
 
 # -- the vise and parallels (vise frame: origin on the table under the marked hole) -------------------------------------
-JAW_X = (-0.040, 0.040)          # inner faces, about the disc's centre line (x 24.0 and 32.0 cm in the world)
+JAW_X = (-0.040, 0.040)          # inner faces, about the blank's centre line (x 24.0 and 32.0 cm in the world)
 JAW_TOP = 0.073
 BED_Z = 0.035
 
 
 def vise() -> str:
     root = "Vise"
-    cy = TOOL_PCD_R               # the jaws are centred on the disc's centre (y)
+    cy = TOOL_PCD_R               # the jaws are centred on the blank's centre (y)
     parts, cols = [], ""
     bx0, bx1 = -0.090, 0.170       # base along x (world 19 to 45 cm)
     by = 0.075

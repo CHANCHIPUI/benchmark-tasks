@@ -1,5 +1,5 @@
-"""In front of the right arm: a drill-press vise holds a round aluminium tool adapter plate for a robot wrist (80 mm
-across, 6 mm thick) on two steel parallels, tool face up and flush with the jaw tops. One of its four pre-drilled,
+"""In front of the right arm: a drill-press vise holds the square aluminium blank of a robot wrist's tool adapter plate
+(80 x 80 x 6 mm) on two steel parallels, tool face up and flush with the jaw tops. One of its four pre-drilled,
 countersunk 5 mm tool holes is ringed in blue marker. To the right of the vise, a T-handle tap wrench holding an M6 plug
 tap stands upright in a grey PLA stand, its T-bar pointing away from the robot. A red band is painted round the tap's
 thread 13.5 mm above its tip.
