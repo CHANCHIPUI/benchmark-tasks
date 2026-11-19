@@ -85,8 +85,9 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
    cutting resistance or its red band reaches the plate, whichever comes first; never further, so it cuts nothing new.
    A tap still in the hole stays as it is.
 3. Square: pull the tap's top end straight up lightly (about 10 N) and stand the engineer's square on the blank against
-   the tap's 6.48 mm shank at four positions 90 deg apart; the largest gap 40 mm above the face must be 1.40 mm or less.
-4. Turn the tap out by hand. Through: the GO gauge screws through the blank. Started: it screws in at least 2 turns.
+   the tap's 6.48 mm shank at four positions 90 deg apart; the largest gap 40 mm above the face must be 1.15 mm or
+   less (the thread within 2.0 deg of square; the blade meets the thread at the face, 0.24 mm inside the shank).
+4. Turn the tap out by hand. Through: the GO gauge screws through the blank. Started: it screws in at least 3 turns.
 5. Read the tier from task.json's "scoring".
 
 ## Estimates
