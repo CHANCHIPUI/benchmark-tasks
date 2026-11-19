@@ -88,7 +88,8 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
 3. Square: pull the tap's top end straight up lightly (about 10 N) and stand the engineer's square on the blank against
    the tap's 6.48 mm shank at four positions 90 deg apart; the largest gap 40 mm above the face must be 1.15 mm or
    less (the thread within 2.0 deg of square; the blade meets the thread at the face, 0.24 mm inside the shank).
-4. Turn the tap out by hand. Through: the GO gauge screws through the blank. Started: it screws in at least 3 turns.
+4. Turn the tap out by hand. Through: the GO gauge screws through the blank. Started: it screws in at least 3 turns
+   (6.0 mm of advance leaves about 3 to 4 turns of full thread behind the tap's 4-thread plug chamfer).
 5. Read the tier from task.json's "scoring".
 
 ## Estimates
