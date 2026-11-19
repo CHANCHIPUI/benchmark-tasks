@@ -42,7 +42,6 @@ DEBUG = bool(os.environ.get("FP_DEBUG"))
 KEEP_ROLL = os.environ.get("FP_KEEP_ROLL", "1") == "1"
 GAP_MM = 94.0                        # pads' gap at grip 1.0
 SQUEEZE_MM = float(os.environ.get("FP_SQUEEZE", "6.0"))   # the fingers commanded 6 mm inside the grip: about 15 N a pad
-# (fully closed, 25 N a pad, the pick was thrown out of the pinch at 1.4-2.3 N of push)
 R_TABLE = np.column_stack([[0, -1, 0], [-1, 0, 0], [0, 0, -1.0]])   # from above, closing across the handle (y)
 R_WORK = np.column_stack([[0, 0, -1], [-1, 0, 0], [0, 1, 0.0]])     # from the right (approach +y), closing along z
 PAD_BELOW_TCP = float(os.environ.get("FP_PAD_MM", "3.0")) / 1000.0   # the handle's mid-thickness this far past the tool point (the pads' wide part)

@@ -10,14 +10,22 @@ bring it back out."**
 
 To do it, the robot has to:
 - pick up the pick by its grip and turn it so its arms point down, the handle out of the mouth;
-- bring it in through the 52 mm mouth opening and land the floss on the contact between two 5.4 mm-wide incisors, a
-  0.6 mm slot held shut, within about 0.6 mm of its centre (the notch above the contact is 1.7 mm wide);
+- bring it in through the 52 mm mouth opening and land the floss on the tight contact between two 5.4 mm-wide
+  incisors, within about 0.6 mm of its centre (the notch above the contact is 1.7 mm wide);
 - slide the front arm down between the soft lower lip and the teeth, pushing the lip forward;
 - work the floss through the contact with a back-and-forth along the floss, keeping the push light: pushed straight
   down, the contact holds and then lets go all at once and the floss drops onto the gum 2.5 mm below;
 - stop short of the gum, press the floss against one incisor's hidden side so it wraps it, and wipe up and down
   between the contact and the gum line; then the other incisor;
 - pull the floss back up through the contact (it holds from below until pulled 3 N) and out.
+
+## Changes in this version
+
+- Snap: a mark on a 0.4 mm pressure film strip on the papilla under the contact scores 0.
+- Pressed on the head or board: the scale rule applies the whole trial and counts everything on the board.
+- Passed: any bare cell in rows 2-4 of either band.
+- Coverage: before-and-after microscope photos in fixed jigs, read as 10 x 4 cells a band.
+- Run limit 3,600 steps.
 
 ## Why it matters
 
@@ -107,63 +115,65 @@ Checks (`--variant`): `snap` saws through like the demo, brings the floss up und
 the middle of the gap without hugging; `leave` does everything but bring the floss back out; `push` pushes straight
 down without sawing (the pinch turns the pick long before the contact's 8 N, so it never passes).
 
-Results. Landing speed is the
-largest descent of the floss between the teeth over any 25 ms while it is in or below the contact (and at every touch
-of the gum), as mm/s; the peak press is the largest 50 ms average of the downward force on the head while the floss is
-below the contact.
+Results. The film strip's peak is the floss's largest force on it in any physics step; the press
+on the head and board is its largest 50 ms average over the whole trial and the largest it held for 0.5 s.
 
-| Run | Score | Steps | Landing speed (worst, mm/s; limit 40) | Peak press below the contact (N; limit 3) | Band wiped 41 / 31 (needs 80%) | Zero rule |
+| Run | Score | Steps | Floss on the film strip, peak (N; marks at 2) | Press on the head and board, peak / held 0.5 s (N; limit 3 held 0.5 s) | Band cells wiped 41 / 31 (needs 80%) | Zero rule |
 |---|---|---|---|---|---|---|
-| demo (recorded) | 1.0 | 1856 | 27 (0.68x) | 1.05 (0.35x) | 94% / 92% | none |
-| check: snap onto the gum (`snap`) | 0.0 | 808 | 80 (2.00x) | 3.39 (1.13x) | 2% / 0% | snapped onto the gum: 1.84 mm in the 25 ms before touching it |
-| check: press into the gum (`press`) | 0.0 | 848 | 27 (0.68x) | 21.10 (7.03x) | 51% / 0% | pressed into the gum: 3 N or more on the head for 0.5 s with the floss below the contact |
-| check: one side only (`one_side`) | 0.5 | 1695 | 27 (0.68x) | 1.72 (0.57x) | 94% / 45% | none |
-| check: straight strokes, no hug (`straight`) | 0.25 | 1937 | 31 (0.77x) | 1.05 (0.35x) | 21% / 48% | none |
-| check: left in the gap (`leave`) | 0.75 | 1095 | 27 (0.68x) | 1.05 (0.35x) | 94% / 92% | none |
+| demo (recorded) | 1.0 | 1856 | 1.10 (0.55x) | 3.06 / 0.86 (0.29x) | 98% / 98% | none |
+| check: snap onto the gum (`snap`) | 0.0 | 808 | 3.19 (1.59x) | 3.39 / 1.24 (0.41x) | 0% / 0% | snapped onto the gum: the pressure film marked (3.19 N on the strip) |
+| check: press into the gum (`press`) | 0.0 | 848 | 1.10 (0.55x) | 21.10 / 12.56 (4.19x) | 48% / 0% | pressed on the head or board: 3 N or more for 0.5 s |
+| check: one side only (`one_side`) | 0.5 | 1695 | 1.10 (0.55x) | 2.99 / 0.86 (0.29x) | 100% / 45% | none |
+| check: straight strokes, no hug (`straight`) | 0.25 | 1937 | 1.10 (0.55x) | 3.21 / 0.86 (0.29x) | 18% / 35% | none |
+| check: left in the gap (`leave`) | 0.75 | 1095 | 1.10 (0.55x) | 1.38 / 0.86 (0.29x) | 98% / 98% | none |
 
-The demo's margins: landing speed and peak press against their limits as above; band coverage against 80%.
-
-Wipe threshold: the straight-stroke check (no hug, the floss in the middle of the gap) still touches the teeth as
-the arm wobbles sideways: at 0.3 N it would have wiped 40% / 59% of the bands, at 0.5 N it wiped 21% / 48%. The demo's hug
-wiped 94% / 92% at 0.5 N. At 0.7 N the top of 41's band is wiped only while the floss is pulled back out (the `leave`
-check, which never pulls out, kept 41 at 82.5%), so F_wipe is 0.5 N. The demo's coverage at other thresholds (same
-run, every phase; the threshold does not change the motion): {"0.3": {"t41": 0.938, "t31": 0.925}, "0.4": {"t41": 0.938, "t31": 0.925}, "0.5": {"t41": 0.938, "t31": 0.925}, "0.6": {"t41": 0.938, "t31": 0.925}, "0.7": {"t41": 0.938, "t31": 0.925}, "0.8": {"t41": 0.938, "t31": 0.925}, "0.9": {"t41": 0.8, "t31": 0.925}, "1.0": {"t41": 0.6, "t31": 0.613}, "1.2": {"t41": 0.45, "t31": 0.487}}.
+The demo's margins: the film strip's peak, and the press held for 0.5 s, against their limits as above; band cells
+against 80%.
 
 Media (in the media folder): `demo.mp4` (three views: the top camera large, the left and right arm cameras beside
 it; from the notch on, the top camera is moved to a close mouth-level view, shown as a 2x crop and labelled "Close
 view"); `setup.png` (the first top-camera frame); `closeup.png` (the close view as the floss settles on the
-contact).
+contact); `model_run.mp4` (the Dream-1 run, three cameras).
 
 ## Scoring
 
 Read every control step (20 Hz); the floss and its rules every physics step (240 Hz). In a real trial the same
-quantities come from the robot's joint log, the scale's display, a 240 fps phone video and photos of the two
-incisors taken out after the run.
+quantities come from the pressure film strip, the scale's display in a 240 fps phone video, and microscope photos of
+the two incisors taken out before and after the run.
 
 **0 for the rest of the run if:**
-1. **Snap:** the floss covers its last 1 mm before touching the gum in 25 ms or less (40 mm/s or faster). Sim: the
-   lowest point of the floss between the teeth (over the papilla, |x| and |y| within 1.5 mm of the contact), at 240
-   Hz; the check runs at every new touch of the gum. Real: the pick tip's height from the joint log by forward
-   kinematics (joint positions logged at 200 Hz or more; the pick's offset in the grasp is measured from the video
-   once it has settled in the pinch), checked on the 240 fps video of the handle (1 mm in 6 frames before the fall
-   stops), the handle's 10 mm depth scaling the image; where the two disagree, the video decides.
-2. **Pressed into the gum:** while the floss is below the contact, the downward force on the head is 3 N or more for
-   0.5 s. Sim: the floss's push on the teeth, gum and contact plus the pick's and the grippers' contact forces on the
-   head and the lip, averaged over each 50 ms step, for 10 steps in a row. Real: the scale's tethered display, in the
-   same 240 fps video, reads 300 g or more above tare.
+1. **Snapped onto the gum:** the floss marks the pressure film strip on the papilla. Real: a strip of Fujifilm Prescale
+   MS (mono-sheet, 10-50 MPa, about 0.1 mm thick), cut 0.4 mm wide and 6 mm long, lies flat along the papilla's crest
+   under the contact (not onto the tooth sides), held by a tab of 0.05 mm polyimide tape at each end on the gum,
+   labial and lingual of the papilla, clear of the bands. A fresh strip each trial, checked unmarked under the
+   microscope before it goes in; after the run any red mark on it is a snap (marks only along the cut edges, narrower
+   than 0.1 mm, from cutting, are photographed before the trial and ignored).
+   Sim: the floss's force on the same strip reaching 2 N (estimate) in any physics step.
+2. **Pressed on the head or board:** at any time in the trial, the downward force on the head and the board it
+   stands on (which also carries the pick at the start and the scale's display) is 3 N or more for 0.5 s. Sim: the
+   floss's push on the teeth, gum and contact plus the pick's and the grippers' contact forces on the head, the lip,
+   the board and the display, averaged over each 50 ms step, for 10 steps in a row. Real: the scale's tethered
+   display, in the 240 fps video, reads 300 g or more above tare.
 3. **Floss failure:** the floss pulls out of the pick or breaks. Sim: the floss's load (the net force it carries)
-   passes 22 N, the lowest mean failure load among seven tested picks.
+   passes 22 N (estimate).
 4. **Head moved** 5 mm (real trial; the head is fixed in the sim).
 
-**Passed below the contact:** the floss went below the contact zone between the incisors (sim: the contact's plug let
-it go at the zone's bottom; real: the joint log shows the pick tip descending through the contact and the video shows
-the handle's drop; the video decides).
+**Passed below the contact:** any cell in rows 2-4 of either band is bare (the bands lie under the contact; the top
+row is left out, as mounting or removing an incisor can scrape it). Real and sim alike.
 
-**Wiped side:** on the post-trial photo, bare resin shows across 80% or more of the band framed by the scribed marks:
-2 mm wide, centred under the contact point, from the contact's lower edge (0.5 mm below the contact point) to 1 mm
-above the gum line, compared with the same tooth's pre-trial photo. Sim: a 0.2 mm grid on the band (80 points a side); a point is wiped when the floss's
-surface passes within 0.1 mm of it while sliding over it at 1 mm/s or more and pressing that tooth with 0.5 N or
-more. The band can only be reached through the contact: it lies under it, on the tooth's facing side.
+**Wiped side:** 80% or more of the band's cells are bare. The band, framed by the four scribed marks, is 2 mm wide,
+centred under the contact point, from the contact's lower edge (0.5 mm below the contact point) to 1 mm above the gum
+line; it is read as a grid of 10 columns (0.2 mm each, between the two vertical ticks) by 4 rows (each a quarter of the
+band's height at that column, between the two grooves), 40 cells. Real: each incisor is seated, facing side up, in its
+own putty jig (polyvinyl siloxane moulded round a spare tooth of the same type, so every tooth sits the same way) under
+a Dino-Lite AM4113T USB microscope on its stand at 50x (field 7.8 x 6.3 mm, 1280 x 1024 pixels), lit by its 8 built-in
+LEDs at a fixed setting with the room lights off; a 0.1 mm calibration slide is photographed at the same setting for the
+scale bar. The same jig and setting are used before and after the run. The 10 x 4 grid is laid over the after-photo on
+the scribed marks, and a cell counts as bare when bare resin covers at least three quarters of it (compared with the
+before-photo); a side is wiped at 32 of 40 cells. Sim: 4 points a cell (2 x 2 at its quarter points); a point is wiped
+when the floss's surface passes within 0.1 mm of it while sliding over it at 1 mm/s or more and pressing that tooth with
+0.5 N or more, and a cell when 3 of its 4 points are. The band can only be reached through the contact: it lies under
+it, on the tooth's facing side.
 
 **Otherwise, from the final 1 s** (the lowest tier any of its steps reached). Every nonzero tier needs the floss to
 have passed below the contact:
@@ -187,13 +197,17 @@ Positions in mm from the midpoint between the arm bases, x forward, y to the rob
 | Lower lip | The mask's lower lip rests on the lower front teeth from their gum line up to 3 below their edges. |
 | Board and scale | 300 x 300 x 18 plywood board (x 235 to 535, y -150 to 150), the head's clamp on its back edge, standing in a taped outline on a digital shipping scale (300 x 300 platform, 2 g steps) with a tethered display, which sits on the board's left front corner (x 245 to 290, y 90 to 140). |
 | Floss pick | GUM Professional Clean Flossers, F-shaped (floss parallel to the handle between two arms) with a ribbed control-grip handle: 75 long, floss 15 between the tips of two 10 arms, handle 10 deep and 6 thick at the grip. Flat on the board's front right corner, handle along x, head away from the robot, arms to the robot's right, the handle's centre line at y -115, its rear end 30 over the board's front edge. A new pick every trial. |
-| Coated incisors | Spare 31/41 pairs: on each facing side, four marks scribed before coating (a groove at the contact's lower edge, one 1 above the gum line, two vertical ticks 2 apart centred under the contact) frame the band; the facing sides are sprayed green with Pascal Occlude occlusal marking spray (shake 10 s, 10 cm away, two 0.5 s passes, dry 60 s) and photographed square-on beside a ruler. |
-| Phone | On a clamp tripod at x 300, y 350, 140 up, filming the handle and the scale's display at 240 fps. |
+| Coated incisors | Spare 31/41 pairs: on each facing side, four marks scribed before coating (a groove at the contact's lower edge, one 1 above the gum line, two vertical ticks 2 apart centred under the contact) frame the band; the facing sides are sprayed green with Pascal Occlude occlusal marking spray (shake 10 s, 10 cm away, two 0.5 s passes, dry 60 s) and photographed in their jigs under the microscope (see Scoring). |
+| Pressure film | Fujifilm Prescale MS (mono-sheet, medium pressure, 10-50 MPa, about 0.1 thick), cut into strips 0.4 wide and 6 long with a scalpel against a steel rule; 0.05 mm polyimide (Kapton) tape cut into 2 x 3 tabs. One strip per trial, laid flat along the papilla's crest between 31 and 41 under the contact and held by a tab at each end on the gum, clear of the bands. |
+| Microscope and jigs | A Dino-Lite AM4113T USB microscope on its stand at 50x, a 0.1 mm calibration slide, and one polyvinyl siloxane putty jig per incisor type (31 and 41), moulded round a spare tooth so each seats facing side up at the same pose under the lens. |
+| Phone | On a clamp tripod at x 300, y 350, 140 up, filming the mouth and the scale's display at 240 fps. |
 | Tools | Feeler blades 0.05 and 0.10 mm (contact check), digital caliper, 0-5 N and 0-10 N spring scales, scriber, 50 g weight. |
 
-**Per trial:** swap in a pre-coated, photographed, contact-checked pair; re-tare the scale; put a new pick on its mark;
-start the phone. After the run, record the final state from the video, take the pair out and photograph each facing
-side square-on beside a ruler; judge the band against its pre-trial photo.
+**Per trial:** swap in a pre-coated, photographed, contact-checked pair; check a fresh film strip is unmarked
+under the microscope and tape it on the papilla;
+re-tare the scale; put a new pick on its mark; start the phone. After the run, take the strip off and look for any red
+mark (under the microscope at 50x if in doubt), record the final state from the video, take the pair out and
+photograph each facing side in its jig under the microscope; count the band's bare cells against the pre-trial photo.
 
 ## Simulation fidelity
 
@@ -212,20 +226,23 @@ Rigid PhysX at 240 Hz (yam_arena's default), 20 Hz control, GPU dynamics.
   above it holds while the floss's push is below 8 N and the floss does not slide along itself; past that, or while
   the floss slides along itself (sawing, its travel along itself over 0.1 s), it gives way at the speed where the push
   equals 8 N times the share of the floss's slip that is downward (friction opposes the total slip), so a
-  back-and-forth lets the floss creep in under a light push (3 N sawing +-2 mm at 2 Hz). It lets go at the
-  zone's bottom. From below it holds one way: the floss goes back up through it only when pulled up 3 N or more, sawing or
+  back-and-forth lets the floss creep in under a light push (3 N sawing +-2 mm at 2 Hz). It lets go at the zone's
+  bottom. From below it holds one way: the floss goes back up through it only when pulled up 3 N or more, sawing or
   not, so pressing on a tooth below the contact never lets it creep back in.
 - **Lower lip:** an articulation: the lip on a slide along x, 0-10 mm forward, a 0.3 N/mm spring with 0.3 N preload
   against the teeth, damped, friction 0.6, 30 g; 40 mm long following the arch, 10 mm thick, its top edge rounded (6
   mm). It touches only the pick and the robot.
 - **Pick:** one rigid body (a 10 x 6 mm grip and two arms tapering to 0.6 mm at their tips), 5 g. The gripper
   squeezes the grip with about 15 N a pad.
-- **Wipe:** the band's 80 points a side are wiped where the floss slides over them (within 0.1 mm, at 1 mm/s or more)
-  while pressing that tooth with 0.5 N or more.
+- **Pressure film:** the floss's force on a 0.4 x 6 mm strip along the papilla under the contact, every physics step,
+  marked at the force given under Scoring. The strip's thickness is not modelled.
+- **Board and display:** kinematic bodies on the scale; the pick's and the hands' contacts on them count in the press.
+- **Wipe:** the band's 40 cells a side (4 points each) are wiped where the floss slides over them (within 0.1 mm, at
+  1 mm/s or more) while pressing that tooth with 0.5 N or more; a cell when 3 of its 4 points are.
 - **Display only:** the lower lip and the mouth's dark interior are drawn cut away (the lip still acts in physics), a
-  small lamp lights the inside of the mouth, the floss is drawn as a 1 mm bright blue line, the band's green coating loses its dots where wiped, and the four scribed
-  marks are drawn. In recorded demo runs the top camera moves to a close mouth-level view once the floss is over the
-  notch.
+  small lamp lights the inside of the mouth, the floss is drawn as a 1 mm bright blue line, the band's green coating
+  loses its dots where wiped, and the four scribed marks and the film strip (red once marked) are drawn. In recorded
+  demo runs the top camera moves to a close mouth-level view once the floss is over the notch.
 - **Not simulated:** the coating itself (the rule stands in for it), the gums' and lip's softness, the jaw's hinge.
 - **Estimates:** every force and stiffness above, and the head's and pick's sizes.
 
@@ -233,9 +250,10 @@ Rigid PhysX at 240 Hz (yam_arena's default), 20 Hz control, GPU dynamics.
 
 Throw the pick away. Take off the face mask, lift the lower typodont jaw off the head's frame, unscrew the two lower
 central incisors from below, and screw in the next spare pair, each screw to its stop with the same screwdriver. Refit
-the jaw at its open stop and the mask, re-tare the scale, and put a new pick on its mark: about 8 minutes. Spare pairs
-are prepared ahead: marks scribed, contact checked (a 0.05 mm feeler blade enters with resistance, a 0.10 mm one does
-not), sprayed and photographed. Re-spray any pair showing bare resin in the band.
+the jaw at its open stop, tape a fresh film strip (checked unmarked) on the papilla, refit the mask, re-tare the scale,
+and put a new pick on its mark: about 8 minutes. Spare pairs are prepared ahead: marks scribed, contact checked (a
+0.05 mm feeler blade enters with resistance, a 0.10 mm one does not), sprayed and photographed in their jigs. Re-spray
+any pair showing bare resin in the band.
 
 ## Sources
 
@@ -252,6 +270,8 @@ not), sprayed and photographed. Re-spray any pair showing bare resin in the band
   failure under a mid-span load from 22.69 N.
 - Sunstar GUM Professional Clean Flossers: F-shaped flossers with an "ergonomically shaped control grip handle" (a
   widened, ribbed finger rest).
+- Fujifilm Prescale: nine grades from 0.006 to 300 MPa; MS (medium pressure, mono-sheet) 10-50 MPa (100-500 kg/cm2).
+- Dino-Lite AM4113T specifications: 10-50x and 220x, 1280 x 1024 pixels, 8 white LEDs; field 7.8 x 6.3 mm at 50x.
 - Candent, 28 Tooth Adult Typodont with GUB Urethane Gums (D85SDP-200-GUB): "Soft urethane gingivae with 28
   screw-retained teeth".
 - Holley TJ et al., J Tenn Dent Assoc 2014;94(1):34-6: typodont teeth sprayed with Occlude indicator spray as a test

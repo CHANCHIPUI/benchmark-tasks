@@ -91,9 +91,9 @@ def _head_cutaway(prim) -> None:
 MOUTH_LAMP = 1.0e5                  # display only: the lamp inside the mouth (12 mm behind and above the contact)
 
 
-def _box(name, x, y, z, color, collide=True):
+def _box(name, x, y, z, color, collide=True, kinematic=False):
     return Shape(name, pos=((x[0] + x[1]) / 2, (y[0] + y[1]) / 2, TOP + (z[0] + z[1]) / 2),
-                 size=(x[1] - x[0], y[1] - y[0], z[1] - z[0]), color=color, collide=collide)
+                 size=(x[1] - x[0], y[1] - y[0], z[1] - z[0]), color=color, collide=collide, kinematic=kinematic)
 
 
 _px, _py, _pz = g.PHONE_C
@@ -101,8 +101,8 @@ SHAPES = [
     _box("scale", g.SCALE_X, g.SCALE_Y, (0.0, g.SCALE_H - 0.004), GREY),
     _box("scale_platform", (g.SCALE_X[0] + 0.004, g.SCALE_X[1] - 0.004), (g.SCALE_Y[0] + 0.004, g.SCALE_Y[1] - 0.004),
          (g.SCALE_H - 0.004, g.SCALE_H), DARK),
-    _box("board", g.SCALE_X, g.SCALE_Y, (g.SCALE_H, g.BOARD_TOP), WOOD),
-    _box("display", *g.DISPLAY, DARK),
+    _box("board", g.SCALE_X, g.SCALE_Y, (g.SCALE_H, g.BOARD_TOP), WOOD, kinematic=True),
+    _box("display", *g.DISPLAY, DARK, kinematic=True),
     _box("display_screen", (g.DISPLAY[0][0] + 0.006, g.DISPLAY[0][1] - 0.006), (g.DISPLAY[1][1], g.DISPLAY[1][1] + 0.001),
          (g.DISPLAY[2][0] + 0.010, g.DISPLAY[2][1] - 0.004), LCD, collide=False),
     _box("phone", (_px - 0.0375, _px + 0.0375), (_py - 0.004, _py + 0.004), (_pz - 0.075, _pz + 0.075), DARK),
@@ -162,10 +162,13 @@ def _reset_state(environment=None) -> None:
     FL.reset()
     RU.reset()
     _HOOK.update(sub=0, fdown=[], vmax=0.0, pick=None, mid_hist=[])
-    _STATE.update(step=0, why=[], zero=False, press_steps=0, press_peak_below=0.0, press_now=0.0, contact_down=0.0,
+    _STATE.update(step=0, why=[], zero=False, press_steps=0, press_peak=0.0, press_win=[], press_hold_peak=0.0, press_now=0.0, contact_down=0.0,
                   rung=0.0, rungs=[], out=False, cov={"t41": 0.0, "t31": 0.0}, lip=0.0, mode="above", zs=g.ZONE[1],
                   F_plug=0.0, T=g.T0, load=0.0, speed_land=[], press_hist=[], f_plug_max=0.0)
     _VIS.pop("n_wiped", None)
+    if _VIS.pop("strip_marked", None) and "strip" in _VIS:
+        from pxr import Gf, Vt
+        _VIS["strip"].GetDisplayColorAttr().Set(Vt.Vec3fArray([Gf.Vec3f(0.93, 0.93, 0.90)]))
     if environment is not None:
         _install(environment)
 
@@ -182,7 +185,7 @@ def _fail(why: str) -> None:
 # -- the floss, every physics step ---------------------------------------------------------------------------------------
 def _floss_substep(base) -> None:
     """Solve the floss for the pick's current pose and apply its pull to the pick (force and torque), before the
-    physics step. Advances the floss-side rules (snap at 240 Hz, wipe, the floss's load)."""
+    physics step. Advances the floss-side rules (the film strip at 240 Hz, wipe, the floss's load)."""
     import torch
 
     pick = base.scene["pick"]
@@ -275,6 +278,18 @@ def _views(environment) -> dict:
         filters = [f"{ns}/pick"] + robot
         _VIEWS["head"] = psv.create_rigid_contact_view(f"{ns}/head", filter_patterns=filters)
         _VIEWS["lip"] = psv.create_rigid_contact_view(f"{ns}/lip/body", filter_patterns=filters)
+        # the board and the scale's display sit on the scale too: the pick's and the hands' contacts on them
+        for name in ("board", "display"):
+            _VIEWS[name] = None
+            for pat in (f"{ns}/{name}",):
+                try:
+                    v = psv.create_rigid_contact_view(pat, filter_patterns=filters)
+                    if v._backend is not None and v.sensor_count > 0:
+                        _VIEWS[name] = v
+                        print("[contact view]", name, pat, v.sensor_count, flush=True)
+                        break
+                except Exception as e:                                    # noqa: BLE001
+                    print("[contact view]", name, pat, "failed:", e, flush=True)
         if _DEBUG:
             links = [f"{ns}/RightArm{lp[link]}" for link in C.LINKS]
             _VIEWS["pick_dbg"] = psv.create_rigid_contact_view(f"{ns}/pick", filter_patterns=links)
@@ -302,6 +317,13 @@ def _monitor(environment) -> None:
     f_head = _np(V["head"].get_contact_force_matrix(dt))[0]          # (filters, 3): on the head
     f_lip = _np(V["lip"].get_contact_force_matrix(dt))[0]
     contact_down = max(0.0, -float(f_head[:, 2].sum() + f_lip[:, 2].sum()))
+    board_down = 0.0                                                    # on the board and the scale's display
+    for name in ("board", "display"):
+        if V[name] is not None:
+            board_down -= float(_np(V[name].get_contact_force_matrix(dt))[..., 2].sum())
+    board_down = max(0.0, board_down)
+    S["board_down"] = board_down
+    contact_down += board_down
     if _DEBUG:
         names = ["pick"] + [f"{a[0]}{l}" for a in ("L", "R") for l in ROBOT_LINKS]
         S["contacts"] = {f"head:{n}": np.round(f, 2).tolist() for n, f in zip(names, f_head) if np.linalg.norm(f) > 0.02}
@@ -319,16 +341,15 @@ def _monitor(environment) -> None:
         S["floss_net"] = round(float(np.linalg.norm(FL.F_A + FL.F_B)), 3)
     lip = environment.unwrapped.scene["lip"]
     S["lip"] = float(_np(lip.data.joint_pos)[0][0])
-    below = FL.mode == "below"
-    if below:
-        S["press_peak_below"] = max(S["press_peak_below"], press)
-        S["press_steps"] = S["press_steps"] + 1 if press >= g.PRESS_N else 0
-        if S["press_steps"] >= round(g.PRESS_S * 20):
-            _fail("pressed into the gum: 3 N or more on the head for 0.5 s with the floss below the contact")
-    else:
-        S["press_steps"] = 0
+    S["press_peak"] = max(S["press_peak"], press)                       # the scale, the whole trial
+    S["press_win"] = (S["press_win"] + [press])[-round(g.PRESS_S * 20):]
+    if len(S["press_win"]) == round(g.PRESS_S * 20):                    # the largest press held for 0.5 s
+        S["press_hold_peak"] = max(S["press_hold_peak"], min(S["press_win"]))
+    S["press_steps"] = S["press_steps"] + 1 if press >= g.PRESS_N else 0
+    if S["press_steps"] >= round(g.PRESS_S * 20):
+        _fail("pressed on the head or board: 3 N or more for 0.5 s")
     if RU.snap is not None:
-        _fail(f"snapped onto the gum: {RU.snap:.2f} mm in the 25 ms before touching it")
+        _fail(f"snapped onto the gum: the pressure film marked ({RU.snap:.2f} N on the strip)")
     if RU.failed:
         _fail("the floss's load passed 22 N (pulled out or broke)")
     S["load"] = RU.load_max
@@ -338,18 +359,21 @@ def _monitor(environment) -> None:
     S["out"] = bool(P is not None and floss_out(P))
     wiped = sum(cov[k] >= g.WIPED for k in ("t41", "t31"))
     rung = 0.0
-    if FL.passed and not RU.failed:
+    passed = any(RU.cells(w).reshape(g.BAND_COLS, g.BAND_ROWS)[:, 1:].any()   # a bare cell in rows 2-4 of either band
+                 for w in RU.wiped.values())
+    S["passed"] = passed
+    if passed and not RU.failed:
         rung = {0: 0.25, 1: 0.5, 2: 0.75}[wiped]
         if wiped == 2 and S["out"]:
             rung = 1.0
     S["rung"] = rung
     S["rungs"] = (S["rungs"] + [rung])[-g.HOLD_STEPS:]
-    S["summary"] = {"passed": FL.passed, "coverage": {k: round(v, 3) for k, v in cov.items()},
+    S["summary"] = {"passed": passed, "coverage": {k: round(v, 3) for k, v in cov.items()},
                     "landings_mm_per_25ms": [round(x, 3) for x in RU.landings],
-                    "peak_drop_mm_per_25ms": round(RU.peak_drop, 3),
-                    "peak_press_below_N": round(S["press_peak_below"], 3), "floss_load_max_N": round(RU.load_max, 2),
+                    "peak_drop_mm_per_25ms": round(RU.peak_drop, 3), "strip_peak_N": round(RU.pap_peak, 3),
+                    "peak_press_N": round(S["press_peak"], 3), "peak_press_held_05s_N": round(S["press_hold_peak"], 3), "floss_load_max_N": round(RU.load_max, 2),
                     "plug_force_max_N": round(S["f_plug_max"], 2), "out": S["out"], "mode": FL.mode,
-                    "coverage_at_f_wipe": {str(thr): {k: round(float(v.mean()), 3) for k, v in w.items()}
+                    "coverage_at_f_wipe": {str(thr): {k: round(float(RU.cells(v).mean()), 3) for k, v in w.items()}
                                            for thr, w in RU.wiped_alt.items()}}
     if SHOW:
         _draw(environment)
@@ -360,8 +384,8 @@ FLOSS_DRAW_W = 0.001                # m: the floss drawn 1 mm thick (display onl
 
 def _draw(environment) -> None:
     """Display only: the floss (a row of 1 mm bright blue dots between the arm tips), the green coating on each
-    incisor's band (dots removed where wiped) and its four scribed marks, USD Points with no collider, mass or contact;
-    physics and score are untouched."""
+    incisor's band (dots removed where wiped) and its four scribed marks, and the pressure film strip on the papilla
+    (red once marked), USD Points with no collider, mass or contact; physics and score are untouched."""
     import omni.usd
     from pxr import Gf, UsdGeom, Vt
 
@@ -377,21 +401,28 @@ def _draw(environment) -> None:
         m = UsdGeom.Points.Define(stage, "/World/BandMarks")
         m.CreateDisplayColorAttr(Vt.Vec3fArray([Gf.Vec3f(0.15, 0.12, 0.10)]))
         _VIS["marks"] = m
-        pts, wid = [], []
-        for k in ("t41", "t31"):
-            band, nrm = RU.band[k], RU.band_n[k]
-            lo, hi = band[:, 0].min(), band[:, 0].max()
-            for x0 in (lo - 0.1, hi + 0.1):                       # the two vertical ticks
-                col = band[np.abs(band[:, 0] - (lo if x0 < 0 else hi)) < 1e-6]
-                for p_, n_ in zip(col, nrm[np.abs(band[:, 0] - (lo if x0 < 0 else hi)) < 1e-6]):
-                    pts.append(p_ + n_ * 0.06 + np.array([x0 - p_[0], 0, 0]))
-            top = band[np.isclose(band[:, 2], g.ZONE[0])]
-            for p_ in top:                                          # the groove at the contact's lower edge
-                pts.append(p_ + np.array([0, 0, 0.12]))
-            for x in np.unique(np.round(band[:, 0], 6)):            # the groove 1 mm above the gum line
-                col = np.abs(band[:, 0] - x) < 1e-6
-                j = np.argmin(band[col, 2])
-                pts.append(band[col][j] + nrm[col][j] * 0.06 + np.array([0, 0, -0.12]))
+        st = UsdGeom.Points.Define(stage, "/World/FilmStrip")              # the pressure film strip on the papilla
+        st.CreateDisplayColorAttr(Vt.Vec3fArray([Gf.Vec3f(0.93, 0.93, 0.90)]))
+        sp = [(x, y, float(g.pap_z(x)) + 0.06) for x in np.arange(-g.STRIP_L / 2, g.STRIP_L / 2 + 1e-9, 0.12)
+              for y in np.linspace(-g.STRIP_W / 2 + 0.1, g.STRIP_W / 2 - 0.1, 5)]
+        SP = np.array([g.to_world(np.array(p)) + origin for p in sp])
+        st.GetPointsAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*map(float, p)) for p in SP]))
+        st.GetWidthsAttr().Set(Vt.FloatArray([0.00022] * len(SP)))
+        _VIS["strip"] = st
+        pts = []
+        for k, s in (("t41", 1.0), ("t31", -1.0)):       # the four scribed marks framing each band
+            n_ = RU.band_n[k].mean(0)
+            n_ /= np.linalg.norm(n_)
+
+            def at(x, z):
+                return np.array([x, s * g.mesial_y41(x, z), z]) + n_ * 0.06
+
+            for x in np.linspace(-g.BAND_W / 2, g.BAND_W / 2, 21):
+                pts.append(at(x, g.ZONE[0] + 0.1))                          # the groove at the contact's lower edge
+                pts.append(at(x, float(g.pap_z(x)) + g.BAND_GUM_CLEAR - 0.1))  # the groove 1 mm above the gum line
+            for x in (-g.BAND_W / 2 - 0.1, g.BAND_W / 2 + 0.1):              # the two vertical ticks, 2 mm apart
+                for z in np.linspace(g.ZONE[0], float(g.pap_z(x)) + g.BAND_GUM_CLEAR, 8):
+                    pts.append(at(x, z))
         P = np.array([g.to_world(p) + origin for p in pts])
         m.GetPointsAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*map(float, p)) for p in P]))
         m.GetWidthsAttr().Set(Vt.FloatArray([0.00012] * len(P)))
@@ -402,6 +433,9 @@ def _draw(environment) -> None:
         W = np.array([g.to_world(p) + origin for p in dense])
         _VIS["floss"].GetPointsAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*map(float, p)) for p in W]))
         _VIS["floss"].GetWidthsAttr().Set(Vt.FloatArray([FLOSS_DRAW_W] * len(W)))
+    if RU.snap is not None and not _VIS.get("strip_marked"):             # the film turns red where it was struck
+        _VIS["strip"].GetDisplayColorAttr().Set(Vt.Vec3fArray([Gf.Vec3f(0.85, 0.10, 0.12)]))
+        _VIS["strip_marked"] = True
     n = int(sum(v.sum() for v in RU.wiped.values()))
     if _VIS.get("n_wiped") != n:
         pts = []
@@ -424,13 +458,15 @@ def success(objects) -> bool:
 def score(objects) -> float:
     """Read every control step (20 Hz); the floss and its rules every physics step (240 Hz).
     0 for the run (latched) if:
-    - snap: the floss between the teeth covers its last 1 mm before touching the gum in 25 ms or less (40 mm/s);
-    - press: while the floss is below the contact, the downward force on the head (the floss's push on the teeth, gum
-      and contact, plus the pick's and the grippers' contact forces on the head and lip) is 3 N or more for 0.5 s;
+    - snap: the floss marks the pressure film strip on the papilla under the contact (2 N on the strip);
+    - press: at any time, the downward force on the head and board (the floss's push on the teeth, gum and contact,
+      plus the pick's and the grippers' contact forces on the head, lip, board and display) is 3 N or more for 0.5 s;
     - the floss's load passes 22 N (it pulls out of the pick or breaks).
-    Passed: the floss has gone below the contact zone between the incisors. A side is wiped when 80% of its band (2 mm
-    wide, centred under the contact, from the contact's lower edge to 1 mm above the gum, a 0.2 mm grid) has had the
-    floss slide over it (within 0.1 mm, at 1 mm/s or more) while pressing that tooth with 0.5 N or more.
+    Passed: any cell in rows 2-4 of either band is wiped (the bands lie under the contact). A side is wiped when 32 of
+    its band's 40 cells are (the band: 2 mm wide, centred under the contact, from the contact's lower edge to 1 mm
+    above the gum, as
+    10 columns by 4 rows); a cell when the floss has slid over 3 of its 4 points (within 0.1 mm, at 1 mm/s or more)
+    while pressing that tooth with 0.5 N or more.
     Otherwise, from the final 1 s (the lowest rung any of its steps reached):
     1.0 passed, both sides wiped, the floss back above the incisal edges; 0.75 passed, both wiped, the floss still
     down between the teeth; 0.5 passed, one side wiped; 0.25 passed, no side wiped; 0 never passed."""

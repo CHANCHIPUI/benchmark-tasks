@@ -106,21 +106,31 @@ def pap_z(x):
 
 # -- the wipe band: 2 mm wide, centred under the contact, from the contact's lower edge to 1 mm above the gum ----------
 BAND_W = 2.0
-BAND_STEP = 0.2
 BAND_GUM_CLEAR = 1.0
+BAND_COLS, BAND_ROWS = 10, 4        # the band's grid of cells: 10 columns of 0.2 mm, 4 rows of a quarter of its local
+                                    # height (between the groove at the contact's lower edge and the groove 1 mm above
+                                    # the gum line); a side is wiped when 80% of its 40 cells are (32)
 
 
 def band41():
-    """The band's grid on 41's facing side: points (M, 3), H mm, and their outward normals."""
-    pts = []
-    for x in np.arange(-BAND_W / 2, BAND_W / 2 + 1e-9, BAND_STEP):
-        z_lo = float(pap_z(x)) + BAND_GUM_CLEAR
-        for z in np.arange(ZONE[0], z_lo - 1e-9, -BAND_STEP):
-            pts.append((x, float(mesial_y41(x, z)), z))
+    """The band's cells on 41's facing side, 4 sample points a cell (2 x 2 at the cell's quarter points): points
+    (M, 3), H mm, their outward normals, and each point's cell index. A cell counts as wiped when at least 3 of its 4
+    points are, as on the photo a cell counts as bare when bare resin covers at least three quarters of it."""
+    pts, cell = [], []
+    cw = BAND_W / BAND_COLS
+    for i in range(BAND_COLS):
+        x0 = -BAND_W / 2 + i * cw
+        for xs in (x0 + 0.25 * cw, x0 + 0.75 * cw):
+            z_top, z_lo = ZONE[0], float(pap_z(xs)) + BAND_GUM_CLEAR
+            rh = (z_top - z_lo) / BAND_ROWS
+            for j in range(BAND_ROWS):
+                for zs in (z_top - (j + 0.25) * rh, z_top - (j + 0.75) * rh):
+                    pts.append((xs, float(mesial_y41(xs, zs)), zs))
+                    cell.append(i * BAND_ROWS + j)
     pts = np.array(pts)
     h = 1e-4
     grad = np.stack([(phi41(pts + h * e) - phi41(pts - h * e)) / (2 * h) for e in np.eye(3)], axis=1)
-    return pts, grad / np.linalg.norm(grad, axis=1, keepdims=True)
+    return pts, grad / np.linalg.norm(grad, axis=1, keepdims=True), np.array(cell)
 
 
 import os as _os0
@@ -138,7 +148,7 @@ Z_HANDLE = (ARM_L, ARM_L + HANDLE_W)
 GRIP_L = 26.0                       # the pads' length along the handle
 GRIP_X = X_REAR + GRIP_L / 2        # the pads over the handle's rear 26 mm
 GRIP_C = np.array([GRIP_X, 0.0, ARM_L + HANDLE_W / 2])   # the tool point when held
-PICK_MASS = float(_os0.environ.get("FP_PICK_G", "5.0")) / 1000.0   # kg (at 2 g it was thrown out of the pinch)
+PICK_MASS = float(_os0.environ.get("FP_PICK_G", "5.0")) / 1000.0   # kg
 ANCHOR_A = np.array([-SPAN / 2, 0.0, 0.0])   # the front (labial) arm's floss anchor
 ANCHOR_B = np.array([SPAN / 2, 0.0, 0.0])    # the back (lingual) arm's
 PICK_OVERHANG = 0.030                        # m: the handle's rear end over the board's front edge
@@ -159,10 +169,11 @@ VS_DEADBAND = 1.0                   # mm/s: slower sliding along the floss count
 VS_WINDOW = 0.1                     # s: sliding speed = the floss's travel along itself over this window
 
 # -- scoring constants --------------------------------------------------------------------------------------------------
-SNAP_MM, SNAP_S = 1.0, 0.025        # the floss covering its last 1 mm onto the gum in 25 ms or less (40 mm/s)
-PRESS_N, PRESS_S = 3.0, 0.5         # 3 N or more on the head for 0.5 s while the floss is below the contact
-F_WIPE = 0.5                        # N: the floss pressing a tooth this hard wipes it (between the straight-stroke
-                                    # check's incidental touches and the hug's press)
+SNAP_MM, SNAP_S = 1.0, 0.025        # diagnostic only: the floss's descent over 25 ms before each touch of the gum
+STRIP_W, STRIP_L = 0.4, 6.0         # mm: the pressure film strip lying flat along the papilla under the contact (y, x)
+F_MARK = 2.0                        # N: the floss pressing the strip this hard marks it: a snap (estimate)
+PRESS_N, PRESS_S = 3.0, 0.5         # 3 N or more on the head for 0.5 s, at any time in the trial
+F_WIPE = 0.5                        # N: the floss pressing a tooth this hard wipes it (estimate)
 WIPE_TOL = 0.1                      # mm: a band point within this of the floss's surface ...
 WIPE_SPEED = 1.0                    # mm/s: ... while the floss slides over it at least this fast
 WIPED = 0.80                        # a side is wiped at 80% of its band points

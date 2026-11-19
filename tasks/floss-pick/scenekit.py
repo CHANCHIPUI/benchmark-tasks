@@ -70,6 +70,7 @@ class Shape(Box):
     axis: str = "Z"
     rot_xyzw: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 1.0)
     collide: bool = True
+    kinematic: bool = False      # a kinematic rigid body (so contact views can report forces on it)
 
     def _check(self) -> None:
         if self.kind not in ("box", "capsule"):
@@ -163,6 +164,9 @@ def _shape_object(spec: Shape):
     body = {"visual_material": sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(spec.color), roughness=0.6)}
     if spec.collide:
         body["collision_props"] = sim_utils.CollisionPropertiesCfg()
+    if spec.kinematic:
+        body["rigid_props"] = sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=True)
+        body["activate_contact_sensors"] = True
     if spec.kind == "box":
         cfg = sim_utils.CuboidCfg(size=tuple(spec.size), **body)
     else:

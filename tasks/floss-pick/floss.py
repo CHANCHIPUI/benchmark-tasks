@@ -239,6 +239,8 @@ class Floss:
         if pin is not None:
             plug = in_region(inner) & (np.abs(inner[:, 2] - pin[1]) <= EPS)
         tot = np.zeros(3)
+        pap = 0.0                       # the gum's push on the floss over the pressure film strip
+        disc = (np.abs(inner[:, 1]) <= g.STRIP_W / 2) & (np.abs(inner[:, 0]) <= g.STRIP_L / 2)
         F_plug = 0.0
         k = c.sum(1) + plug
         one = k == 1
@@ -246,7 +248,10 @@ class Floss:
         for j in range(3):
             m = one & c[:, j]
             if m.any():
-                tot[j] += np.maximum((f[m] * nrm[m, j]).sum(1), 0.0).sum()
+                fn = np.maximum((f[m] * nrm[m, j]).sum(1), 0.0)
+                tot[j] += fn.sum()
+                if j == 2:
+                    pap += fn[disc[m]].sum()
         mp = one & plug
         if mp.any():
             F_plug += f[mp, 2].sum()
@@ -257,6 +262,8 @@ class Floss:
             lam = np.linalg.lstsq(np.stack(basis, axis=1), f[i], rcond=None)[0]
             for q, j in enumerate(who):
                 tot[j] += max(lam[q], 0.0)
+                if j == 2 and disc[i]:
+                    pap += max(lam[q], 0.0)
             if plug[i]:
                 F_plug += lam[-1]
         if pin is not None and pin[0] == "floor":
@@ -264,6 +271,7 @@ class Floss:
         elif pin is not None and pin[0] == "ceil":
             F_plug = min(F_plug, 0.0)
         on = {NAMES[j]: float(tot[j]) for j in range(3)}
+        on["pap"] = float(pap)
         touch = {NAMES[j]: bool(c[:, j].any()) for j in range(3)}
         return T, T * u[0], -T * u[-1], on, touch, float(F_plug)
 
@@ -358,9 +366,11 @@ class Rules:
     def __init__(self, substeps_snap: int = 6):
         self.k = substeps_snap
         from geometry import band41
-        pts, nrm = band41()
+        pts, nrm, cell = band41()
         self.band = {"t41": pts, "t31": pts * np.array([1.0, -1.0, 1.0])}
         self.band_n = {"t41": nrm, "t31": nrm * np.array([1.0, -1.0, 1.0])}
+        self.cell = cell
+        self.n_cells = int(cell.max()) + 1
         self.reset()
 
     ALT = (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2)   # diagnostic: coverage at other F_wipe values (does not affect the score)
@@ -370,7 +380,8 @@ class Rules:
         self.wiped_alt = {f: {k: np.zeros(len(v), bool) for k, v in self.band.items()} for f in self.ALT}
         self.low = deque(maxlen=self.k + 1)
         self.gum_touch = False
-        self.snap = None              # (descent mm over 25 ms) once a snap is found
+        self.snap = None              # (the floss's force on the film strip, N) once it reaches F_MARK: a mark
+        self.pap_peak = 0.0           # N: the floss's largest force on the film strip
         self.landings = []            # (descent mm over the 25 ms before each touch of the gum)
         self.load_max = 0.0
         self.failed = False
@@ -379,8 +390,12 @@ class Rules:
         self.peak_drop = 0.0          # mm: the largest 25 ms descent of the floss between the teeth while it is in or
                                       # below the contact zone (the landing-speed margin, even with no gum touch)
 
+    def cells(self, w: np.ndarray) -> np.ndarray:
+        """Which of the band's cells count as wiped: at least 3 of a cell's 4 points."""
+        return np.bincount(self.cell, weights=w.astype(float), minlength=self.n_cells) >= 3
+
     def coverage(self) -> dict:
-        return {k: float(v.mean()) for k, v in self.wiped.items()}
+        return {k: float(self.cells(v).mean()) for k, v in self.wiped.items()}
 
     def step(self, fl: Floss, P, vel_at):
         """vel_at(points (M, 3) mm) -> the floss material's velocity there (mm/s): the pick's rigid motion."""
@@ -394,9 +409,12 @@ class Rules:
         if touch and not self.gum_touch and len(self.low) == self.low.maxlen and not math.isnan(z_low):
             drop = self.low[0] - z_low
             self.landings.append(drop)
-            if drop >= g.SNAP_MM and self.snap is None:
-                self.snap = drop
+            # (diagnostic: the landing speed; the snap rule is the floss's force on the film strip, below)
         self.gum_touch = touch
+        pap = fl.on.get("pap", 0.0)     # the floss's force on the film strip this physics step
+        self.pap_peak = max(self.pap_peak, pap)
+        if pap >= g.F_MARK and self.snap is None:
+            self.snap = pap
         if fl.mode != "above" and len(self.low) == self.low.maxlen and not math.isnan(z_low):
             self.peak_drop = max(self.peak_drop, self.low[0] - z_low)
         load = float(np.linalg.norm(fl.F_A + fl.F_B))
