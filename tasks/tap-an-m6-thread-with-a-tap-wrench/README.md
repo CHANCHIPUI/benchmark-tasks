@@ -70,9 +70,10 @@ T-bar drives against the fingers as a couple and the hand does not lever the tap
   whose lower edge is 13.5 mm above the point.
 - Wrench: Starrett 93B T-handle tap wrench (20 mm knurled body, 6.4 x 100 mm T-bar).
 - Vise: Wilton 11744 4 in drill-press vise, bolted to the table; two 150 x 32 x 3 mm hardened parallels.
-- Blanks: 80 mm squares sawn from 6 mm 6082-T6 aluminium plate (1st Choice Metals, 6 mm 6082T6 plate, a 300 x 300 mm
-  piece at £14.63 ex VAT gives nine), the four tool holes marked from a printed template, centre-punched, drilled
-  5.0 mm and countersunk 7.0 mm on a drill press; about 10 minutes a blank, four trials per blank. The flange's
+- Blanks: 80 x 80 x 6 mm squares of 6082-T6 plate, ordered cut to size (1st Choice Metals, 6 mm 6082T6 plate, one
+  80 x 80 mm cut from its 100 x 100 mm piece: £1.63 each ex VAT, the first cut free); the four tool holes marked from a
+  printed template, centre-punched, drilled 5.0 mm and countersunk 7.0 mm on a drill press; about 5 minutes a blank,
+  four trials per blank. The flange's
   clearance holes are made after tapping and are not on the trial blank.
 - Stand: grey PLA block 40 x 40 x 60 mm with a 12 mm hole chamfered to 24 mm, taped to the table.
 - Gauges: M6 x 1.0 6H GO thread plug gauge, 75 mm engineer's square, feeler gauges.
