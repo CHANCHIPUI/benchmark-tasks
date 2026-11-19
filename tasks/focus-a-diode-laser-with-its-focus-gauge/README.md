@@ -1,0 +1,78 @@
+# Focus a diode laser before cutting robot parts
+
+A task file for the `yam_arena` embodiment ([yam-isaac-lab-arena](https://github.com/kairosiann/yam-isaac-lab-arena), Isaac Lab-Arena 0.3.1).
+
+An open-frame 20 W diode laser engraver (xTool D1 Pro type), unplugged, stands on the table with its honeycomb panel and
+a 3 mm plywood sheet for robot-arm parts. Its laser module hangs 12 mm too high. The robot flips the focal length
+setting bar down, holds the module while it loosens the thumb-screw handle, lowers the module until the bar rests on
+the sheet, tightens the handle, flips the bar back up onto its magnet and lets go, without dropping the module or
+moving the sheet.
+
+## Run a trial
+
+Dream-1:
+
+```bash
+inspect-robots run --embodiment yam_arena --policy dream \
+  -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
+  --instruction "$(python -c "import json; print(json.load(open('task.json'))['instruction'])")" \
+  --scorer task_score --max-steps 2400 --store-frames --log-dir runs/dream
+```
+
+Scripted demo (scores 1.0): the same command with `--policy yam_scripted`. `TASK_DEMO=nothing` plays no motion (scores 0);
+`TASK_DEMO=slip` loosens the holding grip so the module slides down past the fingers onto its bar (scores 0: dropped).
+
+The demo, open loop. Left hand, its grip tilted 45 deg (pointing down toward -y, fingers closed): sweep the stowed bar
+forward off its magnet; it falls to hang. Left hand, straight down: grip the fan housing across y and push up about
+19 mm against the locked slide, so that it carries the module's weight once freed. Right hand, as a fork (pointing +y,
+8 deg down, fingers open 44 mm round the lever): the upper finger presses the handle down until it turns free; the
+fork slides out. Left hand: lower the module 14 mm over 6 s (12 mm to the contact, 2 mm past it). Right hand: the fork slides
+back round the lever and its lower finger lifts it past its stop; the fork drops clear and slides out. Left hand: let
+go, then, tilted again, sweep the hanging bar forward and up round its axis onto the magnet. Both hands clear.
+
+## How `score()` reaches the score
+
+- `focus_usd.py` writes the scene's USD files into `build/` when the task loads. The engraver's frame, gantry and
+  carriage and the honeycomb panel are fixed bodies; the sheet is a free body. The module is a fixed-base articulation:
+  a prismatic slide (module on its carriage), the bar's hinge and the handle's hinge.
+- Rules, every control step (`_apply_rules`):
+  - lock: while the handle is within 10 deg of its tight stop, a stiff drive (300 kN/m) holds the slide where it was
+    when the handle locked and carries the module's weight, as the real clamp's friction does; otherwise the slide is
+    free (5 N s/m damping);
+  - handle: its drive's target stays put until a push exceeds 0.05 N m, then trails it: the handle sticks, and slips
+    when turned;
+  - magnet: within 5 deg of the stowed angle, a drive holds the bar there with up to 0.02 N m.
+- Drop rules (either latches 0): the slide descending more than 1.5 mm within one 50 ms control step (3 cm/s), touched
+  or not; and, read every 240 Hz physics step (`_poll`) from a PhysX contact view between the module's body and the six
+  finger links of both grippers, a descent of 2 mm from the module's highest point since a finger last touched it.
+- Sheet rule, every control step: any corner of the sheet more than 3 mm from where it lay latches 0.
+- The end-state table (task.json, "scoring") is read every step from e (the slide's height against the height at which
+  the bar, hanging on its stop, touches the sheet's top surface), the handle's and bar's angles, the fingertips'
+  distance to the module, bar, handle and sheet (URDF collision hulls against boxes), and each part's movement over
+  the last 50 ms step. 1.0 needs its state for 20 steps (1 s), the same 1 s the harness holds `success()` for. A
+  latch gives 0 from then on; only a reset clears it.
+
+## Runtime and seeds
+
+- Demo: 793 steps (39.7 s simulated) to the success hold; about 6 minutes on an RTX 3070 Ti laptop GPU including
+  start-up (about 0.4 s a step at 640 x 360).
+- `object_jitter=0` keeps the layout fixed, so no seed is needed. The scripted demo is open loop.
+
+## Real-world kit
+
+- Laser: xTool D1 Pro 20W (frame 600 x 590 mm), with xTool's honeycomb working panel (500 x 500 x 22 mm). Unplugged
+  throughout: the laser never fires, so a used or open-box unit serves.
+- Sheet: 3 mm basswood plywood, 300 x 200 mm.
+- Scoring: a phone filming 240 fps slow motion on a small tripod; a 150 mm steel rule; a taper gap gauge (1 to 15 mm);
+  a 150 mm digital caliper; a 0.5 mm feeler blade; a luggage scale; masking tape.
+
+## Estimates
+
+Estimates: the module's mass, the slide's damping, the handle's friction, the magnet's hold, the sheet's mass, and the
+bar's and handle's sizes (from the maker's photos).
+
+## Sources
+
+Every mesh is generated by `focus_usd.py` from the product's published dimensions and the maker's quick start guide's
+drawings. Textures (basswood, plywood edge, honeycomb, brushed aluminium, fan grille) are drawn by `make_textures.py`.
+No third-party meshes or textures are used.
