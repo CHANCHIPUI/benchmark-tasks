@@ -2,9 +2,9 @@
 
 - basswood.png: the plywood sheet's basswood face veneer (pale, fine straight grain), tiled every 10 cm.
 - ply_edge.png: the sheet's edge, three plies with darker glue lines, for a 3 mm edge.
-- honeycomb.png: the working panel's aluminium honeycomb seen from above (about 6 mm cells).
-- brushed.png: brushed anodised aluminium (frame rails, gantry beam, module body), tinted by each material.
-- fan.png: the module's top: a round fan grille with its four corner screws, one tile per 6 cm top face.
+- brushed.png: brushed anodised aluminium (frame rails, gantry beam, plate, module body), tinted by each material.
+- fan.png: the module's top: a round fan grille with its four corner screws, one tile per top face.
+- knurl.png: the hand screws' diamond knurl, one tile per 6 mm.
 """
 
 from __future__ import annotations
@@ -49,26 +49,6 @@ def ply_edge(n=256):
     return np.dstack([a, a * 0.86, a * 0.66])
 
 
-def honeycomb(n=1024, cells=16):
-    """Hexagonal cells (about 1/cells of the tile across), thin bright walls over darker cell interiors."""
-    y, x = np.mgrid[0:n, 0:n] / n * cells
-    s3 = np.sqrt(3.0)
-    ry = y / (s3 / 2)
-    d1 = np.full(x.shape, 9.0)
-    d2 = np.full(x.shape, 9.0)
-    for dy in (-1, 0, 1, 2):
-        for dx in (-1, 0, 1):
-            cy = np.floor(ry) + dy
-            cx = np.floor(x) + dx + 0.5 * (cy % 2)
-            d = np.hypot(x - cx, (ry - cy) * (s3 / 2))
-            d2 = np.where(d < d1, d1, np.minimum(d2, d))
-            d1 = np.minimum(d1, d)
-    wall = np.clip(1 - (d2 - d1) / 0.06, 0, 1)
-    depth = np.clip(d1 / 0.55, 0, 1)
-    a = 55 + 60 * depth + 150 * wall + rng.normal(0, 4, (n, n))
-    return np.dstack([a, a, a * 1.03])
-
-
 def brushed(n=512):
     streak = rng.normal(0, 1, n)
     streak = np.convolve(streak, np.ones(3) / 3, mode="same")
@@ -93,10 +73,18 @@ def fan(n=512):
     return np.dstack([a, a, a])
 
 
+def knurl(n=128):
+    y, x = (np.mgrid[0:n, 0:n] + 0.5) / n
+    d1 = np.abs(np.sin(np.pi * 4 * (x + y)))
+    d2 = np.abs(np.sin(np.pi * 4 * (x - y)))
+    a = 150 + 80 * np.minimum(d1, d2) + rng.normal(0, 4, (n, n))
+    return np.dstack([a, a, a * 1.02])
+
+
 if __name__ == "__main__":
     save("basswood.png", basswood())
     save("ply_edge.png", ply_edge())
-    save("honeycomb.png", honeycomb())
     save("brushed.png", brushed())
     save("fan.png", fan())
+    save("knurl.png", knurl())
     print(sorted(p.name for p in OUT.iterdir()))
