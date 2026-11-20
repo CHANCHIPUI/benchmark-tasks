@@ -551,7 +551,7 @@ def right_script(ctx, variant, upto):
 
 def brush_then_drop(ctx, arm):
     """Check variant: once the push starts, the hand holds the arm with its tip 0.3 mm into the slide's path (measured
-    angle, by feedback), so the slide brushes it near the end of the push while a hand is on the lever; if it never
+    angle, in closed loop), so the slide brushes it near the end of the push while a hand is on the lever; if it never
     touched, the hand closes the arm until it does. After the push the hand opens the arm 8 degrees off the slide and
     lets go: the arm snaps onto the slide. The landing is the snap, not the brush, so the run must be capped."""
     S = ctx.task._STATE

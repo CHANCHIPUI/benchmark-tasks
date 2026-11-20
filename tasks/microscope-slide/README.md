@@ -1,9 +1,9 @@
 # Load a slide into a microscope's stage by its edges: coverslip up, seated under the objective, spring arm lowered gently
 
-An AmScope B120C compound microscope stands on the table, eyepieces toward the arms, powered off. Its stage is fully
-lowered with the 4x objective in the path, its X and Y scales at the readings that centre a seated slide under the
-objective, and its spring caliper closed. To the robot's left, an angled bench slide holder holds one prepared slide in
-its middle slot, label end up. The instruction is:
+An AmScope M620 compound microscope (or the B120C, the same stand with a binocular head) stands on the table, its head
+toward the arms, powered off. Its stage is fully lowered with the 4x objective in the path, its X and Y scales at the
+readings that centre a seated slide under the objective, and its spring caliper closed. To the robot's left, an angled
+bench slide holder holds one prepared slide in its middle slot, label end up. The instruction is:
 **"Load the prepared slide into the microscope's slide holder, coverslip up and seated against the holder's back edge
 and jaw, so the specimen is under the objective. Handle the slide only by its edges and label end."**
 
@@ -16,6 +16,15 @@ To do it, the robot has to:
   edge (within 0.3 mm), without shoving the stage itself;
 - let the caliper's arm back down under control, the hand still on the lever when its tip meets the slide, so that it
   presses the slide's left end onto the fixed jaw (within 0.3 mm); then let go of everything.
+
+## Changes in this version
+
+- A cheaper microscope is named: the AmScope M620 (40X-1000X; monocular, about US$219, new from AmScope). It is built on the same
+  stand as the AmScope B120C (binocular, about US$300) named before: the same two-layer mechanical stage, metal
+  template, spring caliper and lever, nosepiece and objectives, so the stage height and the space under the 4x
+  objective are the same. Only the head differs; its single eyepiece tube sits between the B120C's two, further from
+  the arms' paths. Either microscope can be used; the scene models the B120C.
+- The scene, the scoring, the demo and the scores are unchanged.
 
 ## Why it matters
 
@@ -50,8 +59,6 @@ the objective is over it.
 | `build_assets.py` | writes `assets/*.usda` from `geometry.py` (needs `pxr`, not the simulator) |
 | `scenekit.py` | USD bodies and articulations for task files, and the physics-rate hook |
 | `demokit.py`, `demo.py` | the scripted demo and the scorer checks |
-| `dev/` | build-time checks (reach and clearance scans, launch script, logs) |
-| `NOTES.md` | build notes |
 
 All assets are built from scratch in `build_assets.py` (no third-party meshes, scans or textures). The robot is
 yam_arena's.
@@ -90,7 +97,7 @@ python demo.py task.py demo_out [--no-record] [--variant face|snap|short]
 3. **Open the caliper (right arm).** The hand takes the lever knob loosely between its pads (12 mm apart round the
    8 mm knob) and swings the arm 30 degrees open, the trailing pad pushing the knob, and holds it.
 4. **Push (left arm).** Fingers closed and pointing back, hand pitched 18 degrees down so the fingertips are the
-   fingers' lowest point, 0.08 mm over the stage (held there by feedback on the hand's measured pose); their end is
+   fingers' lowest point, 0.08 mm over the stage (held there in closed loop on the hand's measured pose); their end is
    flat across the closed fingers' height, so they meet the slide's 1 mm front edge, not its top face. A part pushed
    at one point turns away, so the push goes in short strokes: at the middle of the front edge while the slide is
    square (within 0.6 degrees), at 14 mm toward its lagging end when it is not; between strokes the tip backs off and
@@ -102,7 +109,7 @@ python demo.py task.py demo_out [--no-record] [--variant face|snap|short]
    load comes off it; the hand lifts straight up off the knob.
 6. Both arms move clear of the microscope and go home.
 
-Results (final code; dev/d3.log, dev/v_*.log):
+Results (final code):
 
 | Run | What the script does | Score |
 |---|---|---|
@@ -114,8 +121,7 @@ Results (final code; dev/d3.log, dev/v_*.log):
 
 The four checks run with the final code (no recording).
 
-Media: `demo.mp4` (the top camera large, the left and right arm cameras stacked beside it; the per-camera videos are
-in `dev/out_d3/`); `setup.png` is the first top-camera frame.
+Media: `demo.mp4` (the top camera large, the left and right arm cameras stacked beside it); `setup.png` is the first top-camera frame.
 
 ## Scoring
 
@@ -159,7 +165,7 @@ Positions in mm from the midpoint between the arm bases, x forward, y to the rob
 | Item | Details |
 |---|---|
 | Table | the station's wooden bench top |
-| Microscope | AmScope B120C binocular compound microscope (about US$304): two-layer mechanical stage 116 x 125 mm, 70 x 25 mm X-Y travel, metal template with a spring caliper and lever, forward-facing quadruple nosepiece (4x/10x/40x/100x, 45 mm parfocal), 25 mm stage stroke. Powered off, eyepieces toward the robot, optical axis at x 360, y 0 (base front edge at about x 285). Fixed to the table by two 25 x 100 mm strips of double-sided foam mounting tape under its base (3M Scotch-Mount or similar), or a padded F-clamp on the base's rear lip clear of the stage and the arms' paths. Stage fully lowered, 4x in the path, X and Y scales at the recorded readings that put a seated slide's centre on the optical axis, caliper closed. |
+| Microscope | AmScope M620 (40X-1000X) monocular compound microscope (about US$219), or the AmScope B120C binocular (about US$300), the one modelled. Both are built on the same stand: two-layer mechanical stage 116 x 125 mm with 70 x 25 mm X-Y travel as modelled (AmScope's current pages list 127 x 118 mm and 70 x 21 mm), metal template with a spring caliper and lever, forward-facing quadruple nosepiece (4x/10x/40x/100x, 45 mm parfocal), 25 mm stage stroke; only the head differs (the M620's single eyepiece tube sits between the B120C's two). Powered off, head toward the robot, optical axis at x 360, y 0 (base front edge at about x 285). Fixed to the table by two 25 x 100 mm strips of double-sided foam mounting tape under its base (3M Scotch-Mount or similar), or a padded F-clamp on the base's rear lip clear of the stage and the arms' paths. Stage fully lowered, 4x in the path, X and Y scales at the recorded readings that put a seated slide's centre on the optical axis, caliper closed. |
 | Caliper | a curved arm swinging in the stage plane about a vertical pivot at the template's right back; its tip presses the slide's right end toward the fixed jaw; its lever knob sits at the stage's right edge. |
 | Slide | a standard prepared slide made to this recipe: a ground-edge colour-frosted glass slide (Fisherbrand ground-edge frosted, 75 x 25 x 1 mm, about 5 g, frosted end about 20 mm) with a 22 mm square cover glass (Carolina 633095, 0.13-0.17 mm) mounted with one drop of permanent mountant over a dried 5 uL drop of 1% methylene blue at the slide's centre, the cover glass centred within 1 mm using a printed paper template under the slide; cured overnight. Make ten at once and use any of them. |
 | Bench slide holder | Heathrow Scientific HS15981C (white polyethylene, 15 angled slots, 152 x 102 x 20 mm), centred at x 300, y 220, its long side along y so the slots run along x (front to back). The slide stands alone in the middle slot, label end up, its coverslip facing the microscope (-y); the neighbouring slots are empty. |
@@ -237,6 +243,8 @@ with a damp tissue to pick up slivers. Check the microscope is still on its tape
 ## Sources
 
 - AmScope 120-R series manual (B120-R), section 2.1 "Mounting a Specimen" and specifications.
+- AmScope product pages for the M620 and B120C (amscope.com, prices and specifications: two-layer stage with caliper,
+  forward quadruple nosepiece, 45 mm parfocal objectives; side and front photos of both on the same stand).
 - Olympus CX23 instruction manual, section 3 "Placing the specimen slide"; CX23 brochure (dimension drawing, stage
   height about 190 mm).
 - Nikon Eclipse E100 instruction manual, "Specimen Mounting".
