@@ -10,7 +10,7 @@ hinge angle).
 4. Right arm, locks: the closed fingertips press the lid's free end down, deeper by steps, until the lid is held
    within 0.2 degrees of shut; the hand rises.
 5. Both arms, push: the closed fingers' flat faces on the station's front face, 80 mm either side of its middle, push
-   it toward the wall (feedback on its measured back corners) until both are within 3 mm of the wall; the hands back
+   it toward the wall (closed loop on its measured back corners) until both are within 3 mm of the wall; the hands back
    off and go home.
 
     python demo.py task.py demo_out [--max-steps 3600] [--no-record] [--variant NAME] [--start-view] [--close-view]
@@ -23,6 +23,7 @@ Variants (scorer checks), each printing its mode:
 - ``off_rod``: block A threaded; block B let go inside the station off the rods; locked; pushed;
 - ``no_push``: the full demo without the push;
 - ``off_rod_no_push``: ``off_rod`` without the push;
+- ``both_off``: both blocks let go inside the station off the rods (between the rods on each side); locked; pushed;
 - ``open``: both threaded, nothing else;
 - ``hold_lid``: the full demo, but the right hand stays pressing the lid at the end;
 - ``nothing``: the arms stay still.
@@ -222,7 +223,7 @@ def thread(ctx, arm, name, rod):
             cmd = cmd + np.r_[err[:2], 0.0]
             yield from arm.move(cmd, Rh, 0.3)
         rec[f"hover_err_mm_{attempt}"] = np.round(err * 1000, 2).tolist()
-        # straight down, its measured xy held over the rod by feedback, until the hole's lower end is THREAD below
+        # straight down, its measured xy held over the rod in closed loop, until the hole's lower end is THREAD below
         z_end = tip_z - THREAD + g.BLK_T / 2
         stall, jam = 0, False
         last = None
@@ -428,8 +429,11 @@ def script(ctx, variant: str):
         yield from lay_by_wall(ctx, Rr, "block_b", (0.420, -0.165))
         yield from Rr.go_home(2.0)
     else:
-        yield from thread(ctx, Rr, "block_a", 0)
-        if variant in ("off_rod", "off_rod_no_push"):
+        if variant == "both_off":
+            yield from drop_inside(ctx, Rr, "block_a", (0.0, -0.035))
+        else:
+            yield from thread(ctx, Rr, "block_a", 0)
+        if variant in ("off_rod", "off_rod_no_push", "both_off"):
             yield from drop_inside(ctx, Rr, "block_b", (0.0, 0.035))
         elif variant != "one_in":
             yield from thread(ctx, Rr, "block_b", 2)
@@ -456,7 +460,7 @@ def log(ctx, step, info) -> str:
     bs = " ".join(f"{n[-1]} in {int(b['inside'])} rod {b['rod']} off {b['axis_off'] * 1000:.1f} depth "
                   f"{b['depth'] * 1000:.1f} on {int(b['on_rod'])}" for n, b in S.get("blocks", {}).items())
     sc = Scene(ctx)
-    return (f"lid {math.degrees(S['lid']):.2f} locked {S['locked']} shut {S['shut']} safe {S.get('safe')} wall "
+    return (f"lid {math.degrees(S['lid']):.2f} locked {S['locked']} safe {S.get('safe')} wall "
             f"{[round(v * 1000, 1) for v in S['wall']]} gap {S['gap_mm']} fell {S['fell']} {bs} tier {S['tier']} "
             f"st {np.round((sc.p0 - [g.ST_X, g.ST_Y, g.TOP]) * 1000, 1).tolist()} events {S['events'][-3:]}")
 
@@ -526,7 +530,7 @@ if __name__ == "__main__":
     ap.add_argument("--start-view", action="store_true", help="recorded runs: open on a close view of the start")
     ap.add_argument("--hold", type=float, default=3.0, help="seconds after the script ends (inf: to the step limit)")
     ap.add_argument("--variant", default="full",
-                    choices=["full", "loose_wall", "one_in", "shut_unlocked", "off_rod", "no_push", "off_rod_no_push",
+                    choices=["full", "loose_wall", "one_in", "shut_unlocked", "off_rod", "no_push", "off_rod_no_push", "both_off",
                              "open", "hold_lid", "nothing"])
     a = ap.parse_args()
     if a.variant == "nothing":
@@ -549,7 +553,6 @@ if __name__ == "__main__":
               log_every=int(os.environ.get("MB_LOG_EVERY", "20")), hold_s=a.hold)
     S = sys.modules["task"]._STATE if "task" in sys.modules else {}
     extra = {"variant": a.variant, "tier": S.get("tier"), "safety_flag": S.get("safe"), "locked": S.get("locked"),
-             "shut": S.get("shut"),
              "lid_deg": round(math.degrees(S.get("lid", 0.0)), 3), "along_wall": S.get("along_wall"),
              "wall_mm": [round(v * 1000, 2) for v in S.get("wall", [])], "gap_mm": S.get("gap_mm"),
              "fell": S.get("fell"), "events": S.get("events"), "lock_record": S.get("lock_record"),

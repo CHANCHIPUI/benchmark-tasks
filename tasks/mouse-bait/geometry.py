@@ -69,7 +69,6 @@ CATCH = math.radians(1.5)           # over its last 1.5 degrees shut the catches
 CATCH_F = 2 * LOCK_F                # the push at the free end at LOCK_AT, rising linearly from 0 at CATCH
 CATCH_K = CATCH_F * ST_L / (CATCH - LOCK_AT)    # N m/rad: the catches as a spring in the hinge's drive (implicit)
 CATCH_DAMP = 1.0                    # N m s/rad within the catches (they take up a falling lid's speed)
-SHUT = math.radians(3.0)            # the lid within this of shut counts as shut (resting on its catches)
 
 # -- the bait blocks -----------------------------------------------------------------------------------------------------
 BLK_L, BLK_W, BLK_T = 0.051, 0.025, 0.019

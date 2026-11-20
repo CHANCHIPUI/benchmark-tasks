@@ -223,7 +223,7 @@ def _restart(environment) -> None:
 
 @on_reset
 def _reset_state(environment=None) -> None:
-    _STATE.update(step=0, lid=g.LID_OPEN, locked=False, shut=False, blocks={}, wall=[1.0, 1.0], wall_tilt=0.0,
+    _STATE.update(step=0, lid=g.LID_OPEN, locked=False, blocks={}, wall=[1.0, 1.0], wall_tilt=0.0,
                   safe=1, along_wall=False, fell=False, touch_log=collections.deque(maxlen=round(g.FINAL_S * 20)),
                   touching=False, gap_mm=None, tier=0.0, events=[], why=[], lock_record=None)
 
@@ -301,14 +301,14 @@ def safety(states, blocks: dict, locked: bool) -> int:
     return int(all((b["inside"] and locked) or on_mark(states[n], n) for n, b in blocks.items()))
 
 
-def tier(blocks: dict, locked: bool, shut: bool, along_wall: bool) -> float:
-    """The score of an end state (see score())."""
-    if not all(b["inside"] for b in blocks.values()):
+def tier(blocks: dict, locked: bool, along_wall: bool) -> float:
+    """The score of an end state (see score()). Every score above 0 needs both blocks inside and the lid locked."""
+    if not locked or not all(b["inside"] for b in blocks.values()):
         return 0.0
-    on_rods = all(b["on_rod"] for b in blocks.values())
-    if locked:
-        return 1.0 if (on_rods and along_wall) else 0.75
-    if shut and on_rods:
+    off = sum(not b["on_rod"] for b in blocks.values())
+    if off == 0:
+        return 1.0 if along_wall else 0.75
+    if off == 1 and along_wall:
         return 0.5
     return 0.25
 
@@ -328,7 +328,6 @@ def _monitor(environment) -> None:
         S["lock_record"] = dict(step=_SUB["lock_events"][0] if _SUB["lock_events"] else S["step"],
                                 lid_deg=round(math.degrees(S["lid"]), 3))
         S["events"].append((S["step"], "locked"))
-    S["shut"] = bool(S["lid"] <= g.SHUT)
     frame = station_frame(station)
     S["blocks"] = {n: block_in_station(st[n], frame) for n in BLOCKS}
     S["safe"] = safety(st, S["blocks"], S["locked"])
@@ -346,7 +345,7 @@ def _monitor(environment) -> None:
     S["gap_mm"] = round(gap * 1000, 1)
     S["touching"] = bool(gap <= g.TOUCH)
     S["touch_log"].append(S["touching"])
-    t = tier(S["blocks"], S["locked"], S["shut"], S["along_wall"])
+    t = tier(S["blocks"], S["locked"], S["along_wall"])
     if S["fell"] or any(S["touch_log"]):
         t = 0.0
     S["tier"] = t
@@ -376,14 +375,16 @@ def score(objects) -> float:
     - on a rod: a block inside with its hole's axis within 3 mm of a rod's axis, tilted 20 degrees or less, and its
       underside 5 mm or more below the rod's tip (the rod through its hole);
     - locked: the lid pressed shut until its two key locks caught (task code); only the key opens it, so it stays
-      locked; shut: the lid within 3 degrees of shut;
+      locked;
     - along the wall: both back corners of the station within 20 mm of the wall's face, the station upright within
       10 degrees.
     0 for the rest of the run if the station or a block leaves the bench top. Otherwise 0 if either gripper (collision
-    hulls) touches the station or a block (within 2 mm) at any step of the final 1 s; else:
-    1.0: both blocks on rods, the lid locked, the station along the wall;
-    0.75: the lid locked with both blocks inside, but a block off its rod, the station away from the wall, or both;
-    0.5: both blocks on rods, the lid shut but not locked;
-    0.25: both blocks inside, the lid open, or shut but not locked with a block off its rod;
-    0: any block outside the station (doing nothing included)."""
+    hulls) touches the station or a block (within 2 mm) at any step of the final 1 s; else, with both blocks inside
+    and the lid locked:
+    1.0: both blocks on rods, the station along the wall;
+    0.75: both blocks on rods, the station away from the wall;
+    0.5: one block off its rod, the station along the wall;
+    0.25: both blocks off their rods, or one off its rod with the station away from the wall;
+    and 0 if the lid is open or shut but not locked, or any block is outside the station (doing nothing included).
+    Every score above 0 has both blocks in the locked station, so safety_flag() is 1 for it."""
     return float(_STATE.get("tier", 0.0))
