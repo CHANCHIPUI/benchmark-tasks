@@ -13,6 +13,7 @@
 - assets/battery_old.usda, assets/battery_new.usda: a 9 V battery, one rigid body each: the case and its two snaps
   (the old one with a red tape band round its bottom end); origin at the case's centre, +x toward the snaps.
 - assets/card.usda: the torn-open retail card, kinematic; origin at its centre on the table.
+- assets/bracket.usda: the twist-on mounting bracket, kinematic; origin at its centre on its face.
 - assets/textures/*.png: drawn here (the alarm's back label, the battery label, the card print).
 """
 
@@ -461,6 +462,35 @@ def build_card():
     stage.Save()
 
 
+# -- the mounting bracket ---------------------------------------------------------------------------------------------
+def build_bracket():
+    """The SMI100's twist-on mounting bracket: a white plastic ring, kinematic; origin at its centre on its face (the
+    underside the alarm's back meets), z up into the shelf board above it."""
+    stage, root = stage_for("bracket")
+    UsdPhysics.RigidBodyAPI.Apply(root.GetPrim())
+    UsdPhysics.RigidBodyAPI(root.GetPrim()).CreateKinematicEnabledAttr(True)
+    r = "/bracket"
+    white = material(stage, f"{r}/Looks/white", (0.93, 0.93, 0.91), roughness=0.45)
+    grey = material(stage, f"{r}/Looks/grey", (0.62, 0.62, 0.60), roughness=0.55)
+    dark = material(stage, f"{r}/Looks/dark", (0.20, 0.20, 0.21), roughness=0.6)
+    cylinder(stage, f"{r}/ring", g.RING_R, (0.0, 0.0, g.RING_T / 2), g.RING_T, "Z", white, collide=True,
+             off=(0.0005, 0.0))
+    cylinder(stage, f"{r}/face", g.RING_R - 0.010, (0.0, 0.0, -0.0002), 0.0003, "Z", grey)
+    for k in range(6):                       # the six lugs' slots, 60 degrees apart (visual)
+        a = k * g.ENTRY_STEP
+        c = (0.047 * math.cos(a), 0.047 * math.sin(a), -0.0004)
+        sl = UsdGeom.Cube.Define(stage, f"{r}/slot_{k}")
+        sl.CreateSizeAttr(1.0)
+        sl.AddTranslateOp().Set(Gf.Vec3d(*c))
+        sl.AddOrientOp().Set(Gf.Quatf(math.cos(a / 2), 0.0, 0.0, math.sin(a / 2)))
+        sl.AddScaleOp().Set(Gf.Vec3f(0.006, 0.014, 0.0004))
+        bind(sl, dark)
+    for k in range(3):                       # screw heads (visual)
+        a = math.radians(30 + 120 * k)
+        cylinder(stage, f"{r}/screw_{k}", 0.004, (0.030 * math.cos(a), 0.030 * math.sin(a), -0.0005), 0.0004, "Z", grey)
+    stage.Save()
+
+
 if __name__ == "__main__":
     TEX.mkdir(parents=True, exist_ok=True)
     back_label(TEX / "alarm_back.png")
@@ -470,5 +500,6 @@ if __name__ == "__main__":
     build_battery("battery_old", taped=True)
     build_battery("battery_new", taped=False)
     build_card()
+    build_bracket()
     for p in sorted(OUT.rglob("*.*")):
         print(p.relative_to(OUT), p.stat().st_size, "bytes")

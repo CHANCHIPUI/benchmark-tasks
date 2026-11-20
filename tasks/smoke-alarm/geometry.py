@@ -109,8 +109,32 @@ CLAMP_AX = 2.0                      # ... and onto them
 UNSNAP_LIFT = 0.0015                # an end lifted this far off the floor unsnaps it
 UNSNAP_GAP = 0.0025                 # or the case drawn this far off the block
 
+# -- the mounting bracket (the SMI100's own twist-on bracket), under a shelf board standing in for the ceiling ------
+BRACKET_X, BRACKET_Y = 0.380, 0.260  # the ring's centre
+MOUNT_H = 0.170                     # the ring's face (underside), above the table: the alarm's back meets it here
+RING_R = 0.055                      # 110 across (estimate)
+RING_T = 0.010                      # (estimate)
+SPACER = 0.090                      # a pine block 90 square and 30 thick between the ring and the board
+SPACER_T = 0.030
+BOARD_W, BOARD_T = 0.160, 0.018     # the shelf board: 160 wide, 18 thick
+BOARD_DIR = math.radians(15.0)      # it runs this way (from +x) from the ring's centre ...
+BOARD_SPAN = (-0.085, 0.200)        # ... from 85 behind it to 200 beyond (285 long)
+BOARD_Z = MOUNT_H + RING_T + SPACER_T  # its underside above the table (210)
+POST = 0.035                        # the board's square post, under its far end
+POST_AT = 0.180                     # along BOARD_DIR
+ENTRY_STEP = math.radians(60.0)     # the alarm sits on the bracket in any of six positions 60 degrees apart
+ENTRY_TOL = math.radians(8.0)       # (estimate)
+LOCK_TWIST = math.radians(20.0)     # turned this far clockwise (seen from below) it locks (estimate)
+UNLOCK_BACK = math.radians(10.0)    # turned back this far from the lock it comes free
+SEAT_GAP = 0.0015                   # the alarm's back within this of the ring's face ...
+SEAT_OFF = 0.003                    # ... its axis within this of the ring's ...
+SEAT_TILT = math.radians(3.0)       # ... and level within this: seated
+HOLD_F = 12.0                       # N: locked, task code holds it up against the ring (the lugs)
+PULL_OFF = 0.003                    # locked, pulled this far off the ring it comes free
+
 # -- scoring constants ------------------------------------------------------------------------------------------------
-ON_TABLE_Z = 0.060                  # the alarm's centre below this (over the table): on the table
+ON_TABLE_Z = 0.005                  # the alarm's lowest point this close to the table top, any side up: on the counter
+HELD_F = 0.05                       # N: a contact force over this between a hand and the alarm: the hand touches it
 TABLE_X, TABLE_Y = (-0.05, 0.75), (-0.60, 0.60)
 
 

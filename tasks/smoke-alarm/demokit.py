@@ -77,13 +77,18 @@ class Arm:
     SEEDS = ([0.0, 1.0, 1.0, -0.6, 0.0, 0.0], [0.0, 0.8, 0.6, -0.6, 0.0, 1.5], [0.0, 0.8, 0.6, -0.6, 0.0, -1.5],
              [0.0, 1.2, 0.9, -0.3, 0.0, 2.0], [0.0, 1.2, 0.9, -0.3, 0.0, -2.0])
 
-    def solve_far(self, pos, rot) -> np.ndarray:
-        """Joint angles for a pose far from the current one: IK from the current angles and from a few standard seeds,
-        keeping the nearest exact solution (or the most accurate if none is exact)."""
+    def solve_far(self, pos, rot, seeds=()) -> np.ndarray:
+        """Joint angles for a pose far from the current one: IK from the given seeds, the current angles and a few
+        standard seeds; the first exact solution from a given seed, else the nearest exact one (or the most accurate)."""
         from yam_arena import ik
 
         quat = ik.matrix_to_quat_xyzw(rot)
         best = None
+        for q0 in [np.array(q, float) for q in seeds]:
+            q, err, rerr = ik.solve(pos, quat, q_init=q0, base_pos=self.base, iters=250)
+            if err < 0.001 and rerr < math.radians(0.5):
+                self.worst_mm = max(self.worst_mm, err * 1000)
+                return q
         for q0 in [self.q] + [np.array(q, float) for q in self.SEEDS]:
             q, err, rerr = ik.solve(pos, quat, q_init=q0, base_pos=self.base, iters=250)
             exact = err < 0.001 and rerr < math.radians(0.5)
@@ -93,12 +98,12 @@ class Arm:
         self.worst_mm = max(self.worst_mm, best[2] * 1000)
         return best[1]
 
-    def move_joints(self, pos, rot, seconds: float = 1.5, grip: float | None = None):
+    def move_joints(self, pos, rot, seconds: float = 1.5, grip: float | None = None, seeds=()):
         """Generator: a smooth move in joint space to ``pos``/``rot`` (for approaches from afar, where a straight-line
         move could pass through poses the arm can't reach)."""
         from yam_arena import ik
 
-        q0, q1, g0 = self.q.copy(), self.solve_far(pos, rot), self.grip
+        q0, q1, g0 = self.q.copy(), self.solve_far(pos, rot, seeds), self.grip
         g1 = g0 if grip is None else grip
         n = max(1, round(seconds * CONTROL_HZ))
         for k in range(1, n + 1):

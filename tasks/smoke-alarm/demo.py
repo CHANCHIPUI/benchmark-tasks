@@ -1,20 +1,21 @@
 """Scripted full-score demo (reads object poses from the simulator: the alarm's pose, its compartment's hinge angle,
-the latch tab's travel and the batteries' poses).
+the latch tab's travel and the batteries' poses). README.md describes each step.
 
-1. Left arm, the pin: fingers closed, pointing down, pressing on the alarm's back opposite the compartment (about 6 N);
-   it holds the alarm down until the compartment is latched again.
-2. Right arm, open: closed fingertips press the latch tab down until it has gone 1.7 mm (the compartment is freed and
-   springs out past its catch), then push the tab's inner face outward along the compartment's arc to its 70 degree
-   stop (feedback on the hinge angle).
-3. Right arm, the old battery: a straight-down pinch across its width on its free half, fingertips above the pocket
-   walls; the hand rises until the battery's free end is 3 mm up (it unsnaps), lifts it out and lays it on the table.
-4. Right arm, the new battery: a straight-down pinch on its card, turned 70 degrees in the hand's yaw so its snaps
-   point at the contacts with the + stud on the side toward the alarm's centre; it is lowered into the pocket (feedback
-   on its measured pose) and let go just above the floor; the closed fingertips then press its top down about 8 N.
-5. Right arm, latch: the fingertip pushes the tab's outer face back along the arc until the compartment is shut past
-   its catch, then both arms withdraw.
+1. Right arm, open: closed fingertips press the latch tab down until the compartment is freed and springs out past
+   its catch, then push the tab's inner face outward along the compartment's arc (closed loop on the hinge angle).
+2. Left arm, the pin: fingers closed, tipped 45 degrees toward the compartment, pressing on the alarm's back beside
+   it (about 10 N); it holds the alarm down until the compartment is latched again.
+3. Right arm, the old battery: a straight-down pinch across its width on its free half; the hand turns about the
+   battery's snap end until its free end is 3 mm up (it unsnaps), lifts it out and lays it on the table.
+4. Right arm, the new battery: a straight-down pinch on its card, turned so its snaps point at the contacts with the +
+   stud on the side toward the alarm's centre; lowered into the pocket (closed loop on its pose), slid onto its contacts
+   and pressed through the pinch until it snaps.
+5. Right arm, latch: the closed fingertips push the tab's outer face back along the arc until the compartment is shut
+   past its catch, then both arms withdraw.
+6. Both arms, mount: side grips on the alarm's band (each hand along the band's tangent, below the board), lift, carry
+   it under the ring, raise it onto the ring's face, turn it clockwise seen from below until it locks, let go.
 
-    python demo.py task.py demo_out [--max-steps 2400] [--no-record] [--variant NAME] [--close-view]
+    python demo.py task.py demo_out [--max-steps 6000] [--no-record] [--variant NAME] [--close-view]
 
 Variants (scorer checks), each printing its mode:
 - ``pull_leave``: the old battery taken out and laid on the table, the compartment left open;
@@ -23,8 +24,10 @@ Variants (scorer checks), each printing its mode:
 - ``reversed``: the new battery starts on its card turned over (label down); the same moves put it in turned over,
   then the compartment is pushed shut;
 - ``latch_empty``: the old battery taken out, the empty compartment pushed shut;
-- ``relatch``: the old battery taken out, the empty compartment pushed shut, opened again, the new battery snapped in
-  and the compartment latched;
+- ``relatch``: the old battery taken out, the empty compartment pushed shut, opened again, the new battery snapped in,
+  the compartment latched and the alarm mounted;
+- ``no_mount``: the full swap and latch, the alarm left on the counter;
+- ``mount_only``: the mount alone (the old battery stays in);
 - ``nothing``: the arms stay still.
 Writes one MP4 per camera, setup.png (the first top-camera frame) and result.json.
 """
@@ -43,7 +46,7 @@ import numpy as np
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 import geometry as g  # noqa: E402
-from demokit import run, together, wait  # noqa: E402
+from demokit import run, together, turn, wait  # noqa: E402
 
 DEBUG = bool(os.environ.get("SA_DEBUG"))
 GAP_MM = 94.0                       # pads' gap at grip 1.0
@@ -53,7 +56,7 @@ FT_HALF = 0.0064                    # half the closed fingertips' thickness alon
 PIN_XY = (0.300, -0.015)          # on the back beside the compartment
 PIN_TILT = math.radians(45.0)
 PIN_DEPTH = float(os.environ.get("SA_PIN", "0.030"))      # commanded below the back (~10 N)
-PRESS_DEPTH = float(os.environ.get("SA_PRESS", "0.026"))  # commanded below the battery's top (~8 N)
+PRESS_DEPTH = float(os.environ.get("SA_PRESS", "0.026"))  # commanded below where the battery met the floor (press peaks ~20 N)
 LEAD = math.radians(float(os.environ.get("SA_LEAD", "6")))
 PUSH_X = -0.0500                    # the pushing fingertips' centre along the compartment (their 26 mm width spans
                                     # the tab and stays clear of the back beyond the free end)
@@ -170,7 +173,7 @@ def pin_script(ctx, arm):
         state = want
         ctx.flags["pin_state"] = state
     yield from arm.move(p + [0, 0, 0.05], R, 0.8)
-    yield from arm.go_home(2.0)
+    ctx.flags["left_free"] = True
 
 
 def set_pin(ctx, want: bool):
@@ -372,7 +375,7 @@ def insert_new(ctx, arm, flip=False):
         cmd = cmd + np.r_[err[:2], 0.0]
         yield from arm.move(cmd, Rh, 0.3)
     ctx.flags["hover_err_mm"] = np.round(err * 1000, 2).tolist()
-    # straight down, its measured xy held on the goal by feedback, until it is 0.5 mm over the floor, then let go
+    # straight down, its measured xy held on the goal in closed loop, until it is 0.5 mm over the floor, then let go
     for k in range(160):
         pb, _ = Scene(ctx).batt("new_battery")
         if pb[2] - (goal[2] - HOVER) < 0.0005:
@@ -384,7 +387,19 @@ def insert_new(ctx, arm, flip=False):
     b = ctx.task._STATE["batt"]["new_battery"]
     ctx.flags["placed"] = dict(gap_mm=round(b["gap"] * 1000, 2), side_mm=round(b["side"] * 1000, 2),
                                lift_mm=[round(v * 1000, 2) for v in b["lift"]])
-    # press it down through the pinch (the fingertips stay above the walls), the hand commanded PRESS_DEPTH below
+    # slide it in toward the contacts on the floor until its snaps are in their slots (the case 0.5 mm from the
+    # block, read off its pose), then press it down through the pinch (the fingertips stay above the walls), the hand
+    # commanded PRESS_DEPTH below: "push the battery in until it snaps"
+    xt = Scene(ctx).tray_rot()[:, 0]
+    for k in range(80):
+        b = ctx.task._STATE["batt"]["new_battery"]
+        if b["gap"] <= 0.0005:
+            break
+        cmd[:2] += 0.0001 * xt[:2]
+        cmd[2] -= 0.00003
+        arm.aim(cmd, Rh)
+        yield
+    ctx.flags["slid_in_mm"] = round(ctx.task._STATE["batt"]["new_battery"]["gap"] * 1000, 2)
     z0 = cmd[2]
     fmax, trace = 0.0, []
     for k in range(int(PRESS_DEPTH / 0.0004) + 12):           # down 8 mm/s, then hold
@@ -422,10 +437,215 @@ def flip_new(ctx):
     yield
 
 
+# -- both arms: the alarm onto its bracket -----------------------------------------------------------------------------
+SQUEEZE = float(os.environ.get("SA_SQUEEZE", "0.030"))     # each hand commanded this far into the band
+GRIP_A = {"left": math.radians(130.0), "right": math.radians(310.0)}  # where each hand holds the band (alarm frame),
+                                     # clear of the compartment's opening at the rim (236 to 297 degrees)
+BETA = {"left": math.radians(70.0), "right": math.radians(-80.0)}     # each hand's roll from fingers-down (see side_grip)
+FLIP = {"left": True, "right": False}
+HC = 0.040                           # the fingertips' tapered side, its middle this far above the alarm's front
+SEED = {"left": (-1.2806, 1.8996, 0.9325, -0.6419, -1.2465, -0.1722),  # IK seeds for the first approach (offline IK)
+        "right": (0.2835, 2.0345, 0.5645, 1.2406, -0.7801, 1.4722)}
+TWIST = math.radians(float(os.environ.get("SA_TWIST", "23")))
+LEVEL_GAIN = float(os.environ.get("SA_LEVEL", "0.08"))   # levelling: each hand moves this fraction of its side's height
+NF_ANG = math.atan2(5.5, 14.0)       # the closed fingertips' tapered inner side: 21.4 degrees off the approach axis
+PF = np.array([0.0, 0.01045, 0.005])  # its middle, from the tool point (gripper frame)
+
+
+def side_grip(aw: float, beta: float, flip: bool):
+    """A side grip on the band at angle ``aw`` (world): the closed fingertips' tapered inner side flat on the band, the
+    hand rolled ``beta`` about the band's normal from fingers-down (70 degrees: the fingers along the band's tangent,
+    20 degrees below level). Returns the rotation and the tool point's offset from the contact."""
+    u = np.array([math.cos(aw), math.sin(aw), 0.0])
+    t = np.array([math.sin(aw), -math.cos(aw), 0.0])
+    ez = np.array([0.0, 0.0, 1.0])
+    y = math.cos(NF_ANG) * (-u) + math.sin(NF_ANG) * ez
+    z = -math.cos(NF_ANG) * ez - math.sin(NF_ANG) * u
+    R = turn(-u, beta) @ np.column_stack([t, y, z])
+    off = R @ PF
+    if flip:                         # the other fingertip's side: the same contact, the hand turned over
+        R = R @ np.diag([-1.0, -1.0, 1.0])
+    return R, off
+
+
+def mtrace(ctx, what):
+    """Mount progress: the alarm's pose and each hand's distance from its axis (the log)."""
+    s = Scene(ctx)
+    hands = {arm.side: tcp_actual(arm)[0] for arm in (ctx.left, ctx.right)}
+    r = {k: round(float(np.linalg.norm((v - s.p0)[:2])) * 1000, 1) for k, v in hands.items()}
+    z = {k: round(float(v[2] - g.TOP) * 1000, 1) for k, v in hands.items()}
+    f = {}
+    try:
+        V = ctx.flags.get("_hand_view")
+        if V is None:
+            from yam_arena.robot import asset_link_paths
+            from scenekit import env
+            import yam_arena.constants as C
+            psv = env().unwrapped.sim.physics_sim_view
+            ns = "/World/envs/env_*"
+            lp = asset_link_paths()
+            hands = [f"{ns}/{arm}{lp[link]}" for arm in ("LeftArm", "RightArm") for link in ("gripper", "tip_left", "tip_right")]
+            V = (psv.create_rigid_contact_view(f"{ns}/smoke_alarm/body", filter_patterns=hands), float(C.PHYSICS_DT))
+            ctx.flags["_hand_view"] = V
+        m = V[0].get_contact_force_matrix(V[1])
+        m = np.asarray(m.numpy() if hasattr(m, "numpy") else m).reshape(-1, 3)
+        f = {k: round(float(np.linalg.norm(m[i])), 2) for i, k in enumerate(("Lg", "Ltl", "Ltr", "Rg", "Rtl", "Rtr"))}
+    except Exception as e:                                  # debugging aid only
+        f = {"err": repr(e)[:80]}
+    tilt = math.degrees(math.acos(max(-1.0, min(1.0, s.R0[2, 2]))))
+    print(f"MOUNT {what}: alarm {np.round((s.p0 - [0, 0, g.TOP]) * 1000, 1).tolist()} yaw {math.degrees(s.yaw0):.2f} "
+          f"tilt {tilt:.2f} hand r {r} z {z} forces {f}", flush=True)
+    return f
+
+
+def both(ctx, fn, seconds):
+    """Both arms to the poses fn(arm) -> (p, R), together, in straight lines."""
+    yield from together(*(arm.move(*fn(arm), seconds) for arm in (ctx.left, ctx.right)))
+
+
+def mount(ctx):
+    """Grip the alarm's band from opposite sides with both hands' closed fingertips (side grips, the hands along the
+    band's tangent), lift it, carry it under the bracket, raise it until its back meets the ring's face, turn it
+    clockwise seen from below until it locks, let go and draw the hands out under the board."""
+    ctx.flags["view"] = "mount"
+    sc = Scene(ctx)
+    c, yaw = sc.p0.copy(), sc.yaw0
+    b = np.array([g.BRACKET_X, g.BRACKET_Y])
+
+    def at(centre, front, dr, phi=0.0, dz=None):
+        """Each hand's pose: its contact dr outside the band (negative: pressed in), HC above the alarm's front at
+        height ``front`` (plus dz[side])."""
+        def fn(arm):
+            aw = yaw + phi + GRIP_A[arm.side]
+            R, off = side_grip(aw, BETA[arm.side], FLIP[arm.side])
+            r = g.ALARM_R + dr
+            cp = np.array([centre[0] + r * math.cos(aw), centre[1] + r * math.sin(aw),
+                           front + HC + (dz or {}).get(arm.side, 0.0)])
+            return cp - off, R
+        return fn
+
+    f0 = c[2]
+    # each hand up 80 mm from where it is, then (joint space) to 60 mm out from the band and 80 mm up, then straight in
+    yield from together(*(arm.move(arm.pos + [0.0, 0.0, 0.080], arm.rot, 1.0, grip=0.0) for arm in (ctx.left, ctx.right)))
+    yield from together(*(arm.move_joints(*at(c, f0 + 0.080, 0.060)(arm), 2.5, seeds=(SEED[arm.side],))
+                          for arm in (ctx.left, ctx.right)))
+    yield from both(ctx, at(c, f0 + 0.030, 0.015), 1.2)
+    yield from both(ctx, at(c, f0, 0.015), 1.0)
+    yield from both(ctx, at(c, f0, 0.002), 0.6)
+    yield from both(ctx, at(c, f0, -SQUEEZE), 1.5)
+    yield from wait(0.3)
+    ctx.flags["squeeze_N"] = mtrace(ctx, "squeezed")
+    yield from both(ctx, at(c, f0 + 0.005, -SQUEEZE), 0.8)
+    yield from wait(0.3)
+    mtrace(ctx, "lifted")
+    z = f0 + 0.005
+    hand_c = c[:2].copy()
+    dz = {"left": 0.0, "right": 0.0}
+
+    def steer(phi, centre_gain=0.1):
+        s = Scene(ctx)
+        n = s.R0[:, 2]
+        topc = s.p0 + s.R0 @ np.array([0, 0, g.ALARM_H])
+        for side in dz:
+            a = yaw + phi + GRIP_A[side]
+            h = -(n[0] * math.cos(a) + n[1] * math.sin(a)) / n[2] * g.ALARM_R   # its back's height there vs its middle
+            dz[side] = float(np.clip(dz[side] - LEVEL_GAIN * h, -0.010, 0.010))
+        if centre_gain:
+            hand_c[:] += centre_gain * (b - topc[:2])
+            d = hand_c - b
+            if np.linalg.norm(d) > 0.012:
+                hand_c[:] = b + d * 0.012 / np.linalg.norm(d)
+        return topc, math.degrees(math.acos(min(1.0, n[2])))
+
+    # up to 60 mm, then carry it under the ring, its back 15 mm below the ring's face, levelling it as it goes
+    z_carry = g.TOP + g.MOUNT_H - g.ALARM_H - 0.015
+    for k in range(30):
+        steer(0.0, 0.0)
+        z = f0 + 0.005 + (0.060 - 0.005) * ik_smooth((k + 1) / 30)
+        for arm in (ctx.left, ctx.right):
+            arm.aim(*at(hand_c, z, -SQUEEZE, 0.0, dz)(arm))
+        yield
+    start, n = hand_c.copy(), 100
+    p0 = math.remainder(round(yaw / g.ENTRY_STEP) * g.ENTRY_STEP - yaw, 2 * math.pi)  # to the nearest entry position
+    ctx.flags["entry_turn_deg"] = round(math.degrees(p0), 2)
+    for k in range(n):
+        s_ = ik_smooth((k + 1) / n)
+        steer(p0 * s_, 0.0)
+        hand_c[:] = start + (b - start) * s_
+        zz = z + (z_carry - z) * s_
+        for arm in (ctx.left, ctx.right):
+            arm.aim(*at(hand_c, zz, -SQUEEZE, p0 * s_, dz)(arm))
+        yield
+    z = z_carry
+    mtrace(ctx, "carried")
+    for k in range(3):
+        yield from wait(0.3)
+        s = Scene(ctx)
+        topc = s.p0 + s.R0 @ np.array([0, 0, g.ALARM_H])
+        err = b - topc[:2]
+        mtrace(ctx, f"under the ring {k}")
+        if np.linalg.norm(err) < 0.0007 or np.linalg.norm(err) > 0.03:
+            break
+        hand_c[:] += err
+        yield from both(ctx, at(hand_c, z, -SQUEEZE, p0, dz), 0.5)
+    s = Scene(ctx)
+    ctx.flags["under_ring_mm"] = np.round(((s.p0 + s.R0 @ np.array([0, 0, g.ALARM_H]))[:2] - b) * 1000, 2).tolist()
+    # up until its back meets the ring's face, read off its pose: each step the hands level it and keep the middle of
+    # its back under the ring's middle
+    for k in range(400):
+        topc, tilt = steer(p0)
+        if topc[2] >= g.TOP + g.MOUNT_H - 0.0003 and tilt < 1.5:
+            break
+        if topc[2] < g.TOP + g.MOUNT_H - 0.0003:
+            z += 0.0001
+        for arm in (ctx.left, ctx.right):
+            arm.aim(*at(hand_c, z, -SQUEEZE, p0, dz)(arm))
+        yield
+    mtrace(ctx, "at the ring")
+    s = Scene(ctx)
+    yaw_start = s.yaw0
+    topc = s.p0 + s.R0 @ np.array([0, 0, g.ALARM_H])
+    ctx.flags["seat"] = dict(gap_mm=round((g.TOP + g.MOUNT_H - topc[2]) * 1000, 2),
+                             off_mm=round(float(np.linalg.norm(topc[:2] - b)) * 1000, 2),
+                             tilt_deg=round(math.degrees(math.acos(min(1.0, s.R0[2, 2]))), 2))
+    # 1 mm more, then turn it clockwise seen from below (+z) about its axis until it has turned TWIST - 1.5 degrees
+    z += 0.001
+    phi, turned = p0, 0.0
+    for k in range(240):
+        s = Scene(ctx)
+        turned = math.remainder(s.yaw0 - yaw_start, 2 * math.pi)
+        if turned >= TWIST - math.radians(1.5) or phi - p0 >= TWIST + math.radians(10.0):
+            break
+        if k >= 6:
+            phi += math.radians(0.5)
+        steer(phi)
+        for arm in (ctx.left, ctx.right):
+            arm.aim(*at(hand_c, z, -SQUEEZE, phi, dz)(arm))
+        yield
+    ctx.flags["turned_deg"] = round(math.degrees(turned), 2)
+    ctx.flags["hands_turned_deg"] = round(math.degrees(phi - p0), 2)
+    mtrace(ctx, "turned")
+    yield from wait(0.3)
+    # let go: out 20 mm, down 60 mm, then each hand clear of the board before it goes home
+    yield from both(ctx, at(hand_c, z, 0.020, phi, dz), 0.6)
+    yield from both(ctx, at(hand_c, z - 0.060, 0.020, phi, dz), 1.0)
+    ctx.flags["view"] = "mounted"
+    pl, Rl = ctx.left.pos.copy(), ctx.left.rot.copy()
+    yield from together(ctx.left.move(pl + [0.0, 0.0, -0.050], Rl, 0.8))
+    yield from together(ctx.left.move(pl + [-0.200, 0.0, -0.050], Rl, 1.5))
+    yield from together(ctx.left.move(pl + [-0.200, 0.0, 0.150], Rl, 1.2))
+
+
+def ik_smooth(s: float) -> float:
+    return s * s * (3 - 2 * s)
+
+
 def right_script(ctx, variant):
     arm = ctx.right
     while "pin_state" not in ctx.flags:
         yield
+    if variant == "mount_only":                      # a check of the mount alone (the old battery stays in)
+        return
     yield from open_door(ctx, arm)
     if variant == "open_only":
         return
@@ -454,10 +674,15 @@ def script(ctx, variant: str):
     def right():
         yield from right_script(ctx, variant)
         ctx.flags["release_pin"] = True
-        yield from ctx.right.go_home(2.0)
+        while not ctx.flags.get("left_free"):
+            yield
+        if variant in ("full", "relatch", "mount_only"):
+            yield from mount(ctx)
+        yield from together(ctx.left.go_home(2.0), ctx.right.go_home(2.0))
+        ctx.flags["view"] = "side"
 
     yield from together(right(), pin_script(ctx, ctx.left))
-    print("FLAGS", json.dumps({k: v for k, v in ctx.flags.items() if k not in ("pin_state", "pin_want", "release_pin")}), flush=True)
+    print("FLAGS", json.dumps({k: v for k, v in ctx.flags.items() if k not in ("pin_state", "pin_want", "release_pin", "left_free", "_hand_view")}), flush=True)
     yield from wait(1.0)
 
 
@@ -468,7 +693,9 @@ def log(ctx, step, info) -> str:
     sc = Scene(ctx)
     tilt = math.degrees(math.acos(max(-1.0, min(1.0, sc.R0[2, 2]))))
     return (f"tilt {tilt:.2f} hinge {math.degrees(S['hinge']):.2f} max {math.degrees(S['hinge_max']):.1f} tab {S['tab'] * 1000:.2f} "
-            f"latched {S['latched']} snapped {S['snapped']} on_table {S['on_table']} tier {S['tier']} "
+            f"latched {S['latched']} snapped {S['snapped']} counter {S['on_counter']} mount gap {S['mount_gap'] * 1000:.1f} "
+            f"off {S['mount_off'] * 1000:.1f} twist {math.degrees(S['twist']):.1f} seated {S['seated']} locked {S['locked']} "
+            f"tier {S['tier']} "
             f"alarm {np.round((sc.p0 - [g.ALARM_X, g.ALARM_Y, g.TOP]) * 1000, 1).tolist()} {bs} events {S['events'][-3:]}")
 
 
@@ -480,30 +707,47 @@ def close_view(ctx, gen):
     base = ctx.emb._env.unwrapped
     cam = base.scene["top_cam"]
     o = base.scene.env_origins[0:1].to(torch.float32)
-    moved = False
+    moved = mount_view = side_view = False
+
+    def look(eye, t):
+        cam.set_world_poses_from_view(torch.tensor(np.array([eye]), dtype=torch.float32, device=o.device) + o,
+                                      torch.tensor(np.array([t]), dtype=torch.float32, device=o.device) + o)
+
     for _ in gen:
         yield
         if not moved and Scene(ctx).hinge > math.radians(60):
             t = np.array([g.ALARM_X + 0.005, g.ALARM_Y - 0.075, g.TOP + 0.035])
-            eye = t + np.array([-0.17, -0.10, 0.17])
-            cam.set_world_poses_from_view(torch.tensor(np.array([eye]), dtype=torch.float32, device=o.device) + o,
-                                          torch.tensor(np.array([t]), dtype=torch.float32, device=o.device) + o)
+            look(t + np.array([-0.17, -0.10, 0.17]), t)
             moved = True
             ctx.flags["close_view_step"] = ctx.task._STATE["step"]
             print("top camera: close view", flush=True)
+        if not mount_view and ctx.flags.get("view") == "mount":
+            # the second close view: the alarm and the bracket, from the far right, below the board
+            t = np.array([g.BRACKET_X - 0.05, g.BRACKET_Y - 0.05, g.TOP + 0.110])
+            look(np.array([g.BRACKET_X + 0.42, g.BRACKET_Y - 0.30, g.TOP + 0.150]), t)
+            mount_view = True
+            ctx.flags["mount_view_step"] = ctx.task._STATE["step"]
+            print("top camera: mount view", flush=True)
+        if not side_view and ctx.flags.get("view") == "side":
+            # the arms home: a low side view of the alarm hanging on its bracket, from the far right, near table height
+            t = np.array([g.BRACKET_X, g.BRACKET_Y, g.TOP + 0.120])
+            look(np.array([g.BRACKET_X + 0.30, g.BRACKET_Y - 0.30, g.TOP + 0.050]), t)
+            side_view = True
+            ctx.flags["side_view_step"] = ctx.task._STATE["step"]
+            print("top camera: side view", flush=True)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("task")
     ap.add_argument("out")
-    ap.add_argument("--max-steps", type=int, default=2400)
+    ap.add_argument("--max-steps", type=int, default=6000)
     ap.add_argument("--no-record", action="store_true")
     ap.add_argument("--close-view", action="store_true")
     ap.add_argument("--hold", type=float, default=3.0, help="seconds after the script ends (inf: to the step limit)")
     ap.add_argument("--variant", default="full",
                     choices=["full", "pull_leave", "no_latch", "open_only", "reversed", "latch_empty", "relatch",
-                             "nothing"])
+                             "no_mount", "mount_only", "nothing"])
     a = ap.parse_args()
     if a.variant == "nothing":
         def scr(ctx):
@@ -520,7 +764,7 @@ if __name__ == "__main__":
     S = sys.modules["task"]._STATE if "task" in sys.modules else {}
     extra = {"variant": a.variant, "tier": S.get("tier"), "snapped": S.get("snapped"), "latched": S.get("latched"),
              "hinge_deg": round(math.degrees(S.get("hinge", 0.0)), 3),
-             "hinge_max_deg": round(math.degrees(S.get("hinge_max", 0.0)), 2), "on_table": S.get("on_table"),
+             "hinge_max_deg": round(math.degrees(S.get("hinge_max", 0.0)), 2), "on_counter": S.get("on_counter"), "mounted": S.get("mounted"),
              "events": S.get("events"), "snap_record": S.get("snap_record"),
              "batt": {n: {k: (np.round(np.asarray(v) * 1000, 2).tolist() if k in ("p", "lift") else
                               (round(v * 1000, 2) if k in ("gap", "side") else v)) for k, v in b.items()}
