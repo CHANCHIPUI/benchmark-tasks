@@ -55,7 +55,7 @@ def n_in_slot(cs, front=L.FRONT_X, y=0.0, R=None):
     return cs
 
 
-NO = dict(dropped=False, over_edge=False, out_back=False)
+NO = dict(dropped=False, out_back=False)
 
 
 def check():
@@ -87,25 +87,24 @@ def check():
     held = with_room(start())
     held["N"] = case((L.FRONT_X + L.CASE[0] / 2 - 0.10, 0.0, shelf_z() + 0.03))
     run("room made, N held 3 cm above the work shelf", held, want=0.25)
-    top = with_room(start())
-    top["N"] = case((L.ROW_X, 0.0, L.H(L.TOP_SHELF) + L.CASE[2] / 2))
-    run("room made, N on the top shelf", top, want=0.0)
-    on_stack = with_room(start())
-    run("room made, N still on the stack", on_stack, want=0.25)
+    run("room made, N still on the table", with_room(start()), want=0.25)
+    run("room made, N still on the table, a case went out of the back", with_room(start()),
+        latches=dict(NO, out_back=True), want=0.0)
     run("N in, a case went out of the back and was pulled back", n_in_slot(with_room(start())),
         latches=dict(NO, out_back=True), want=0.25)
-    moved = n_in_slot(with_room(start()))
-    p = moved["S1"]["pos"].copy()
-    p[0] -= 0.04
-    moved["S1"] = case(p)
-    run("N in, S1 pushed 4 cm along the deck", moved, want=0.25)
-    run("N in, a neighbour pushed past the deck edge", n_in_slot(with_room(start())), latches=dict(NO, over_edge=True), want=0.0)
+    out_c2 = n_in_slot(with_room(start()))
+    p = out_c2["C2"]["pos"].copy()
+    p[0] += L.SHELF_X[1] + 0.03 - out_c2["C2"]["c"][:, 0].max()     # C2 left 3 cm out of the back
+    out_c2["C2"] = case(p)
+    run("N in, C2 left 3 cm out of the back", out_c2, latches=dict(NO, out_back=True), want=0.25)
+    run("N in, a neighbour pushed off the back onto the table (dropped)", n_in_slot(with_room(start())),
+        latches=dict(NO, out_back=True, dropped=True), want=0.0)
     behind = n_in_slot(with_room(start()), front=L.FRONT_X + 0.05)
     run("N set on the shelf 5 cm behind the front-edge line", behind, want=0.0)
     on_top = with_room(start())
     on_top["N"] = case((L.ROW_X, L.ROW["C1"] + 0.05, shelf_z() + L.CASE[2]))
     run("N set on top of C1", on_top, want=0.0)
-    run("a stack case knocked off (dropped)", start(), latches=dict(NO, dropped=True), want=0.0)
+    run("N dropped from the hands onto the table", start(), latches=dict(NO, dropped=True), want=0.0)
     run("N in, but not still", n_in_slot(with_room(start())), still=False, want=0.5)
     over = n_in_slot(with_room(start()))
     p3 = over["C3"]["pos"].copy()
@@ -114,6 +113,25 @@ def check():
     run("N in, C3 3 cm past the shelf's end (not wholly on it)", over, want=0.5)
     turned = n_in_slot(with_room(start()), R=rz(20))
     run("N in, turned 20 degrees across the row", turned, want=0.0)
+    lifted = n_in_slot(with_room(start()))
+    lifted["C1"] = case((0.30, 0.40, L.H(L.CASE[2] / 2)))          # C1 set down on the table, not dropped
+    run("N in, C1 lifted off onto the table (no drop)", lifted, want=0.0)
+    run("N in, proud, C1 lifted off onto the table (no drop)",
+        dict(lifted, N=n_in_slot(with_room(start()), front=L.FRONT_X - 0.05)["N"]), want=0.0)
+    run("N in, C1 lifted off onto the table, a case out of the back", lifted, latches=dict(NO, out_back=True), want=0.0)
+    # the other route: C1 alone slid right against C2, N at the left posts (24.0 cm, 4 mm each side)
+    alone = start()
+    c1_hi = L.ROW["C2"] + L.CASE[1] / 2                              # C2's left face
+    alone["C1"] = case((L.ROW_X, c1_hi + L.CASE[1] / 2, L.H(L.WORK_TOP) + L.CASE[2] / 2))
+    run("C1 alone slid against C2 (24.0 cm at the left posts), N still on the table", alone, want=0.25)
+    left = T.POST_INNER[0]
+    n_in_slot(alone, y=(left + c1_hi + L.CASE[1]) / 2)
+    run("C1 alone slid against C2, N in at the left posts, flush", alone, want=1.0)
+    posts = start()                                                  # C1 alone slid 8.0 cm left, against the posts
+    posts["C1"] = case((L.ROW_X, T.POST_INNER[0] - L.CASE[1] / 2, L.H(L.WORK_TOP) + L.CASE[2] / 2))
+    run("C1 alone slid 8.0 cm left against the posts (24.0 cm gap), N still on the table", posts, want=0.25)
+    c1_lo = T.POST_INNER[0] - L.CASE[1]
+    run("C1 alone slid against the posts, N in the gap, flush", n_in_slot(posts, y=(c1_lo + c1_hi) / 2), want=1.0)
     return out
 
 

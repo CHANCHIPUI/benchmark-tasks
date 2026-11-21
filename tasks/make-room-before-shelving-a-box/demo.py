@@ -26,7 +26,7 @@ TIP = 0.013                                                     # fingertips pas
 LOG = bool(os.environ.get("SHELF_DEBUG"))
 
 # sliding a soup case sideways
-PUSH_H = 1.15                                                   # the pushing hand's TCP height above the deck
+PUSH_H = 0.39                                                   # the pushing hand's TCP height above the table
 BODY = 0.051                                                    # the gripper body's side from the TCP, across the fingers
 BODY_MID = 0.057                                                # the pushing hand's TCP this far ahead of the case's centre
 PUSH_YAW = 14.0                                                 # turned toward the case against the wrist's give
@@ -89,7 +89,7 @@ def _log(text):
 def park(ctx, arm, t=2.0):
     """Back to a pose near ready, out of the way."""
     side = 1.0 if arm.side == "left" else -1.0
-    yield from arm.move((0.22, side * 0.30, L.H(0.95)), grip=d.down(0), finger=FINGER_OPEN, t=t, label="park")
+    yield from arm.move((0.22, side * 0.30, L.H(0.19)), grip=d.down(0), finger=FINGER_OPEN, t=t, label="park")
 
 def _drive(arm, point):
     """One control step: command the TCP to ``point`` with the arm's grip."""
@@ -202,7 +202,7 @@ def hold_path(ctx, path, t, depth=None, dy=0.0):
              f"{np.round(ctx.left.tcp(), 3)} {np.round(ctx.right.tcp(), 3)}, force {np.round(tcp_force(ctx, ctx.left), 1)}")
 
 def carry(ctx, points, speed=0.10):
-    """Both holding hands through (hands' x, height of the hands above the deck) points, keeping their squeeze."""
+    """Both holding hands through (hands' x, height of the hands above the table) points, keeping their squeeze."""
     for x, h in points:
         x0, z0 = ctx.hold_nom
         z1 = L.H(h)
@@ -330,13 +330,13 @@ def _pinch_in(ctx, xp, zp, y_of):
 
 
 def pinch_lift_out(ctx):
-    """Up 10 cm off the stack, back until N's far end is 1.5 cm in front of the shelf, then up above it."""
+    """Up 8 cm off the table, back until N's far end is 3 cm in front of the shelf, then up above it."""
     x0, z0 = ctx.hold_nom
     pos, _ = _s(ctx, "N")
     lead = pos[0] - x0                                   # N's centre ahead of the hands
     dz = z0 - pos[2]                                     # the hands above N's centre
     clear = L.SHELF_X[0] - HX - 0.03 - lead
-    yield from carry(ctx, [(x0, z0 - L.DECK_Z + 0.08), (clear, z0 - L.DECK_Z + 0.08),
+    yield from carry(ctx, [(x0, z0 - L.TABLE_Z + 0.08), (clear, z0 - L.TABLE_Z + 0.08),
                            (clear, L.WORK_TOP + HZ + 0.04 + dz)], speed=0.06)
 
 
