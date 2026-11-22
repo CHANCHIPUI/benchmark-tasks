@@ -66,8 +66,11 @@ def Xform "battery_new" (
             def Shader "texture"
             {
                 uniform token info:id = "UsdUVTexture"
-                asset inputs:file = @./textures/battery_label.png@
+                float4 inputs:fallback = (0.7155, 0.7155, 0.7155, 1)
+                asset inputs:file = @./textures/sa_battery_label.png@
                 float2 inputs:st.connect = </battery_new/Looks/label/st.outputs:result>
+                token inputs:wrapS = "clamp"
+                token inputs:wrapT = "clamp"
                 float3 outputs:rgb
             }
         }

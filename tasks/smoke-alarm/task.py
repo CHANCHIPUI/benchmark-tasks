@@ -1,12 +1,12 @@
-"""On the station table: a First Alert SMI100 battery smoke alarm lies face down, taken off its mounting bracket, its
-low-battery chirp sounding once a minute. The bracket is screwed, on a pine block, under a shelf board 160 mm wide
-above the counter, standing in for the ceiling; its ring's face is 170 mm up. The alarm's swing-out battery compartment,
-set into the back at the rim on the robot's right, is shut and latched, the old 9 V (a band of red tape round its bottom
-end) snapped onto its contacts. A new 9 V lies label up on its torn-open card beside it. The instruction is only
-"The smoke alarm keeps chirping. Make it stop."
+"""On the station table: a First Alert SMI100 battery smoke alarm lies face up on a small box, taken off its
+mounting bracket, its low-battery chirp sounding once a minute. The bracket is screwed, on a pine block, under a
+shelf board 160 mm wide above the counter, standing in for the ceiling; its ring's face is 170 mm up. The alarm's
+front-access battery compartment, a swing-out tray at the rim on the robot's right under the front cover, is shut and
+latched, the old 9 V (a band of red tape round its bottom end) snapped onto its contacts. A new 9 V lies label up on
+its torn-open card beside it. The instruction is only "The smoke alarm keeps chirping. Make it stop."
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 -E control_hz=20 \\
-         --scorer task_score --max-steps 6000 ...
+         --scorer task_score --max-steps 8000 ...
 Demo:    python demo.py task.py demo_out
 """
 
@@ -34,19 +34,23 @@ INSTRUCTION = "The smoke alarm keeps chirping. Make it stop."
 physics(g.PHYSICS_HZ)
 
 TOP = g.TOP
-ALARM_POS = np.array([g.ALARM_X, g.ALARM_Y, TOP + 0.0003])
+ALARM_POS = np.array([g.ALARM_X, g.ALARM_Y, TOP + g.BOX_H + 0.0003])
 _seat = g.tray_to_alarm(g.SEAT, 0.0)
 OLD_POS = tuple(float(v) for v in ALARM_POS + _seat + [0.0, 0.0, 0.0002])
+YAW_180 = (0.0, 0.0, 1.0, 0.0)          # xyzw: snaps toward -x (the seated battery's axes, SEAT_ROT)
 NEW_POS = (g.NEW_X, g.NEW_Y, TOP + g.CARD[2] + g.BATT_T / 2 + 0.0003)
+NEW_ROT = (0.0, 0.0, math.sin(g.NEW_YAW / 2), math.cos(g.NEW_YAW / 2))
 
 ALARM = UsdBody("smoke_alarm", usd="assets/alarm.usda", pos=tuple(ALARM_POS), size=(0.142, 0.142, g.ALARM_H),
                 articulation=True, joint_pos=(("hinge", 0.0), ("tab", 0.0)),
                 drives=(("hinge", 0.0, g.HINGE_DAMP), ("tab", g.TAB_K, g.TAB_DAMP)),
                 friction=(1.2, 1.0), solver_iters=32)
-OLD = UsdBody("old_battery", usd="assets/battery_old.usda", pos=OLD_POS, size=(g.BATT_L, g.BATT_W, g.BATT_T),
-              mass=g.BATT_MASS, friction=(0.6, 0.5), solver_iters=32, torsional_patch=0.005)
-NEW = UsdBody("new_battery", usd="assets/battery_new.usda", pos=NEW_POS, size=(g.BATT_L, g.BATT_W, g.BATT_T),
-              mass=g.BATT_MASS, friction=(0.6, 0.5), solver_iters=32, torsional_patch=0.005)
+OLD = UsdBody("old_battery", usd="assets/battery_old.usda", pos=OLD_POS, rot_xyzw=YAW_180,
+              size=(g.BATT_L, g.BATT_W, g.BATT_T), mass=g.BATT_MASS, friction=(0.6, 0.5), solver_iters=32,
+              torsional_patch=0.005)
+NEW = UsdBody("new_battery", usd="assets/battery_new.usda", pos=NEW_POS, rot_xyzw=NEW_ROT,
+              size=(g.BATT_L, g.BATT_W, g.BATT_T), mass=g.BATT_MASS, friction=(0.6, 0.5), solver_iters=32,
+              torsional_patch=0.005)
 CARD = UsdBody("battery_card", usd="assets/card.usda", pos=(g.CARD_X, g.CARD_Y, TOP), size=g.CARD, friction=(0.6, 0.5))
 BRACKET = UsdBody("mounting_bracket", usd="assets/bracket.usda", pos=(g.BRACKET_X, g.BRACKET_Y, TOP + g.MOUNT_H),
                   size=(2 * g.RING_R, 2 * g.RING_R, g.RING_T), friction=(0.5, 0.45))
@@ -59,9 +63,11 @@ SPACER = Shape("bracket_block", pos=(g.BRACKET_X, g.BRACKET_Y, TOP + g.MOUNT_H +
                 size=(g.SPACER, g.SPACER, g.SPACER_T), rot_xyzw=_BOARD_Q, color=WOOD)
 BOARD = Shape("shelf_board", pos=(float(_BOARD_C[0]), float(_BOARD_C[1]), TOP + g.BOARD_Z + g.BOARD_T / 2),
               size=(g.BOARD_SPAN[1] - g.BOARD_SPAN[0], g.BOARD_W, g.BOARD_T), rot_xyzw=_BOARD_Q, color=WOOD)
+BOX = Shape("cardboard_box", pos=((g.BOX_X[0] + g.BOX_X[1]) / 2, (g.BOX_Y[0] + g.BOX_Y[1]) / 2, TOP + g.BOX_H / 2),
+            size=(g.BOX_X[1] - g.BOX_X[0], g.BOX_Y[1] - g.BOX_Y[0], g.BOX_H), color=(0.66, 0.52, 0.36))
 POST = Shape("shelf_post", pos=(float(_POST_C[0]), float(_POST_C[1]), TOP + g.BOARD_Z / 2),
              size=(g.POST, g.POST, g.BOARD_Z), rot_xyzw=_BOARD_Q, color=WOOD)
-OBJECTS = [ALARM, OLD, NEW, CARD, BRACKET, SPACER, BOARD, POST]
+OBJECTS = [ALARM, OLD, NEW, CARD, BRACKET, SPACER, BOARD, POST, BOX]
 BATTERIES = ("old_battery", "new_battery")
 
 _STATE: dict = {}
@@ -99,20 +105,23 @@ def tray_pose(alarm) -> tuple[np.ndarray, np.ndarray]:
 
 
 def battery_in_tray(battery, tray) -> dict:
-    """Where a battery lies in the compartment: its snap-end face's gap to the contact block, each end's case bottom
-    above the floor, its centre line off the pocket's, its angle off seated, and whether it is turned + to +."""
+    """Where a battery lies in the compartment: its snap-end face's gap to the contact block (at the free end), each
+    end's case bottom above the floor, its centre line off the pocket's, its angle off seated, and whether it is
+    turned + to + (read in the seat frame: the tray frame turned by SEAT_ROT, so a seated battery's axes are its)."""
     pt, Rt = tray
-    p = Rt.T @ (np.asarray(battery.pos, float) - pt)
-    R = Rt.T @ _rotation(battery.quat_xyzw)
+    pt_ = Rt.T @ (np.asarray(battery.pos, float) - pt)
+    p = g.SEAT_ROT.T @ pt_
+    R = g.SEAT_ROT.T @ Rt.T @ _rotation(battery.quat_xyzw)
     ex, ez = R[:, 0], R[:, 2]
     half = g.BODY_L / 2
     snap_end, bottom_end = p + ex * half, p - ex * half
-    lift = [float(e[2] - abs(ez[2]) * g.BATT_T / 2 - abs(ex[2]) * 0.0 - g.FLOOR_TOP) for e in (snap_end, bottom_end)]
-    return dict(p=p, gap=float(g.BLOCK_FACE - snap_end[0]), lift=lift, side=float(p[1] - g.POCKET_YC),
+    lift = [float(e[2] - abs(ez[2]) * g.BATT_T / 2 - g.FLOOR_TOP) for e in (snap_end, bottom_end)]
+    face = -g.BLOCK_FACE                              # the block's face in the seat frame
+    return dict(p=pt_, gap=float(face - snap_end[0]), lift=lift, side=float(p[1] + g.POCKET_YC),
                 ang=float(math.acos(max(-1.0, min(1.0, ex[0])))), up=float(ez[2]),
                 plus_to_plus=bool(ex[0] > math.cos(g.SNAP_ANG) and ez[2] > math.cos(g.SNAP_ANG)),
-                in_pocket=bool(g.FREE_WALL[1] - 0.003 < p[0] < g.BLOCK_FACE + 0.003 and abs(p[1] - g.POCKET_YC) < 0.012
-                               and g.FLOOR_TOP - 0.003 < p[2] < g.FLOOR_TOP + 0.035))
+                in_pocket=bool(g.BLOCK_FACE - 0.003 < pt_[0] < g.NEAR_WALL[0] + 0.003 and abs(pt_[1] - g.POCKET_YC) < 0.012
+                               and g.FLOOR_TOP - 0.003 < pt_[2] < g.FLOOR_TOP + 0.035))
 
 
 def seated(b: dict) -> bool:
@@ -215,7 +224,7 @@ def _substep() -> None:
     if who is not None:
         batt = S["batt"][who]
         Rt = _quat_rot(_t(alarm.data.body_link_quat_w)[0, S["i_tray"]])
-        f = -g.CLAMP_F * Rt[:, 2] + g.CLAMP_AX * Rt[:, 0]
+        f = -g.CLAMP_F * Rt[:, 2] - g.CLAMP_AX * Rt[:, 0]          # down, and toward the block (-x_tray)
         pos = _t(batt.data.root_link_pose_w)[0, :3]
         batt.permanent_wrench_composer.set_forces_and_torques_index(
             forces=f.reshape(1, 1, 3), positions=pos.reshape(1, 1, 3), body_ids=[0], is_global=True)
@@ -223,9 +232,7 @@ def _substep() -> None:
         fs.append(-f)
         ps.append(pos)
     if locked:
-        root = _t(alarm.data.root_link_pose_w)[0]
-        Rb = _quat_rot(root[3:7])
-        top = root[:3] + Rb[:, 2] * g.ALARM_H
+        top = _t(alarm.data.root_link_pose_w)[0][:3]          # the alarm frame's origin: the middle of its back
         ids.append(S["i_body"])
         fs.append(torch.tensor([0.0, 0.0, g.HOLD_F], dtype=top.dtype, device=top.device))
         ps.append(top)
@@ -320,13 +327,16 @@ def tier(snapped: str | None, latched: bool, opened: bool, on_counter: bool, mou
 
 
 def on_counter(p, R) -> bool:
-    """The alarm down on the counter, any side up: the lowest point of its 142 x 51 mm disc (origin at its front's
-    middle, axis R[:, 2]) within ON_TABLE_Z of the table top, its middle over the table. Resting on it also needs
-    neither hand touching it (held(), in _monitor)."""
+    """The alarm down on the counter, any side up: the lowest point of its 142 x 51 mm disc (origin on its axis at
+    one face, axis R[:, 2]) within ON_TABLE_Z of the table top with its middle over the table, or within ON_TABLE_Z of
+    the box's top with its middle over the box. Resting on it also needs neither hand touching it (held(), in
+    _monitor)."""
     n = R[:, 2]
     mid = np.asarray(p, float) + n * g.ALARM_H / 2
     low = mid[2] - abs(n[2]) * g.ALARM_H / 2 - math.sqrt(max(0.0, 1.0 - n[2] * n[2])) * g.ALARM_R
-    return bool(abs(low - TOP) < g.ON_TABLE_Z and g.TABLE_X[0] < mid[0] < g.TABLE_X[1] and g.TABLE_Y[0] < mid[1] < g.TABLE_Y[1])
+    on_table = abs(low - TOP) < g.ON_TABLE_Z and g.TABLE_X[0] < mid[0] < g.TABLE_X[1] and g.TABLE_Y[0] < mid[1] < g.TABLE_Y[1]
+    on_box = abs(low - (TOP + g.BOX_H)) < g.ON_TABLE_Z and g.BOX_X[0] < mid[0] < g.BOX_X[1] and g.BOX_Y[0] < mid[1] < g.BOX_Y[1]
+    return bool(on_table or on_box)
 
 
 def _mount(alarm) -> None:
@@ -335,7 +345,8 @@ def _mount(alarm) -> None:
     ENTRY_TOL); locked once turned LOCK_TWIST clockwise seen from below (+z) while seated; free again if turned back
     UNLOCK_BACK or pulled PULL_OFF off the ring."""
     S = _STATE
-    p, R = np.asarray(alarm.pos, float), _rotation(alarm.quat_xyzw)
+    pa, Ra = np.asarray(alarm.pos, float), _rotation(alarm.quat_xyzw)
+    p, R = g.front_frame(pa, Ra)                      # origin at its front's middle, z toward its back
     top = p + R[:, 2] * g.ALARM_H
     gap = (TOP + g.MOUNT_H) - top[2]
     off = math.hypot(top[0] - g.BRACKET_X, top[1] - g.BRACKET_Y)
@@ -359,12 +370,12 @@ def _mount(alarm) -> None:
             S["locked"] = True
             S["events"].append((S["step"], "locked on its bracket"))
     elif abs(gap) <= g.SEAT_GAP and off <= g.SEAT_OFF and tilt <= g.SEAT_TILT \
-            and abs(math.remainder(yaw, g.ENTRY_STEP)) <= g.ENTRY_TOL:
+            and abs(math.remainder(yaw - g.RING_YAW, g.ENTRY_STEP)) <= g.ENTRY_TOL:
         S["seated"], S["yaw_seat"], S["twist"] = True, S["yaw_acc"], 0.0
         S["events"].append((S["step"], "seated on its bracket"))
     _SUB["locked"] = S["locked"]
     S["mounted"] = S["locked"]
-    S["on_counter"] = on_counter(p, R)
+    S["on_counter"] = on_counter(pa, Ra)
 
 
 @on_step
@@ -454,7 +465,8 @@ def score(objects) -> float:
     - latched: the compartment pushed shut past its catch (within 1 degree) after the tab freed it;
     - opened: the compartment swung out 45 degrees or more at some time in the run;
     - mounted: the alarm locked on its bracket (_mount(): seated on the ring in one of its six entry positions, then
-      turned 20 degrees clockwise seen from below); on the counter: resting on the table, any side up (on_counter()).
+      turned 20 degrees clockwise seen from below); on the counter: resting on the table or the box, any side up
+      (on_counter()).
     Every score above 0 needs the alarm on the counter or mounted. 1.0: the new battery snapped, the compartment
     latched, the alarm mounted; 0.75: the same, the alarm on the counter instead; 0.5: the new battery snapped, the
     compartment not latched; 0.25: the old battery still snapped and the compartment was opened; 0 otherwise (no

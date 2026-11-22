@@ -50,8 +50,11 @@ def Xform "card" (
             def Shader "texture"
             {
                 uniform token info:id = "UsdUVTexture"
-                asset inputs:file = @./textures/card.png@
+                float4 inputs:fallback = (0.5225, 0.5225, 0.5225, 1)
+                asset inputs:file = @./textures/sa_card.png@
                 float2 inputs:st.connect = </card/Looks/print/st.outputs:result>
+                token inputs:wrapS = "clamp"
+                token inputs:wrapT = "clamp"
                 float3 outputs:rgb
             }
         }
