@@ -1,0 +1,19 @@
+**d43**: pair_task_score 1 (last report at step 2200)
+
+- step 834 (41.7 s): a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+- step 932 (46.6 s): a end tight: clamp 64 N, head gap -0.06 mm, edge gap -0.00 mm
+- step 1774 (88.7 s): b screw bit at (-0.6, -0.7) mm from its hole, push 5.3 N
+- step 1824 (91.2 s): b end tight: clamp 52 N, head gap -0.06 mm, edge gap -0.00 mm
+- step 2054 (102.7 s): hangs on its own (no gripper contact for 3 s); tier 1.0
+
+- A: fastened 1.0, seated 1.0, flush 1.0, clamp 138 N, head gap -0.10 mm, edge gap -0.00 mm, driver turned 78 deg in the hand while driving, peak push 8.0 N
+- B: fastened 1.0, seated 1.0, flush 1.0, clamp 131 N, head gap -0.10 mm, edge gap -0.00 mm, driver turned 43 deg in the hand while driving, peak push 5.4 N
+- dropped 0.0, hangs 1.0, cross-station contact peak 0.00 N
+
+| Arm | J1 N m | J2 N m | J3 N m | J4 N m | J5 N m | J6 N m | Housing contact, N |
+|---|---|---|---|---|---|---|---|
+| limit | 27 | 27 | 27 | 7 | 7 | 7 | |
+| A outer (left) | 8.5 | 21.2 | 13.2 | 3.9 | 1.9 | 1.4 | 27.5 |
+| A inner (right) | 1.6 | 11.3 | 12.1 | 4.2 | 1.5 | 2.2 | 0.0 |
+| B inner (left) | 12.1 | 16.7 | 11.1 | 3.7 | 3.3 | 1.8 | 23.1 |
+| B outer (right) | 12.6 | 17.8 | 10.3 | 3.6 | 3.2 | 2.3 | 42.0 |

@@ -1,0 +1,8 @@
+H=0.55 (ceiling underside above the table), housing centre line x_f=0.36
+    outer: end wall, on its stands             elev  15 yaw   0.0  panel clr  155.4 mm (link3)  housing clr  -27.5 mm (gripper)  q=[-0.78, 1.46, 0.69, 1.14, -0.75, 0.25]
+    outer: end wall, flush                     elev  45 yaw   0.0  panel clr   66.0 mm (gripper)  housing clr   11.0 mm (gripper)  q=[-0.68, 1.56, 1.14, 1.32, -0.46, 0.52]
+    inner: near rim, on its stands             elev  15 yaw   0.0  panel clr  235.4 mm (link4)  housing clr   77.6 mm (gripper)  q=[1.16, 0.62, 0.18, 1.03, 1.08, -0.53]
+    inner: near rim, flush                     elev  45 yaw   0.0  panel clr   88.8 mm (gripper)  housing clr   70.6 mm (gripper)  q=[0.86, 0.85, 0.64, 1.2, 0.57, -0.69]
+    inner: driver, screw tip at ceiling        elev   0 yaw  45.3  panel clr   68.8 mm (link4)  housing clr   13.8 mm (link4)  q=[0.79, 1.28, 1.1, 0.19, -0.0, 0.0]
+    inner: driver, screw seated                elev   0 yaw  45.3  panel clr   40.8 mm (link4)  housing clr    1.1 mm (link4)  q=[0.79, 1.29, 1.22, 0.08, -0.0, 0.0]
+    inner: middle support (after its screw)    elev  30 yaw   0.0  panel clr   75.5 mm (gripper)  housing clr   74.2 mm (gripper)  q=[-1.26, 1.17, 0.92, 1.34, -0.97, 1.0]

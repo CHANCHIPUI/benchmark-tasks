@@ -1,0 +1,8 @@
+A outer (left): tool point [520.0, 108.0, 1287.0] mm (station frame), IK error 0.0 mm, q [-0.43, 2.28, 2.08, 1.29, -0.21, 0.37]
+  hand load    0 N: |torque| J1-J6 [0.0, 11.2, 5.7, 0.5, 0.1, 0.0] N m
+  hand load   15 N: |torque| J1-J6 [0.0, 19.2, 11.2, 2.2, 0.6, 0.0] N m
+  hand load   20 N: |torque| J1-J6 [0.0, 21.9, 13.0, 2.7, 0.7, 0.0] N m
+B outer (right): tool point [520.0, -108.0, 1287.0] mm (station frame), IK error 0.0 mm, q [0.43, 2.28, 2.08, 1.29, 0.21, -0.37]
+  hand load    0 N: |torque| J1-J6 [0.0, 11.2, 5.7, 0.5, 0.1, 0.0] N m
+  hand load   15 N: |torque| J1-J6 [0.0, 19.2, 11.2, 2.2, 0.6, 0.0] N m
+  hand load   20 N: |torque| J1-J6 [0.0, 21.9, 13.0, 2.7, 0.7, 0.0] N m

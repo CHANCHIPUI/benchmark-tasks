@@ -1,0 +1,10 @@
+outer: end wall, back 100 below          elev  45 yaw   0.0 panel clr  146.8 mm (link3) housing clr  -27.1 mm (gripper)
+inner: near rim y 300, back 100 below    elev  45 yaw   0.0 panel clr  176.0 mm (gripper) housing clr   41.0 mm (gripper)
+inner: driver at x 0.37, tip in pilot hole elev   0 yaw  40.2 panel clr   55.8 mm (link4) housing clr   11.2 mm (link4)
+inner: driver at x 0.37, seated          elev   0 yaw  40.2 panel clr   40.8 mm (link4) housing clr   11.2 mm (link4)
+inner: driver at x 0.47, tip in pilot hole elev   0 yaw  33.7 panel clr   55.8 mm (link4) housing clr    0.8 mm (link4)
+inner: driver at x 0.47, seated          elev   0 yaw  33.7 panel clr   40.8 mm (link4) housing clr  -14.2 mm (link4)
+A left (outer)   shoulder to far slot (x 470, y -508): 1.463 m
+A left (outer)   shoulder to far end wall (y -609): 1.532 m
+A right (inner)  shoulder to far slot (x 470, y -508): 0.955 m
+A right (inner)  shoulder to far end wall (y -609): 0.997 m

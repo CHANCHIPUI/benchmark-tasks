@@ -1,0 +1,12 @@
+A near slot x 370, bite                          elev   0 yaw  40.2 panel clr   85.8 mm (link4) housing box clr   32.7 mm (link4) q=[0.7, 1.45, 1.29, 0.17, -0.0, 0.0]
+A near slot x 370, seated                        elev   0 yaw  40.2 panel clr   68.3 mm (link4) housing box clr   17.4 mm (link4) q=[0.7, 1.46, 1.36, 0.1, -0.0, 0.0]
+B far slot x 470 (mirrored), bite                elev   0 yaw  33.7 panel clr   85.8 mm (link4) housing box clr   30.8 mm (link4) q=[0.59, 1.76, 1.6, 0.16, -0.0, 0.0]
+B far slot x 470 (mirrored), seated              elev   0 yaw  33.7 panel clr   68.3 mm (link4) housing box clr   13.3 mm (link4) q=[0.59, 1.77, 1.68, 0.09, -0.0, 0.0]
+      (failed: 0:39mm/5deg )
+pick, grip 150 up, holder (220, 380)             UNREACHED
+      (failed: 0:7mm/1deg )
+pick, grip 170 up, holder (220, 380)             UNREACHED
+pick, grip 190 up, holder (220, 380)             elev   0 yaw  40.1 panel clr  298.2 mm (link4) housing box clr  135.3 mm (gripper) q=[0.7, 0.61, 0.06, 0.55, -0.0, 0.0]
+inner push, rim y 300, start                     elev  30 yaw   0.0 panel clr  172.8 mm (link4) housing box clr  147.1 mm (gripper) q=[0.65, 0.95, 0.51, 1.07, 0.55, -0.36]
+inner push, rim y 300, flush                     elev  45 yaw   0.0 panel clr  102.0 mm (gripper) housing box clr   77.8 mm (gripper) q=[0.56, 1.09, 0.78, 1.18, 0.39, -0.42]
+inner push, rim y 0, flush                       elev  45 yaw   0.0 panel clr  102.0 mm (gripper) housing box clr   77.8 mm (gripper) q=[-0.87, 1.37, 0.94, 1.43, -0.57, 0.69]

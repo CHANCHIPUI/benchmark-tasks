@@ -1,0 +1,24 @@
+c_nothing      variant=nothing     score=0     last_rep_step=100 dropped=0.0 hangs=1.0 a_fastened=0.0 a_tight=0.0 a_gap=0.0905 a_edge_gap=0.1 a_clamp=0.0 a_turn=0.0 b_fastened=0.0 b_tight=0.0 b_gap=0.0755 b_edge_gap=0.1 b_clamp=0.0 b_turn=0.0 cross_contact_peak_n=0.0
+c_alone        variant=alone       score=0     last_rep_step=800 dropped=0.0 hangs=0.0 a_fastened=0.0 a_tight=0.0 a_gap=0.0989 a_edge_gap=0.0702 a_clamp=0.0 a_turn=0.0 b_fastened=0.0 b_tight=0.0 b_gap=0.0914 b_edge_gap=0.0841 b_clamp=0.0 b_turn=0.0 cross_contact_peak_n=0.0
+c_drop         variant=drop        score=0     last_rep_step=500 dropped=1.0 hangs=0.0 a_fastened=0.0 a_tight=0.0 a_gap=0.1363 a_edge_gap=0.0406 a_clamp=0.0 a_turn=0.0 b_fastened=0.0 b_tight=0.0 b_gap=0.1376 b_edge_gap=0.0898 b_clamp=0.0 b_turn=0.0 cross_contact_peak_n=0.0
+    step 348: dropped (a corner moving down at 0.43 m/s)
+c_unseated     variant=unseated    score=0.5   last_rep_step=2400 dropped=0.0 hangs=1.0 a_fastened=1.0 a_tight=0.0 a_gap=-0.0 a_edge_gap=0.0086 a_clamp=17.9697 a_turn=64.9745 b_fastened=1.0 b_tight=0.0 b_gap=-0.0 b_edge_gap=0.0037 b_clamp=22.0903 b_turn=37.6337 cross_contact_peak_n=0.0
+    step 834: a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+    step 1856: b screw bit at (0.9, -0.9) mm from its hole, push 5.0 N
+    step 2347: hangs on its own (no gripper contact for 3 s); tier 0.5
+c_one_tight    variant=one_tight   score=0.75  last_rep_step=2400 dropped=0.0 hangs=1.0 a_fastened=1.0 a_tight=1.0 a_gap=-0.0001 a_edge_gap=0.0006 a_clamp=160.5103 a_turn=77.5636 b_fastened=1.0 b_tight=0.0 b_gap=0.0 b_edge_gap=0.0062 b_clamp=8.6898 b_turn=23.3539 cross_contact_peak_n=0.0
+    step 834: a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+    step 932: a end tight: clamp 64 N, head gap -0.06 mm, edge gap -0.00 mm
+    step 1774: b screw bit at (-0.6, -0.7) mm from its hole, push 5.3 N
+    step 2318: hangs on its own (no gripper contact for 3 s); tier 0.75
+c_one_end      variant=one_end     score=0.25  last_rep_step=2400 dropped=0.0 hangs=0.0 a_fastened=1.0 a_tight=1.0 a_gap=-0.0001 a_edge_gap=0.0 a_clamp=134.6093 a_turn=68.1871 b_fastened=0.0 b_tight=0.0 b_gap=0.1753 b_edge_gap=0.0002 b_clamp=0.0 b_turn=0.0 cross_contact_peak_n=0.0
+    step 834: a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+    step 932: a end tight: clamp 64 N, head gap -0.06 mm, edge gap -0.00 mm
+c_still_held   variant=still_held  score=0.25  last_rep_step=3200 dropped=0.0 hangs=0.0 a_fastened=1.0 a_tight=1.0 a_gap=-0.0001 a_edge_gap=-0.0 a_clamp=136.8971 a_turn=77.5636 b_fastened=1.0 b_tight=1.0 b_gap=-0.0001 b_edge_gap=-0.0 b_clamp=129.6773 b_turn=42.7716 cross_contact_peak_n=0.0
+    step 834: a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+    step 932: a end tight: clamp 64 N, head gap -0.06 mm, edge gap -0.00 mm
+    step 1774: b screw bit at (-0.6, -0.7) mm from its hole, push 5.3 N
+    step 1824: b end tight: clamp 52 N, head gap -0.06 mm, edge gap -0.00 mm
+c_slip         variant=slip        score=0.25  last_rep_step=3200 dropped=0.0 hangs=0.0 a_fastened=1.0 a_tight=0.0 a_gap=-0.0001 a_edge_gap=0.0028 a_clamp=243.8814 a_turn=77.5636 b_fastened=0.0 b_tight=0.0 b_gap=0.5581 b_edge_gap=0.0174 b_clamp=0.0 b_turn=0.0 cross_contact_peak_n=0.0
+    step 834: a screw bit at (0.7, 1.0) mm from its hole, push 5.2 N
+    step 932: a end tight: clamp 64 N, head gap -0.06 mm, edge gap -0.00 mm
