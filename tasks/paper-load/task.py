@@ -353,6 +353,7 @@ def score(objects) -> float:
     0.25: in the tray, but not down on its floor (within 3 mm) or not against its right side (within 0.5 mm);
     0.5: down and against the right side, but the guide more than 0.5 mm from the stack's left edge;
     0.75: down, right and the guide snug, but OK not pressed with the paper in, the paper support not raised, or a
-    gripper touching the printer or the paper in the final 1 s;
+    gripper touching the printer or the paper in the final 1 s (in a real trial, also OK pressed but code 1000 still
+    shown, or the test page jamming; neither is simulated);
     1.0: all of it."""
     return float(_STATE.get("tier", 0.0))

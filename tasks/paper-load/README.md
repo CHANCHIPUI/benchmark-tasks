@@ -66,8 +66,15 @@ the stack's left edge without pushing the stack off the right side or knocking t
 | `scenekit.py` | USD bodies and articulations for task files, the floor bay, and the physics-rate hook |
 | `demokit.py`, `demo.py` | the scripted demo and the scorer checks in simulation |
 
-All assets are built from scratch in `build_assets.py` (no third-party meshes, scans or textures); the panel is drawn
-there with the DejaVu fonts. The robot is yam_arena's.
+All assets are built from scratch in `build_assets.py` (no third-party meshes, scans or textures). The robot is
+yam_arena's.
+
+**Font.** The lettering on the display in the panel texture (`assets/textures/pl_panel_1.png`) is drawn in DejaVu Sans
+Bold (`DejaVuSans-Bold.ttf`, DejaVu fonts 2.37, Ubuntu's `fonts-dejavu-core` package). Only these rendered glyphs are
+in the repository, not the font file. Its license (https://dejavu-fonts.github.io/License.html) is the Bitstream Vera
+Fonts license, free to use and redistribute: "Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. Bitstream
+Vera is a trademark of Bitstream, Inc. DejaVu changes are in public domain." The glyphs DejaVu imported from the Arev
+fonts carry the Arev Fonts license, but none of them are drawn here.
 
 ## Run a trial
 
@@ -170,10 +177,19 @@ feeler gauge set) and a phone camera.
 - **Guide snug.** The 0.5 mm leaf can't be slid down between the guide and the stack's left edge.
 - **Accepted.** OK was pressed (in the video) with the stack in the tray, and code 1000 is gone from the display.
   After the trial, print a nozzle check (Setup, then Black): it feeds from the stack and prints without a jam (no
-  code 1300).
+  code 1300). If OK was pressed but code 1000 is still shown, or the nozzle check jams, the trial is not accepted.
 - **Support.** The paper support is still past upright (95 degrees).
 - **Released.** In the final second of the video, neither gripper touches the printer or the paper.
 - **The paper.** Check the sheets for a crease or a tear.
+
+The score:
+- 0: the stack is not in the tray (doing nothing included), or a sheet is folded or torn.
+- 1.0: loaded, guide snug, accepted, support past upright, released.
+- 0.75: loaded and guide snug, but not accepted, the support no longer past upright, or a gripper touching. Not
+  accepted covers OK never pressed with the paper in, OK pressed but code 1000 still shown, and a nozzle check that
+  jams.
+- 0.5: loaded, but the guide not snug.
+- 0.25: in the tray, but not down on its floor or not against its right side.
 
 ## Reset
 
@@ -203,7 +219,7 @@ the printer on their marks. Nothing in the trial is sharp or hot; the grippers n
 | Printer | one articulation fixed to the world: the body (boxes: the document cover's frame, the rear housing with the slot, its floor and right side), the shut document cover, the paper support on a hinge with a stop, the guide on a slide, and the OK, Black and Color keys (sprung, 2 mm proud, 1.5 mm of travel) |
 | Paper | the five sheets as one limp stack: 9 rigid strips across its short side, each the stack's full 215.9 mm wide and 31.0 mm long, joined by 8 sprung hinges (a floating articulation). Each strip's collider is a 2 mm box. Mass and bending stiffness are both 8 times the five sheets' (180 g in all), so it hangs and bends as the stack does |
 | Easier than paper | the sheets never separate or fan; the stack is rigid across its 215.9 mm width (it can't bow against the guide); held at its edge it hangs flat where paper curls; no air slows it; it can't crease or tear (a hinge past 150 degrees counts as folded over) |
-| Code 1000 | cleared by task code: OK pressed while the stack stands in the tray |
+| Code 1000 | cleared by task code: OK pressed while the stack stands in the tray. The test page isn't simulated (no feed or jam), so in sim accepted means that press |
 | Physics | PhysX, 240 Hz, 20 Hz control |
 
 Estimates: the rear tray's slot (22 mm wide, its floor 112 mm above the table, its right side at y -160); the paper
