@@ -181,7 +181,12 @@ URL https://www.bosch-professional.com/gb/en/products/bosch-go-gen3-06019H2201.
   precision with 7 torque settings and maximum performance mode". The page does not describe how the tool starts.
 - Search snippet, not fetched (galaxus.at, Bosch Professional GO 3, manufacturer number 06019H2201, third generation):
   "either press the ON/OFF switch or press the device against the workpiece".
-- No US price was found for the Gen 3 either. At $1.30 to the pound, £67.55 is about $88.
+- Fetched again on 2026-11-24: "£75.28" incl. VAT, "£62.73" excl. VAT ("Lowest price in the last 30 days: £56.50");
+  article number 0.601.9H2.201. The page still does not describe how the tool starts.
+- No US price was found for the Gen 3 either. At $1.30 to the pound, £75.28 is about $98 (£67.55, the 2026-11-22
+  price, about $88).
+- Gen 3 push-to-start: only the search snippet above; the Gen 2 data sheet (Farnell) is the fetched source for
+  "push machine forward or press 'on' button to begin". Check push-to-start on the Gen 3 unit bought (or use a Gen 2).
 
 ### Cheaper alternative: BLACK+DECKER 4V MAX BDCS20C / BDCSFL20C
 These are button-actuated. No push-to-start claim was found.

@@ -1,3 +1,0 @@
-dy=+0.20 from the arm base; cells: max approach elevation (deg), "--" unreachable
-  z_above_table:  0.20  0.25  0.30  0.35  0.40  0.45  0.50  0.55  0.60
-  x=0.20          --    --    --    --    --    --    --    --    -- 

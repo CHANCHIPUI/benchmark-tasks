@@ -1,8 +1,0 @@
-(1) pick from the holder, fingers closed on the driver
-  A: on its peg 190 above the table, grip 45 above the driver's bottom (150 below the bit tip), tool point 235 up: IK error 0.0 mm; riser top 41.0 mm (tip_right), peg 33.7 mm (tip_left)
-  B: on its peg 205 above the table, grip 30 above the driver's bottom (165 below the bit tip), tool point 235 up: IK error 0.0 mm; riser top 26.1 mm (tip_right), peg 23.7 mm (tip_right)
-(2) at the slot (screw tip at the ceiling / seated)
-  A slot x 370, gripped 150 below the bit tip, bite: IK error 0.0 mm; near wall 19.4 (link4), far wall 228.9 (gripper), end wall 137.7 (gripper), back 70.2 (link4)
-  A slot x 370, gripped 150 below the bit tip, seated: IK error 0.0 mm; near wall 11.2 (link4), far wall 223.0 (gripper), end wall 127.8 (gripper), back 53.0 (link4)
-  B slot x 470, gripped 165 below the bit tip, bite: IK error 0.0 mm; near wall 31.6 (link4), far wall 157.5 (gripper), end wall 139.7 (gripper), back 84.4 (link4)
-  B slot x 470, gripped 165 below the bit tip, seated: IK error 0.0 mm; near wall 14.6 (link4), far wall 147.3 (gripper), end wall 128.0 (gripper), back 66.8 (link4)

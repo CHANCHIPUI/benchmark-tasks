@@ -1,6 +1,6 @@
 #!/bin/bash
 # dev/media.sh RUN: media/demo.mp4 (the six station cameras in a 2x3 grid, plus the overview) and media/setup.png
-# (the overview, and B's and A's top cameras below it) from dev/logs/RUN, a --store-frames run, in the active
+# (the overview, and A's and B's top cameras below it) from dev/logs/RUN, a --store-frames run, in the active
 # Isaac Lab-Arena environment. Step 0 is left out: the overview camera is placed at the reset, after it.
 D=$(cd "$(dirname "$0")/.." && pwd)
 RUN=$1
@@ -17,7 +17,7 @@ from PIL import Image
 src, out = sys.argv[1], sys.argv[2]
 f = lambda cam, k: np.load(sorted(glob.glob(f"{src}/*_{cam}_{k:06d}.npy"))[0])[..., :3].astype(np.uint8)
 ov = Image.fromarray(f("overview_cam", 1))
-tops = [Image.fromarray(f(c, 1)) for c in ("b_top_cam", "a_top_cam")]   # B left, A right, as in the overview
+tops = [Image.fromarray(f(c, 1)) for c in ("a_top_cam", "b_top_cam")]   # A left, B right, as in the overview
 w = ov.width
 tops = [t.resize((w // 2, round(t.height * (w // 2) / t.width))) for t in tops]
 canvas = Image.new("RGB", (w, ov.height + tops[0].height), "white")

@@ -4,12 +4,14 @@
 D=$(cd "$(dirname "$0")/.." && pwd)
 cd "$D" || exit 1
 RUNS=("$@")
-[ ${#RUNS[@]} -eq 0 ] && RUNS=(c_nothing:nothing:300 c_alone:alone:1100 c_drop:drop:800 c_unseated:unseated:3200
-                               c_one_tight:one_tight:3200 c_one_end:one_end:3200 c_still_held:still_held:3200
-                               c_slip:slip:3200)
+[ ${#RUNS[@]} -eq 0 ] && RUNS=(c_nothing:nothing:300 c_alone:alone:900 c_drop:drop:700 c_unslid:unslid:800 c_set_down:set_down:600
+                               c_let_go_b:let_go_b:800 c_one_end_hung:one_end_hung:800 c_untightened:untightened:800
+                               c_one_end:one_end:1500 c_one_screw:one_screw:1500 c_slip:slip:1500
+                               c_still_held:still_held:1500 c_forearm:forearm:1700 c_driver_touch:driver_touch:1700)
 for r in "${RUNS[@]}"; do
   IFS=: read -r name variant steps <<<"$r"
   rm -rf dev/logs/$name
-  TAILN=3 dev/run.sh "$name" "$steps" "$variant" > /dev/null
+  CLP_TORQUE_LOG=dev/runs/${name}_torque.npz TAILN=3 dev/run.sh "$name" "$steps" "$variant" > /dev/null
+  gzip -c "dev/$name.log" > "dev/runs/$name.log.gz"
 done
 python3 dev/summary.py "${RUNS[@]}" | tee -a dev/checks.txt

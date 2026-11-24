@@ -1,8 +1,0 @@
-Demo reproducibility (scripted demo, yam_pair_scripted, pair_task_score):
-d41  1.0  (frames, overview)
-d42  1.0  (frames, overview)    differing per-step monitor lines vs d41: 0
-d43  1.0  (frames, overview; media made from this run)    vs d41: 0
-d44  1.0  (no frames, no overview; final code, dev/demo_code.md5)    vs d43: 0
-After d44 only docstrings and comments in scripted.py and task.py changed (text); dev/demo_code.md5 holds the hashes of
-the shipped files.
-media/demo.mp4 is rendered from d43's frames and d43's log (dev/overlay.py); d44 stored no frames and matches d43.
